@@ -10,7 +10,7 @@ const SignUpPage = () => {
                 <input type="text" placeholder="Username"/>
                 <input type="text" placeholder="Tag"/>
                 <input type="submit" value={"Sign up"}/>
-            </form>
+            </form> 
         </div>
         <div className="reroute-container">
             <p>Already have an account? <a href="/login">Log in</a></p>
