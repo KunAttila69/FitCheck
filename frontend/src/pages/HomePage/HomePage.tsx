@@ -4,10 +4,10 @@ import { getUserProfile } from "../../services/authServices"
 
 const HomePage = () => { 
   const [profile, setProfile] = useState()
-
   getUserProfile().then(res => {
     setProfile(res)
   })
+  
   
   return (
     <>
@@ -18,6 +18,7 @@ const HomePage = () => {
         </div>
         <div className="profile"></div>
       </nav>
+      <main></main>
       <main>
         <h1>Logged in as: {profile}</h1>
       </main>
