@@ -1,13 +1,15 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import "./style.css"  
 import { getUserProfile } from "../../services/authServices"
 
 const HomePage = () => { 
   const [profile, setProfile] = useState()
-  getUserProfile().then(res => {
-    setProfile(res)
-  })
   
+  useEffect(()=> {
+    getUserProfile().then(res => {
+      setProfile(res)
+    })
+  }, [])
   
   return (
     <>

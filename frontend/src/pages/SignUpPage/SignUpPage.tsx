@@ -1,5 +1,6 @@
 import "./SignUpStyle.css"
 const SignUpPage = () => {
+
   return (
     <div className="signup-container">
         <div className="form-container">
