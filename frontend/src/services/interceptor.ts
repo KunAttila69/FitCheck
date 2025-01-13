@@ -1,4 +1,4 @@
-export const BASE_URL = ""
+export const BASE_URL = "https://localhost:7293"
 
 async function refreshAccessToken() {
     if(!localStorage.getItem("refresh")){
