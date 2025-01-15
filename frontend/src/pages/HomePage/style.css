@@ -44,16 +44,19 @@ nav{
 @keyframes openSearch {
     0% {
         width: 0;
+        font-size: 0;
         transform: translateX(-40px); 
         border-radius: 50%;
     }
     50% {
         width: 10%;
         transform: translateX(0); 
+        font-size: 0;
         border-radius: 0 5px 5px 0;
     }
     100% {
         width: calc(100% - 14px);
+        font-size: large;
         transform: translateX(0); 
         border-radius: 0 5px 5px 0;
     }
