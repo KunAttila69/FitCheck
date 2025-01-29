@@ -1,91 +1,109 @@
-﻿using FitCheck_Server.Models;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using MySql.Data.MySqlClient;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
+using Microsoft.EntityFrameworkCore;
+using FitCheck_Server.Models;
+using FitCheck_Server.Data;
+using FitCheck_Server.Services;
+using FitCheck_Server.backend.Models.Models;
 
 namespace FitCheck_Server.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/auth")]
     public class AuthController : ControllerBase
     {
-        private readonly IConfiguration _config;
-        private readonly MySqlConnection _connection;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly AuthService _authService;
+        private readonly ApplicationDbContext _dbContext;
 
-        public AuthController(IConfiguration config, MySqlConnection connection)
+        public AuthController(
+            UserManager<ApplicationUser> userManager,
+            AuthService authService,
+            ApplicationDbContext dbContext)
         {
-            _config = config;
-            _connection = connection;
+            _userManager = userManager;
+            _authService = authService;
+            _dbContext = dbContext;
+        }
+
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] RegisterRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            ApplicationUser? existingUser = await _userManager.FindByNameAsync(request.Username);
+            if (existingUser != null)
+            {
+                return BadRequest(new { Message = "Username is already taken." });
+            }
+
+            existingUser = await _userManager.FindByEmailAsync(request.Email);
+            if (existingUser != null)
+            {
+                return BadRequest(new { Message = "Email is already in use." });
+            }
+
+            ApplicationUser? user = new ApplicationUser
+            {
+                UserName = request.Username,
+                Email = request.Email
+            };
+
+            var result = await _userManager.CreateAsync(user, request.Password);
+            if (!result.Succeeded)
+            {
+                return BadRequest(new { Errors = result.Errors });
+            }
+
+            return Ok(new { Message = "User registered successfully." });
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
-            if (string.IsNullOrWhiteSpace(request.Username) || string.IsNullOrWhiteSpace(request.Password))
+            if (!ModelState.IsValid)
             {
-                return BadRequest("Username and password are required.");
+                return BadRequest(ModelState);
             }
 
-            try
+            ApplicationUser? user = await _userManager.FindByNameAsync(request.Username);
+            if (user == null || !await _userManager.CheckPasswordAsync(user, request.Password))
             {
-                await _connection.OpenAsync();
-
-                // Check if the user exists and get the password hash
-                var query = "SELECT password_hash FROM users WHERE username = @username";
-                using var cmd = new MySqlCommand(query, _connection);
-                cmd.Parameters.AddWithValue("@username", request.Username);
-
-                var storedPasswordHash = await cmd.ExecuteScalarAsync() as string;
-
-                // Validate credentials
-                if (storedPasswordHash == null || !VerifyPasswordHash(request.Password, storedPasswordHash))
-                {
-                    return Unauthorized("Invalid credentials.");
-                }
-
-                // Generate JWT token
-                var token = GenerateJwtToken(request.Username);
-                return Ok(new { token });
+                return Unauthorized(new { Message = "Invalid credentials" });
             }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
-            finally
-            {
-                await _connection.CloseAsync();
-            }
+
+            string accessToken = _authService.GenerateAccessToken(user);
+            string refreshToken = _authService.GenerateRefreshToken();
+
+            user.RefreshToken = refreshToken;
+            user.RefreshTokenExpiry = DateTime.UtcNow.AddDays(7); 
+            await _userManager.UpdateAsync(user); 
+
+            return Ok(new { accessToken, refreshToken });
         }
 
-        private string GenerateJwtToken(string username)
+        [HttpPost("refresh")]
+        public async Task<IActionResult> RefreshToken([FromBody] RefreshRequest request)
         {
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            ApplicationUser? user = await _dbContext.Users
+                .FirstOrDefaultAsync(u => u.RefreshToken == request.RefreshToken);
 
-            var claims = new[]
+            if (user == null || user.RefreshTokenExpiry < DateTime.UtcNow)
             {
-                new Claim(ClaimTypes.Name, username),
-                new Claim(ClaimTypes.Role, "User")
-            };
+                return Unauthorized(new { Message = "Invalid or expired refresh token" });
+            }
 
-            var token = new JwtSecurityToken(
-                issuer: _config["Jwt:Issuer"],
-                audience: _config["Jwt:Audience"],
-                claims: claims,
-                expires: DateTime.Now.AddMinutes(int.Parse(_config["Jwt:ExpiryMinutes"])),
-                signingCredentials: creds);
+            string newAccessToken = _authService.GenerateAccessToken(user);
+            string newRefreshToken = _authService.GenerateRefreshToken();
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
-        }
+            user.RefreshToken = newRefreshToken;
+            user.RefreshTokenExpiry = DateTime.UtcNow.AddDays(1);
+            await _userManager.UpdateAsync(user);
 
-        private bool VerifyPasswordHash(string password, string storedHash)
-        {
-            using var sha256 = System.Security.Cryptography.SHA256.Create();
-            var computedHash = Convert.ToBase64String(sha256.ComputeHash(Encoding.UTF8.GetBytes(password)));
-            return storedHash == computedHash;
+            return Ok(new { accessToken = newAccessToken, refreshToken = newRefreshToken });
         }
     }
 }
