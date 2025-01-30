@@ -1,4 +1,5 @@
 using System.Text;
+using FitCheck_Server.Data;
 using FitCheck_Server.Models;
 using FitCheck_Server.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;

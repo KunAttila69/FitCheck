@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using FitCheck_Server.Models;
-using FitCheck_Server.Data;
 using FitCheck_Server.Services;
 using FitCheck_Server.DTOs;
+using FitCheck_Server.Data;
 
 namespace FitCheck_Server.Controllers
 {

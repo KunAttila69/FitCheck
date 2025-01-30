@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
 using FitCheck_Server.Models;
+using FitCheck_Server.Data;
 
 namespace FitCheck_Server.Controllers
 {
