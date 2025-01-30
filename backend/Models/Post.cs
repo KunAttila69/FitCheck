@@ -9,8 +9,7 @@ namespace FitCheck_Server.Models
         [Key]
         public int Id { get; set; }
 
-        [Required]
-        public string Caption { get; set; }
+        public string? Caption { get; set; }
 
         public List<PostMedia> MediaFiles { get; set; } = new List<PostMedia>();
 
@@ -22,7 +21,7 @@ namespace FitCheck_Server.Models
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedAt { get; set; }
 
-        public string Location { get; set; }
+        public string? Location { get; set; }
 
         public PrivacySetting Privacy { get; set; } = PrivacySetting.Public;
 

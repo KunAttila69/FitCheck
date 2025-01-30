@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using FitCheck_Server.Models;
 using FitCheck_Server.Data;
 using FitCheck_Server.Services;
-using FitCheck_Server.backend.Models.Models;
+using FitCheck_Server.DTOs;
 
 namespace FitCheck_Server.Controllers
 {

@@ -1,4 +1,4 @@
-﻿namespace FitCheck_Server.Models
+﻿namespace FitCheck_Server.DTOs
 {
     public class LoginRequest
     {

@@ -1,5 +1,4 @@
 using System.Text;
-using FitCheck_Server.Data;
 using FitCheck_Server.Models;
 using FitCheck_Server.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -49,6 +48,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<FileService>();
 
 var app = builder.Build();
 if (app.Environment.IsDevelopment())
@@ -63,4 +63,5 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
+app.UseStaticFiles();
 app.Run();

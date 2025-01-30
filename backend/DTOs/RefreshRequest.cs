@@ -1,4 +1,4 @@
-﻿namespace FitCheck_Server.backend.Models.Models
+﻿namespace FitCheck_Server.DTOs
 {
     public class RefreshRequest
     {
