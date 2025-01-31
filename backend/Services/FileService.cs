@@ -15,11 +15,6 @@ namespace FitCheck_Server.Services
             _environment = environment;
         }
 
-        /// <summary>
-        /// Saves an uploaded media file (image/video) to the server.
-        /// </summary>
-        /// <param name="file">The uploaded file (IFormFile)</param>
-        /// <returns>Relative path to the saved file (e.g., "/uploads/posts/image.jpg")</returns>
         public async Task<string> SaveMediaAsync(IFormFile file)
         {
             if (file == null || file.Length == 0)
@@ -27,8 +22,14 @@ namespace FitCheck_Server.Services
                 throw new ArgumentException("No file uploaded.");
             }
 
+            var wwwrootPath = _environment.WebRootPath;
+            if (string.IsNullOrEmpty(wwwrootPath))
+            {
+                throw new InvalidOperationException("wwwroot folder not found.");
+            }
+
             var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
-            var uploadsFolder = Path.Combine(_environment.WebRootPath, "uploads", "posts");
+            var uploadsFolder = Path.Combine(wwwrootPath, "uploads", "posts");
 
             if (!Directory.Exists(uploadsFolder))
             {
@@ -45,10 +46,6 @@ namespace FitCheck_Server.Services
             return $"/uploads/posts/{fileName}";
         }
 
-        /// <summary>
-        /// Deletes a media file from the server.
-        /// </summary>
-        /// <param name="filePath">Relative path of the file (e.g., "/uploads/posts/image.jpg")</param>
         public void DeleteMedia(string filePath)
         {
             if (string.IsNullOrEmpty(filePath))

@@ -36,8 +36,8 @@ namespace FitCheck_Server.Controllers
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var user = await _userManager.FindByIdAsync(userId);
+            string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            ApplicationUser? user = await _userManager.FindByIdAsync(userId);
             if (user == null) return Unauthorized();
 
             var mediaFiles = new List<PostMedia>();
@@ -53,7 +53,7 @@ namespace FitCheck_Server.Controllers
 
             var hashtags = ExtractHashtags(request.Caption);
 
-            var post = new Post
+            Post post = new Post
             {
                 Caption = request.Caption,
                 MediaFiles = mediaFiles,
@@ -65,7 +65,15 @@ namespace FitCheck_Server.Controllers
             _context.Posts.Add(post);
             await _context.SaveChangesAsync();
 
-            return Ok(post);
+            PostDtos postDto = new PostDtos
+            {
+                Id = post.Id,
+                Caption = post.Caption,
+                MediaUrls = post.MediaFiles.Select(m => m.FilePath).ToList(),
+                LikeCount = post.Likes.Count
+            };
+
+            return Ok(postDto);
         }
 
         [HttpGet]
@@ -74,12 +82,13 @@ namespace FitCheck_Server.Controllers
             var posts = await _context.Posts
                 .Include(p => p.User)
                 .Include(p => p.MediaFiles)
-                .Include(p => p.Likes)
-                .Include(p => p.Comments)
-                    .ThenInclude(c => c.User)
-                .OrderByDescending(p => p.CreatedAt)
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
+                .Select(p => new PostDtos
+                {
+                    Id = p.Id,
+                    Caption = p.Caption,
+                    MediaUrls = p.MediaFiles.Select(m => m.FilePath).ToList(),
+                    LikeCount = p.Likes.Count
+                })
                 .ToListAsync();
 
             return Ok(posts);
@@ -98,7 +107,21 @@ namespace FitCheck_Server.Controllers
 
             if (post == null) return NotFound();
 
-            return Ok(post);
+            var postDto = new PostDtos
+            {
+                Id = post.Id,
+                Caption = post.Caption,
+                MediaUrls = post.MediaFiles.Select(m => m.FilePath).ToList(),
+                LikeCount = post.Likes.Count,
+                Comments = post.Comments.Select(c => new CommentDto
+                {
+                    Text = c.Text,
+                    AuthorUsername = c.User.UserName,
+                    CreatedAt = c.CreatedAt
+                }).ToList()
+            };
+
+            return Ok(postDto);
         }
         #endregion
 
@@ -154,7 +177,14 @@ namespace FitCheck_Server.Controllers
             _context.Comments.Add(comment);
             await _context.SaveChangesAsync();
 
-            return Ok(comment);
+            var commentDto = new CommentDto
+            {
+                Text = comment.Text,
+                AuthorUsername = comment.User.UserName,
+                CreatedAt = comment.CreatedAt
+            };
+
+            return Ok(commentDto);
         }
 
         [HttpGet("{postId}/comments")]
@@ -164,6 +194,12 @@ namespace FitCheck_Server.Controllers
                 .Include(c => c.User)
                 .Where(c => c.PostId == postId)
                 .OrderByDescending(c => c.CreatedAt)
+                .Select(c => new CommentDto
+                {
+                    Text = c.Text,
+                    AuthorUsername = c.User.UserName,
+                    CreatedAt = c.CreatedAt
+                })
                 .ToListAsync();
 
             return Ok(comments);
@@ -177,6 +213,11 @@ namespace FitCheck_Server.Controllers
             var hashtags = await _context.Hashtags
                 .OrderByDescending(h => h.Posts.Count)
                 .Take(count)
+                .Select(h => new HashtagDto
+                {
+                    Tag = h.Tag,
+                    PostCount = h.Posts.Count
+                })
                 .ToListAsync();
 
             return Ok(hashtags);
