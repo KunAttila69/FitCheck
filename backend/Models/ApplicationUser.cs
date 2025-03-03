@@ -7,8 +7,8 @@ namespace FitCheck_Server.Models
         public string? Email {  get; set; }
         public string? RefreshToken { get; set; }
         public DateTime? RefreshTokenExpiry { get; set; }
-        public string? Bio { get; set; }
-        public string? ProfilePictureUrl { get; set; }
+        public string? Bio { get; set; } = string.Empty;
+        public string? ProfilePictureUrl { get; set; } = null;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 }
