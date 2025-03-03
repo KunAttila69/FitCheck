@@ -30,7 +30,7 @@ namespace FitCheck_Server.Controllers
         }
 
         #region Post Endpoints
-        [HttpPost]
+        [HttpPost("create-post")]
         [Authorize]
         public async Task<IActionResult> CreatePost([FromForm] CreatePostRequest request)
         {
@@ -76,7 +76,7 @@ namespace FitCheck_Server.Controllers
             return Ok(postDto);
         }
 
-        [HttpGet]
+        [HttpGet("get-feed")]
         public async Task<IActionResult> GetFeed([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
         {
             var posts = await _context.Posts
