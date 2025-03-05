@@ -30,7 +30,7 @@ namespace FitCheck_Server.Controllers
         }
 
         #region Post Endpoints
-        [HttpPost]
+        [HttpPost("create-post")]
         [Authorize]
         public async Task<IActionResult> CreatePost([FromForm] CreatePostRequest request)
         {
@@ -76,7 +76,7 @@ namespace FitCheck_Server.Controllers
             return Ok(postDto);
         }
 
-        [HttpGet]
+        [HttpGet("get-feed")]
         public async Task<IActionResult> GetFeed([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
         {
             var posts = await _context.Posts
@@ -166,6 +166,7 @@ namespace FitCheck_Server.Controllers
         public async Task<IActionResult> AddComment(int postId, [FromBody] AddCommentRequest request)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             var comment = new Comment
             {
                 Text = request.Text,
@@ -177,11 +178,16 @@ namespace FitCheck_Server.Controllers
             _context.Comments.Add(comment);
             await _context.SaveChangesAsync();
 
+            // Explicitly load the user with Include
+            var savedComment = await _context.Comments
+                .Include(c => c.User)
+                .FirstOrDefaultAsync(c => c.Id == comment.Id);
+
             var commentDto = new CommentDto
             {
-                Text = comment.Text,
-                AuthorUsername = comment.User.UserName,
-                CreatedAt = comment.CreatedAt
+                Text = savedComment.Text,
+                AuthorUsername = savedComment.User.UserName,
+                CreatedAt = savedComment.CreatedAt
             };
 
             return Ok(commentDto);
