@@ -6,7 +6,7 @@ async function refreshAccessToken() {
     }    
 
     try{
-        const response = await fetch(BASE_URL + "/api/token/refresh", {
+        const response = await fetch(BASE_URL + "/api/auth/refresh", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -35,35 +35,36 @@ async function refreshAccessToken() {
 }
 
 export async function authFetch(url: string, options: RequestInit = {}): Promise<Response> {
-    
-    if(!localStorage.getItem("access")){
-        await refreshAccessToken()
+    if (!localStorage.getItem("access")) {
+        try {
+            await refreshAccessToken();
+        } catch {
+            console.error("Authentication required");
+            return Promise.reject(new Error("Authentication required"));
+        }
     }
 
-    const headers = {
-        ...options.headers,
-        Authorization: `Bearer ${localStorage.getItem("access")}`
-    }
+    const headers = new Headers(options.headers);
+    headers.set("Authorization", `Bearer ${localStorage.getItem("access")}`);
 
-    try{
-        const response = await fetch(url, {...options, headers})
+    try {
+        const response = await fetch(url, { ...options, headers });
 
-        if(response.status === 401){
-            console.warn("Access token expired!")
-            await refreshAccessToken()
-
-            const retryHeaders = { 
-                ...options.headers,
-                Authorization: `Bearer ${localStorage.getItem("access")}`
+        if (response.status === 401) {
+            console.warn("Access token expired!");
+            try {
+                await refreshAccessToken();
+                headers.set("Authorization", `Bearer ${localStorage.getItem("access")}`);
+                return await fetch(url, { ...options, headers });
+            } catch {
+                console.error("Re-authentication failed.");
+                return Promise.reject(new Error("Re-authentication failed"));
             }
-
-            return await fetch(url, {...options,headers: retryHeaders})
         }
 
-        return response
-    
-    } catch(error){
-        console.error(error)
-        throw error
+        return response;
+    } catch (error) {
+        console.error(error);
+        throw error;
     }
 }
