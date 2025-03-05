@@ -49,7 +49,9 @@ namespace FitCheck_Server.Controllers
             ApplicationUser? user = new ApplicationUser
             {
                 UserName = request.Username,
-                Email = request.Email
+                Email = request.Email,
+                CreatedAt = DateTime.UtcNow
+
             };
 
             var result = await _userManager.CreateAsync(user, request.Password);

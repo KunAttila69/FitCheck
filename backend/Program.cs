@@ -57,6 +57,15 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<FileService>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "MyAllowSpecificOrigins",
+                      policy =>
+                      {
+                          policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin(); // TODO : Change this before release
+                      });
+});
+
 var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
@@ -71,4 +80,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.UseStaticFiles();
+
+app.UseCors();
 app.Run();
