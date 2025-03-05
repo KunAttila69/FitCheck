@@ -22,23 +22,23 @@ namespace FitCheck_Server.Services
                 throw new ArgumentException("No file uploaded.");
             }
 
-            var wwwrootPath = _environment.WebRootPath;
+            string wwwrootPath = _environment.WebRootPath;
             if (string.IsNullOrEmpty(wwwrootPath))
             {
                 throw new InvalidOperationException("wwwroot folder not found.");
             }
 
-            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
-            var uploadsFolder = Path.Combine(wwwrootPath, "uploads", "posts");
+            string fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
+            string uploadsFolder = Path.Combine(wwwrootPath, "uploads", "posts");
 
             if (!Directory.Exists(uploadsFolder))
             {
                 Directory.CreateDirectory(uploadsFolder);
             }
 
-            var filePath = Path.Combine(uploadsFolder, fileName);
+            string filePath = Path.Combine(uploadsFolder, fileName);
 
-            using (var stream = new FileStream(filePath, FileMode.Create))
+            using (FileStream stream = new FileStream(filePath, FileMode.Create))
             {
                 await file.CopyToAsync(stream);
             }
@@ -53,12 +53,37 @@ namespace FitCheck_Server.Services
                 return;
             }
 
-            var fullPath = Path.Combine(_environment.WebRootPath, filePath.TrimStart('/'));
+            string fullPath = Path.Combine(_environment.WebRootPath, filePath.TrimStart('/'));
 
             if (File.Exists(fullPath))
             {
                 File.Delete(fullPath);
             }
+        }
+
+        public async Task<string> SaveAvatarAsync(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+            {
+                throw new ArgumentException("No file uploaded.");
+            }
+
+            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
+            var uploadsFolder = Path.Combine(_environment.WebRootPath, "uploads", "avatars");
+
+            if (!Directory.Exists(uploadsFolder))
+            {
+                Directory.CreateDirectory(uploadsFolder);
+            }
+
+            var filePath = Path.Combine(uploadsFolder, fileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            return $"/uploads/avatars/{fileName}";
         }
     }
 }
