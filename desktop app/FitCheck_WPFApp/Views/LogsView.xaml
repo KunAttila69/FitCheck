@@ -1,0 +1,49 @@
+﻿<UserControl x:Class="FitCheck_WPFApp.Views.LogsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:local="clr-namespace:FitCheck_WPFApp.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="900">
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <StackPanel Grid.Row="0" Margin="0,0,0,20">
+            <TextBlock Text="Admin Action Logs" FontSize="24" FontWeight="Bold"/>
+            <TextBlock Text="View all admin activities" Foreground="{DynamicResource MaterialDesignBodyLight}"/>
+        </StackPanel>
+
+        <!-- Logs Table -->
+        <materialDesign:Card Grid.Row="1">
+            <Grid>
+                <DataGrid ItemsSource="{Binding Logs}" 
+                          AutoGenerateColumns="False" 
+                          IsReadOnly="True"
+                          CanUserAddRows="False"
+                          CanUserDeleteRows="False"
+                          CanUserReorderColumns="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Date" Binding="{Binding Timestamp, StringFormat='{}{0:yyyy-MM-dd HH:mm:ss}'}" Width="150"/>
+                        <DataGridTextColumn Header="Admin" Binding="{Binding AdminUsername}" Width="120"/>
+                        <DataGridTextColumn Header="Action" Binding="{Binding ActionType}" Width="120"/>
+                        <DataGridTextColumn Header="Target ID" Binding="{Binding TargetId}" Width="100"/>
+                        <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="*"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <!-- No Logs Message -->
+                <TextBlock Text="No logs to display" 
+                           HorizontalAlignment="Center" 
+                           VerticalAlignment="Center"
+                           Visibility="{Binding HasLogs, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=inverse}"/>
+            </Grid>
+        </materialDesign:Card>
+    </Grid>
+</UserControl>

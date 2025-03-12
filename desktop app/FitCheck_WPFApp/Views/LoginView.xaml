@@ -1,0 +1,72 @@
+﻿<UserControl x:Class="FitCheck_WPFApp.Views.LoginView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:local="clr-namespace:FitCheck_WPFApp.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="900">
+
+    <Grid Background="{DynamicResource MaterialDesignPaper}">
+        <materialDesign:Card Width="400" Height="400" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="30">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Logo and Title -->
+                <StackPanel Grid.Row="0" Margin="0,0,0,30">
+                    <TextBlock Text="FitCheck Admin" FontSize="28" FontWeight="Bold" HorizontalAlignment="Center"/>
+                    <TextBlock Text="Please login to continue" FontSize="14" HorizontalAlignment="Center" 
+                               Foreground="{DynamicResource MaterialDesignBodyLight}"/>
+                </StackPanel>
+
+                <!-- Username -->
+                <TextBox Grid.Row="1" 
+                         materialDesign:HintAssist.Hint="Username"
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                         Text="{Binding Username}"
+                         Margin="0,0,0,15"/>
+
+                <!-- Password -->
+                <PasswordBox Grid.Row="2"
+                             x:Name="PasswordBox"
+                             materialDesign:HintAssist.Hint="Password"
+                             Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"
+                             Margin="0,0,0,25"/>
+
+                <!-- Error Message -->
+                <TextBlock Grid.Row="3" 
+                           Text="{Binding ErrorMessage}"
+                           Foreground="Red"
+                           TextWrapping="Wrap"
+                           Visibility="{Binding HasError, Converter={StaticResource BoolToVisibilityConverter}}"
+                           Margin="0,0,0,15"/>
+
+                <!-- Login Button -->
+                <Button Grid.Row="4"
+                        Content="LOGIN"
+                        Command="{Binding LoginCommand}"
+                        CommandParameter="{Binding ElementName=PasswordBox}"
+                        Style="{StaticResource MaterialDesignRaisedButton}"
+                        materialDesign:ButtonAssist.CornerRadius="5"
+                        Height="50"
+                        Margin="0,0,0,15"/>
+
+                <!-- Loading Indicator -->
+                <Grid Grid.Row="5" HorizontalAlignment="Center" Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}" 
+                                 IsIndeterminate="True"
+                                 Width="20" 
+                                 Height="20"/>
+                </Grid>
+            </Grid>
+        </materialDesign:Card>
+    </Grid>
+</UserControl>
