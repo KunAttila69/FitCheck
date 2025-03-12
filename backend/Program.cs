@@ -60,13 +60,10 @@ builder.Services.AddScoped<FileService>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: "MyAllowSpecificOrigins",
-        policy =>
-        {
-            policy.WithOrigins("http://localhost:5173")
-            .AllowCredentials()
-            .AllowAnyHeader()
-            .AllowAnyMethod();
-        });
+                      policy =>
+                      {
+                          policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin(); // TODO : Change this before release
+                      });
 });
 
 var app = builder.Build();
@@ -84,5 +81,5 @@ app.MapControllers();
 
 app.UseStaticFiles();
 
-app.UseCors("MyAllowSpecificOrigins");
+app.UseCors();
 app.Run();

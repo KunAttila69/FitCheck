@@ -2,23 +2,12 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family:Arial, Helvetica, sans-serif;
 }
 
-@font-face {
-    font-family: 'Sigmar One';
-    src: url('../public/fonts/Sigmar-Regular.ttf') format('truetype');
-}
-
-:root{
-    --main-color: #5E4C5A;
-    --white: #FFFAFF;
-    --black: #050401;
-    --contrast: #30BCED;
-    --highlight: #F9A03F; 
-    --links: #3A4AD6;
-}
-
+body{
+    width: 100vw;
+    height: 100vh;
 body{  
     background-color: #f4eded;
 }
