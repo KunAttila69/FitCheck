@@ -19,13 +19,7 @@
     --links: #3A4AD6;
 }
 
-body{
-    width: 100vw;
-    height: 100vh;
+body{  
     background-color: #f4eded;
 }
-
-#root{
-    height: 100%;
-    width: 100%;
-}
+ 

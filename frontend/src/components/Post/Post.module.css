@@ -1,0 +1,74 @@
+.postContainer{      
+    border-radius: 2.5px;
+    background-color: #FFF;
+    box-shadow: 0 0 3px 2px var(--main-color); 
+    margin-bottom: 20px;
+    & .postHeader{
+        display: flex;
+        padding: 10px;
+        & div{
+            padding: 0 10px;
+        }
+        & p{
+            width: 250px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+}
+
+.posterProfile{
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    box-shadow: 0 0 1px 2px var(--main-color); 
+}
+
+.postFooter{
+    padding: 2.5px 10px;
+}
+
+.post{
+    & img{
+        width: 100%;
+    }
+}
+.commentContainer{
+
+    padding: 5px 10px;
+}
+.comment{
+    display: flex;
+    align-items: center;
+    margin: 2.5px 0;
+    & img{
+        border-radius: 50%;
+        height: 25px;
+        width: 25px;
+        margin-right: 5px;
+    }
+}
+.postStats{
+    display: flex;
+    align-items: center;
+    & h4{
+        margin: 0 5px;
+    }
+}
+.likeBtn{
+    height: 30px;
+    width: 30px;
+    border: none;
+    background: none;
+    background-size: cover;
+    background-image: url("../../images/like.png");
+}
+.commentBtn{
+    height: 30px;
+    width: 30px;
+    border: none;
+    background: none;
+    background-size: cover;
+    background-image: url("../../images/comment.png");
+}
