@@ -15,7 +15,7 @@ const Navbar = ({selectedPage} : NavbarProps) => {
                     <button></button>
                     <input type="text" placeholder="Search for user"/>
                 </div>
-                <div className={styles.profile}></div>
+                <div className={styles.profile} onClick={() => {navigate("/edit")}}></div>
             </div>
                 <div className={styles.iconContainer}>
                 <div className={`${styles.notifications} ${styles.icon}`} onClick={() => navigate("/notifications")}>{notificationCount > 0 ? <div className={styles.notificationCount}>{notificationCount}</div> : ""} {selectedPage == "notifications" ? <div className={styles.selected}/> : ""}</div>

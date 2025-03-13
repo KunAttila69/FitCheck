@@ -2,6 +2,7 @@ import {  useState } from "react";
 import styles from "./NotificationsPage.module.css"; 
 import Navbar from "../../components/Navbar/Navbar";
 import { useNavigate } from "react-router-dom";
+
 const NotificationsPage = () => {
   const navigate = useNavigate() 
   const [profile, setProfile] = useState() 

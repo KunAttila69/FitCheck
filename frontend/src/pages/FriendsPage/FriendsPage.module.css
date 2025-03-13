@@ -1,0 +1,35 @@
+main{ 
+    display: flex;
+    flex-direction: column;
+}
+.friendContainer{
+    width: 100%;
+    display: flex;
+    border-radius: 5px;
+    padding: 10px;
+    background-color: var(--white); 
+    margin: 7.5px 0;
+    box-shadow: 0 0 3px 2px var(--main-color); 
+    align-items: center; 
+    justify-content: space-between;
+    & p{
+        font-size: .75rem;
+    }
+    & img{
+        width: 45px;
+        margin-right: 10px;
+        border-radius: 50%;
+    } 
+    & .deleteFriend{
+        background-image: url("../../images/delete.png");
+        background-size: cover;
+        height: 20px;
+        border-radius: 5px;
+        border: none;
+        background-color: transparent;
+        cursor: pointer;
+        width: 20px;
+        justify-self: flex-end; 
+        padding: 20px;
+    }
+}
