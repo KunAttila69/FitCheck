@@ -1,28 +1,21 @@
-import { useEffect, useState } from "react"
-import "./style.css"  
+import { useEffect, useState } from "react";
+import "./HomePageStyle.module.css";
 import { getUserProfile } from "../../services/authServices"
+import Post from "../../components/Post/Post";
+import Navbar from "../../components/Navbar/Navbar";
 
 const HomePage = () => { 
-  const [profile, setProfile] = useState()
-  
-  useEffect(()=> {
-    getUserProfile().then(res => {
-      setProfile(res)
-    })
-  }, [])
+  const [profile, setProfile] = useState() 
   
   return (
     <>
-      <nav>
-        <div className="search">
-          <button></button>
-          <input type="text" placeholder="Search for user"/>
-        </div>
-        <div className="profile"></div>
-      </nav>
-      <main></main>
+      <Navbar selectedPage="home"/>
       <main>
-        <h1>Logged in as: {profile}</h1>
+        <Post/>
+        <Post/>
+        <Post/>
+        <Post/>
+        <Post/>
       </main>
     </>
   )

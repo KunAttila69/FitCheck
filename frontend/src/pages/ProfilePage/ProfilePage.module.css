@@ -1,0 +1,66 @@
+.profilePic{
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+nav{
+    padding-top: 11px;
+}
+
+.profileHeader{
+    display: flex;
+    p{
+        font-size: .9rem;
+        margin: 10px 0;
+    }
+    & .buttonContainer{
+        width: 60%;
+    }
+
+    
+}
+
+.addFriend{ 
+    align-self: flex-end; 
+    height: fit-content;
+    width: 100%;
+    padding: 5px;
+    font-size: 1.25rem;
+    border-radius: 5px;
+    background-color: var(--contrast);
+    color: #fff;
+    font-family: "Sigmar One";
+    letter-spacing: 1px;
+
+}
+
+.profileStats{
+    margin: 10px 0;
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+    text-align: center;
+    & div{
+        width: 30%;
+        outline: 2px solid black; 
+        padding: 10px 0;
+        & h2{
+            color: var(--highlight);
+        }
+    }
+}
+
+.icon {
+    float: right;
+    height: 35px;
+    width: 35px; 
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    box-sizing: border-box;  
+    cursor: pointer; 
+    margin-bottom: 10px;
+}
+.home { 
+    background-image: url("../../images/home.png");
+}
