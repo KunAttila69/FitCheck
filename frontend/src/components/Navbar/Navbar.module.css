@@ -52,8 +52,8 @@ nav{
     justify-content: space-evenly;
     width: 60%; 
     .icon {
-        height: 35px;
-        width: 35px; 
+        height: 36px;
+        width: 36px; 
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
