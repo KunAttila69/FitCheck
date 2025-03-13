@@ -15,15 +15,18 @@ namespace FitCheck_Server.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly AuthService _authService;
         private readonly ApplicationDbContext _dbContext;
+        private readonly RoleService _roleService;
 
         public AuthController(
             UserManager<ApplicationUser> userManager,
             AuthService authService,
-            ApplicationDbContext dbContext)
+            ApplicationDbContext dbContext,
+            RoleService roleService)
         {
             _userManager = userManager;
             _authService = authService;
             _dbContext = dbContext;
+            _roleService = roleService;
         }
 
         [HttpPost("register")]
@@ -51,7 +54,6 @@ namespace FitCheck_Server.Controllers
                 UserName = request.Username,
                 Email = request.Email,
                 CreatedAt = DateTime.UtcNow
-
             };
 
             var result = await _userManager.CreateAsync(user, request.Password);
@@ -59,6 +61,9 @@ namespace FitCheck_Server.Controllers
             {
                 return BadRequest(new { Errors = result.Errors });
             }
+
+            // Assign the default User role
+            await _userManager.AddToRoleAsync(user, "User");
 
             return Ok(new { Message = "User registered successfully." });
         }
@@ -77,14 +82,17 @@ namespace FitCheck_Server.Controllers
                 return Unauthorized(new { Message = "Invalid credentials" });
             }
 
-            string accessToken = _authService.GenerateAccessToken(user);
+            string accessToken = await _authService.GenerateAccessToken(user);
             string refreshToken = _authService.GenerateRefreshToken();
 
             user.RefreshToken = refreshToken;
-            user.RefreshTokenExpiry = DateTime.UtcNow.AddDays(7); 
-            await _userManager.UpdateAsync(user); 
+            user.RefreshTokenExpiry = DateTime.UtcNow.AddDays(7);
+            await _userManager.UpdateAsync(user);
 
-            return Ok(new { accessToken, refreshToken });
+            // Get user roles to return with the response
+            var roles = await _userManager.GetRolesAsync(user);
+
+            return Ok(new { accessToken, refreshToken, roles });
         }
 
         [HttpPost("refresh")]
@@ -98,14 +106,17 @@ namespace FitCheck_Server.Controllers
                 return Unauthorized(new { Message = "Invalid or expired refresh token" });
             }
 
-            string newAccessToken = _authService.GenerateAccessToken(user);
+            string newAccessToken = await _authService.GenerateAccessToken(user);
             string newRefreshToken = _authService.GenerateRefreshToken();
 
             user.RefreshToken = newRefreshToken;
-            user.RefreshTokenExpiry = DateTime.UtcNow.AddDays(1);
+            user.RefreshTokenExpiry = DateTime.UtcNow.AddDays(7);
             await _userManager.UpdateAsync(user);
 
-            return Ok(new { accessToken = newAccessToken, refreshToken = newRefreshToken });
+            // Get user roles to return with the response
+            var roles = await _userManager.GetRolesAsync(user);
+
+            return Ok(new { accessToken = newAccessToken, refreshToken = newRefreshToken, roles });
         }
     }
 }
