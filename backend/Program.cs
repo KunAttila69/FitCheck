@@ -45,6 +45,15 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+// Add Authorization with Policies
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("RequireUserRole", policy => policy.RequireRole("User"));
+    options.AddPolicy("RequireModeratorRole", policy => policy.RequireRole("Moderator"));
+    options.AddPolicy("RequireAdministratorRole", policy => policy.RequireRole("Administrator"));
+    options.AddPolicy("RequireModeratorOrAdmin", policy => policy.RequireRole("Moderator", "Administrator"));
+});
+
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
@@ -56,6 +65,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<FileService>();
+builder.Services.AddScoped<RoleService>();
 
 builder.Services.AddCors(options =>
 {
@@ -82,4 +92,38 @@ app.MapControllers();
 app.UseStaticFiles();
 
 app.UseCors();
+
+// Add this after app.UseCors(); but before app.Run();
+// Initialize roles
+using (var scope = app.Services.CreateScope())
+{
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+    var roles = new[] { "User", "Moderator", "Administrator" };
+
+    foreach (var role in roles)
+    {
+        if (!await roleManager.RoleExistsAsync(role))
+        {
+            await roleManager.CreateAsync(new IdentityRole(role));
+        }
+    }
+
+    // Optionally create an initial admin user
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+    var adminUser = new ApplicationUser
+    {
+        UserName = "admin",
+        Email = "admin@example.com",
+        CreatedAt = DateTime.UtcNow
+    };
+
+    if (await userManager.FindByNameAsync(adminUser.UserName) == null)
+    {
+        var result = await userManager.CreateAsync(adminUser, "Admin@123"); // Change this password!
+        if (result.Succeeded)
+        {
+            await userManager.AddToRoleAsync(adminUser, "Administrator");
+        }
+    }
+}
 app.Run();

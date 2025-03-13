@@ -4,13 +4,21 @@
     box-sizing: border-box;
     font-family:Arial, Helvetica, sans-serif;
 }
-
-body{
-    width: 100vw;
-    height: 100vh;
+@font-face {
+    font-family: "Sigmar One";
+    src: url("../public/fonts/Sigmar-Regular.ttf") format("truetype"); 
 }
 
-#root{
-    height: 100%;
-    width: 100%;
+:root{
+    --white: #FFFAFF;
+    --main-color: #846B8A;
+    --highlight: #F9A03F;
+    --contrast: #30BCED;
+    --links: #3A4AD6;
 }
+
+body{  
+    background-color: #f4eded; 
+    width: 100vw; 
+}
+ 

@@ -5,27 +5,43 @@ using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using FitCheck_Server.Models;
+using Microsoft.AspNetCore.Identity;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace FitCheck_Server.Services
 {
     public class AuthService
     {
         private readonly IConfiguration _config;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public AuthService(IConfiguration config)
+        public AuthService(IConfiguration config, UserManager<ApplicationUser> userManager)
         {
             _config = config;
+            _userManager = userManager;
         }
 
-        public string GenerateAccessToken(ApplicationUser user)
+        public async Task<string> GenerateAccessToken(ApplicationUser user)
         {
             var key = Encoding.UTF8.GetBytes(_config["JwtSettings:Key"]!);
-            var claims = new[]
+
+            // Get user roles
+            var userRoles = await _userManager.GetRolesAsync(user);
+
+            // Create claims
+            var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email!),
                 new Claim(ClaimTypes.Name, user.UserName!)
             };
+
+            // Add role claims
+            foreach (var role in userRoles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
 
             var token = new JwtSecurityToken(
                 issuer: _config["JwtSettings:Issuer"],

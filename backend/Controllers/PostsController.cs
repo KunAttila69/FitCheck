@@ -13,6 +13,7 @@ namespace FitCheck_Server.Controllers
 {
     [ApiController]
     [Route("api/posts")]
+    [Authorize(Policy = "RequireUserRole")]
     public class PostsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
