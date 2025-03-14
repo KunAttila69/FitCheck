@@ -7,6 +7,7 @@ import NotificationsPage from './pages/NotificationsPage/NotificationsPage';
 import ProfilePage from './pages/ProfilePage/ProfilePage';
 import FriendsPage from './pages/FriendsPage/FriendsPage';
 import EditPage from './pages/EditPage/EditPage';
+import LeaderboardPage from './pages/LeaderboardPage/LeaderboardPage';
 
 function App() { 
   return (
@@ -16,6 +17,7 @@ function App() {
       <Route path='/notifications' element={<NotificationsPage/>} />
       <Route path='/friends' element={<FriendsPage/>} />
       <Route path='/edit' element={<EditPage/>} />
+      <Route path='/leaderboard' element={<LeaderboardPage/>} />
       <Route path='/profile' element={<ProfilePage/>} />
       <Route path='/login' element={<LoginPage />}/>
       <Route path='/signup' element={<SignUpPage />}/>

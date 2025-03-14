@@ -51,7 +51,7 @@ nav{
     display: flex;
     justify-content: space-evenly;
     width: 60%; 
-    .icon {
+    & .icon {
         height: 36px;
         width: 36px; 
         background-size: cover;

@@ -1,0 +1,43 @@
+.leaderboard{
+    border-spacing: 0 5px;
+    border-radius: 5px;
+    & thead{
+        & tr{
+            background-color: var(--highlight);
+            text-align: center;
+            font-size: 1.5rem;
+            color: #fff;
+            & td{
+                font-family: "Sigmar One";
+                letter-spacing: 1px;
+                border-radius: 5px;
+                outline: 2px solid black;
+                
+            }
+        }
+    }
+    & tbody{
+        gap: 2px;
+        & tr{
+            text-align: center;
+            font-size: 1.25rem;
+            box-shadow: inset 0 0 2px 2px black;
+            border-radius: 5px;
+            background-color: #fff;
+            & td{
+                padding: 10px; 
+                border: 1px solid black; 
+                 
+                & img{
+                    border-radius: 50%;
+                    width: 30px;
+                }
+            }
+        }
+    }
+}
+.nameContainer{
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
