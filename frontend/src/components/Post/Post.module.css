@@ -2,7 +2,7 @@
     border-radius: 2.5px;
     background-color: #FFF;
     box-shadow: 0 0 3px 2px var(--main-color); 
-    margin-bottom: 20px;
+    margin-bottom: 20px; 
     & .postHeader{
         display: flex;
         padding: 10px;
