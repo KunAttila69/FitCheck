@@ -56,10 +56,10 @@ namespace FitCheck_Server.Controllers
             var result = await _roleService.AssignRoleToUserAsync(request.UserId, request.RoleName);
             if (!result)
             {
-                return BadRequest(new { Message = "Failed to assign role to user" });
+                return BadRequest("Failed to assign role to user");
             }
 
-            return Ok(new { Message = $"Role {request.RoleName} assigned to user successfully" });
+            return Ok($"Role {request.RoleName} assigned to user successfully");
         }
 
         [HttpPost("remove-role")]
@@ -73,10 +73,10 @@ namespace FitCheck_Server.Controllers
             var result = await _roleService.RemoveRoleFromUserAsync(request.UserId, request.RoleName);
             if (!result)
             {
-                return BadRequest(new { Message = "Failed to remove role from user" });
+                return BadRequest("Failed to remove role from user");
             }
 
-            return Ok(new { Message = $"Role {request.RoleName} removed from user successfully" });
+            return Ok($"Role {request.RoleName} removed from user successfully");
         }
 
         [HttpGet("user-roles/{userId}")]
