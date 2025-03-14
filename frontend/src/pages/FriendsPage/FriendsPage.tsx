@@ -1,10 +1,9 @@
 import {  useState } from "react";
 import styles from "./FriendsPage.module.css"; 
 import Navbar from "../../components/Navbar/Navbar";
-import { useNavigate } from "react-router-dom";
+import Friend from "../../components/Friend/Friend";
 
 const FriendsPage = () => {
-    const navigate = useNavigate() 
     const [profile, setProfile] = useState() 
     const notifications = [
       {user: "Gipsz Jakab", userPic: "../../images/img.png", newPosts: 4},
@@ -16,16 +15,7 @@ const FriendsPage = () => {
         <Navbar selectedPage="friends"/>
         <main>
           {notifications.map((friend, i) => {
-              return (
-                  <div className={styles.friendContainer} key={i}>
-                      <img src={friend.userPic}  onClick={() => {navigate("/profile")}}/>
-                      <div className={styles.textContainer}>
-                          <h4>{friend.user}</h4>
-                          <p>This user has {friend.newPosts} new posts</p>
-                      </div>
-                      <button className={styles.deleteFriend}></button>
-                  </div>
-              )
+              return <Friend friend={friend} key={i}/>
           })}
         </main>
       </>
