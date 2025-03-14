@@ -82,7 +82,7 @@ namespace FitCheck_Server.Controllers
                 return Unauthorized("Invalid credentials");
             }
 
-            string accessToken = await _authService.GenerateAccessToken(user);
+        string accessToken = await _authService.GenerateAccessToken(user);
             string refreshToken = _authService.GenerateRefreshToken();
 
             user.RefreshToken = refreshToken;
