@@ -1,0 +1,48 @@
+.imageContainer{ 
+    background-color: #ccc;
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 50px;
+    opacity: .8;
+}
+
+.previewImage {
+    opacity: .7;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    object-fit: cover; 
+}
+
+.selectedImage{
+    margin: auto;
+    width: 300px;
+}
+
+.uploadForm{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.uploadIcon{
+    height: 200px;
+    width: 200px;
+    background-size: cover;
+    background-image: url("../../images/upload.png");
+    margin-bottom: 20px;
+}
+
+.descriptionInput{
+    margin-top: 10px;
+    width: 60%;
+    height: 100px;
+    border: none;
+    background: none;
+    font-size: 1rem;
+} 

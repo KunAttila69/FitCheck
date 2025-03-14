@@ -6,6 +6,7 @@ const EditPage = () => {
         <main className={styles.editContainer}>
             <header>
                 <div className={`${styles.home} ${styles.icon}`} onClick={() => navigate("/")}></div>
+                <div className={`${styles.logout} ${styles.icon}`} onClick={() => navigate("/login")}></div>
                 <div className={styles.imageContainer}>
                     <button className={styles.editBtn}><img src="../../src/images/edit.png" alt="" /></button>
                     <img src="../../images/img.png"/>

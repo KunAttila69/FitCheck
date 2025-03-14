@@ -8,6 +8,7 @@ import ProfilePage from './pages/ProfilePage/ProfilePage';
 import FriendsPage from './pages/FriendsPage/FriendsPage';
 import EditPage from './pages/EditPage/EditPage';
 import LeaderboardPage from './pages/LeaderboardPage/LeaderboardPage';
+import UploadPage from './pages/UploadPage/UploadPage';
 
 function App() { 
   return (
@@ -21,6 +22,7 @@ function App() {
       <Route path='/profile' element={<ProfilePage/>} />
       <Route path='/login' element={<LoginPage />}/>
       <Route path='/signup' element={<SignUpPage />}/>
+      <Route path='/upload' element={<UploadPage />}/>
     </Routes>
   </BrowserRouter>
   )

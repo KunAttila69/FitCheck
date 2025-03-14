@@ -22,7 +22,7 @@ header{
         }
         & button{
             position: absolute;
-            right: 0;
+            right: 10px;
             top: 0;
             background-color: #aaa;
             display: flex;
@@ -43,8 +43,6 @@ header{
 
 .icon {
     position: absolute;
-    top: 10px;
-    left: 10px;
     height: 36px;
     width: 36px; 
     background-size: cover;
@@ -55,7 +53,14 @@ header{
     margin-bottom: 10px;
 }
 .home { 
+    top: 10px;
+    left: 10px;
     background-image: url("../../images/home.png");
+}
+.logout{
+    background-image: url("../../images/logout.png");
+    top: 15px;
+    right: 5px; 
 }
 
 .passwordChanger{
