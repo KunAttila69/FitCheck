@@ -38,13 +38,13 @@ namespace FitCheck_Server.Controllers
             var post = await _dbContext.Posts.FindAsync(postId);
             if (post == null)
             {
-                return NotFound(new { Message = "Post not found" });
+                return NotFound("Post not found");
             }
 
             _dbContext.Posts.Remove(post);
             await _dbContext.SaveChangesAsync();
 
-            return Ok(new { Message = "Post deleted successfully" });
+            return Ok("Post deleted successfully");
         }
 
         [HttpGet("comments")]
@@ -64,13 +64,13 @@ namespace FitCheck_Server.Controllers
             var comment = await _dbContext.Comments.FindAsync(commentId);
             if (comment == null)
             {
-                return NotFound(new { Message = "Comment not found" });
+                return NotFound("Comment not found");
             }
 
             _dbContext.Comments.Remove(comment);
             await _dbContext.SaveChangesAsync();
 
-            return Ok(new { Message = "Comment deleted successfully" });
+            return Ok("Comment deleted successfully");
         }
     }
 }

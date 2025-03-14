@@ -246,6 +246,7 @@ namespace FitCheck_Server.Controllers
                 {
                     existingTag = new Hashtag { Tag = tag };
                     _context.Hashtags.Add(existingTag);
+                    _context.SaveChanges();
                 }
 
                 hashtags.Add(existingTag);
