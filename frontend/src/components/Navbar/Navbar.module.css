@@ -50,7 +50,7 @@ nav{
 .iconContainer{
     display: flex;
     justify-content: space-evenly;
-    width: 60%; 
+    width: 100%; 
     & .icon {
         height: 36px;
         width: 36px; 

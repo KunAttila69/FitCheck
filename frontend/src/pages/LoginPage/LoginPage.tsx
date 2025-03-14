@@ -19,8 +19,11 @@ const LoginPage = () => {
 
     setLoading(true)
     try {
-      const res = await loginUser(username, password)
-      console.log(res) 
+      loginUser(username, password)
+        .then((res) => {
+          console.log(res)
+        })
+       
     } catch (err) {
       setError("Invalid username or password!")
     } finally {

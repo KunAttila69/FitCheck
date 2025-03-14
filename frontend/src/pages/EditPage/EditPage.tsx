@@ -1,7 +1,9 @@
+import { useState } from "react";
 import styles from "./EditPage.module.css"
 import { useNavigate } from "react-router-dom";
 const EditPage = () => {
     const navigate = useNavigate()
+    const [changingPassword, setChangingPassword] = useState<boolean>(false)
     return ( 
         <main className={styles.editContainer}>
             <header>
@@ -14,8 +16,8 @@ const EditPage = () => {
                 <input type="text" className={styles.nameChanger} value={"Gipsz.Jakab"}/>
                 <textarea className={styles.aboutMeSection}>About me...</textarea>
             </header>
-            <form>
-                <button className={styles.passwordActivationBtn}>Change password</button>
+            <button className={styles.passwordActivationBtn} onClick={() => {setChangingPassword(!changingPassword)}}>Change password</button>
+            {changingPassword && <form>
                 <div className={styles.passwordChanger}>
                     <label>Old Password</label>
                     <input type="text" />
@@ -24,8 +26,8 @@ const EditPage = () => {
                     <label>Confirm Password</label>
                     <input type="text"/>
                 </div>
-                <button className={styles.confirmButton}>Confirm Changes</button>
-            </form>
+            </form>}
+            <button className={styles.confirmButton}>Confirm Changes</button>
         </main>
     );
 }

@@ -72,8 +72,11 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: "MyAllowSpecificOrigins",
                       policy =>
                       {
-                          policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin(); // TODO : Change this before release
-                      });
+                          policy.WithOrigins("http://localhost:5173")
+                          .AllowCredentials()
+                          .AllowAnyHeader()
+                          .AllowAnyMethod(); //Ne nyúlj hozzá
+                      }); 
 });
 
 var app = builder.Build();
@@ -91,7 +94,7 @@ app.MapControllers();
 
 app.UseStaticFiles();
 
-app.UseCors();
+app.UseCors("MyAllowSpecificOrigins");
 
 // Add this after app.UseCors(); but before app.Run();
 // Initialize roles

@@ -90,7 +90,7 @@ header{
     background: none;
     font-size: 1rem;
 }
-.passwordActivationBtn{
+.passwordActivationBtn, .confirmButton{
     padding: 5px;
     cursor: pointer;
     font-size: 1.1rem;
@@ -98,14 +98,10 @@ header{
     letter-spacing: 1.1px;
     color: #444;
     border: none;
-    margin: 7.5px 2px;
+    margin: 7.5px;
     outline: 2px solid black;
     border-radius: 5px;
-}
-.confirmButton{ 
-    padding: 20px;
-    width: 100%; 
-}
+} 
 header{
     width: 100%;
     box-shadow: 0 0 2px 3px var(--main-color);
