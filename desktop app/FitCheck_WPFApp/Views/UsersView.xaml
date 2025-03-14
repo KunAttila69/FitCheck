@@ -1,0 +1,143 @@
+﻿<UserControl x:Class="FitCheck_WPFApp.Views.UsersView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:FitCheck_WPFApp.Views"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="900">
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Grid Grid.Row="0" Margin="0,0,0,20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0">
+                <TextBlock Text="Users Management" FontSize="24" FontWeight="Bold"/>
+                <TextBlock Text="View and manage user accounts" Foreground="{DynamicResource MaterialDesignBodyLight}"/>
+            </StackPanel>
+
+            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                <TextBox Width="250" materialDesign:HintAssist.Hint="Search users..." Margin="0,0,10,0"
+                         Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}">
+                    <TextBox.InputBindings>
+                        <KeyBinding Key="Return" Command="{Binding SearchCommand}"/>
+                    </TextBox.InputBindings>
+                </TextBox>
+                <Button Command="{Binding RefreshCommand}" Style="{StaticResource MaterialDesignFloatingActionMiniButton}">
+                    <materialDesign:PackIcon Kind="Refresh" Height="20" Width="20"/>
+                </Button>
+            </StackPanel>
+        </Grid>
+
+        <!-- Users List -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+
+            <materialDesign:Card Grid.Column="0" Margin="0,0,10,0">
+                <ListView ItemsSource="{Binding Users}" SelectedItem="{Binding SelectedUser}">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Username" Width="150">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Ellipse Width="30" Height="30" Margin="0,0,10,0">
+                                                <Ellipse.Fill>
+                                                    <ImageBrush ImageSource="{Binding ProfilePictureUrl, TargetNullValue='/Resources/default_user.png'}"/>
+                                                </Ellipse.Fill>
+                                            </Ellipse>
+                                            <TextBlock Text="{Binding Username}" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Email" Width="200" DisplayMemberBinding="{Binding Email}"/>
+                            <GridViewColumn Header="Status" Width="100">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock>
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsBanned}" Value="True">
+                                                            <Setter Property="Text" Value="Banned"/>
+                                                            <Setter Property="Foreground" Value="Red"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding IsBanned}" Value="False">
+                                                            <Setter Property="Text" Value="Active"/>
+                                                            <Setter Property="Foreground" Value="Green"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Joined Date" Width="120" DisplayMemberBinding="{Binding CreatedAt, StringFormat='{}{0:yyyy-MM-dd}'}"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </materialDesign:Card>
+
+            <!-- User Details Panel -->
+            <materialDesign:Card Grid.Column="1" Padding="15">
+                <ScrollViewer>
+                    <StackPanel>
+                        <TextBlock Text="User Details" FontSize="18" FontWeight="Bold" Margin="0,0,0,15"/>
+
+                        <TextBlock Text="No user selected" FontStyle="Italic" Foreground="{DynamicResource MaterialDesignBodyLight}"
+                                   Visibility="{Binding SelectedUser, Converter={StaticResource NullToVisibilityConverter}}"/>
+
+                        <StackPanel Visibility="{Binding SelectedUser, Converter={StaticResource NullToVisibilityConverter}, ConverterParameter=inverse}">
+                            <Image Source="{Binding SelectedUser.ProfilePictureUrl, TargetNullValue='/Resources/default_user.png'}" 
+                                   Height="100" Width="100" Stretch="UniformToFill" Margin="0,0,0,15"/>
+
+                            <TextBlock Text="Username" FontWeight="Bold"/>
+                            <TextBlock Text="{Binding SelectedUser.Username}" Margin="0,0,0,10"/>
+
+                            <TextBlock Text="Email" FontWeight="Bold"/>
+                            <TextBlock Text="{Binding SelectedUser.Email}" Margin="0,0,0,10"/>
+
+                            <TextBlock Text="Bio" FontWeight="Bold"/>
+                            <TextBlock Text="{Binding SelectedUser.Bio}" TextWrapping="Wrap" Margin="0,0,0,10"/>
+
+                            <TextBlock Text="Join Date" FontWeight="Bold"/>
+                            <TextBlock Text="{Binding SelectedUser.CreatedAt, StringFormat='{}{0:yyyy-MM-dd HH:mm}'}" Margin="0,0,0,20"/>
+
+                            <!-- Action Buttons -->
+                            <Button Content="Ban User" Command="{Binding BanUserCommand}" 
+                                    Style="{StaticResource MaterialDesignRaisedButton}" 
+                                    Background="Red" Foreground="White" Margin="0,0,0,10"
+                                    Visibility="{Binding SelectedUser.IsBanned, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=inverse}"/>
+
+                            <Button Content="Unban User" Command="{Binding UnbanUserCommand}" 
+                                    Style="{StaticResource MaterialDesignRaisedButton}" 
+                                    Background="Green" Foreground="White" 
+                                    Visibility="{Binding SelectedUser.IsBanned, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </ScrollViewer>
+            </materialDesign:Card>
+        </Grid>
+
+        <!-- Loading Indicator -->
+        <Grid Grid.Row="1" Background="#80000000" Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}">
+            <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}" IsIndeterminate="True" 
+                         Width="60" Height="60"/>
+        </Grid>
+    </Grid>
+</UserControl>

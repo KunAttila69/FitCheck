@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net6.0-windows</TargetFramework>
+		<Nullable>enable</Nullable>
+		<UseWPF>true</UseWPF>
+		<ApplicationIcon>Resources\app_icon.ico</ApplicationIcon>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="MaterialDesignColors" Version="5.2.1" />
+		<PackageReference Include="MaterialDesignThemes" Version="5.2.1" />
+		<PackageReference Include="System.Net.Http.Json" Version="7.0.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Remove="Resources\default_user.png" />
+		<None Remove="Resources\no_image.png" />
+		<None Remove="Resources\app_icon.ico" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Resource Include="Resources\default_user.png" />
+		<Resource Include="Resources\no_image.png" />
+		<Resource Include="Resources\app_icon.ico" />
+	</ItemGroup>
+
+</Project>

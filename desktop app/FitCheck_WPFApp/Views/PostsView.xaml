@@ -1,0 +1,135 @@
+﻿<UserControl x:Class="FitCheck_WPFApp.Views.PostsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:local="clr-namespace:FitCheck_WPFApp.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="900">
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Grid Grid.Row="0" Margin="0,0,0,20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0">
+                <TextBlock Text="Posts Management" FontSize="24" FontWeight="Bold"/>
+                <TextBlock Text="View and moderate user posts" Foreground="{DynamicResource MaterialDesignBodyLight}"/>
+            </StackPanel>
+
+            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                <TextBox Width="250" materialDesign:HintAssist.Hint="Search posts..." Margin="0,0,10,0"
+                         Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"/>
+                <Button Command="{Binding RefreshCommand}" Style="{StaticResource MaterialDesignFloatingActionMiniButton}">
+                    <materialDesign:PackIcon Kind="Refresh" Height="20" Width="20"/>
+                </Button>
+            </StackPanel>
+        </Grid>
+
+        <!-- Posts Content -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Posts List -->
+            <materialDesign:Card Grid.Column="0" Margin="0,0,10,0">
+                <ListView ItemsSource="{Binding Posts}" SelectedItem="{Binding SelectedPost}">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="ID" Width="50" DisplayMemberBinding="{Binding Id}"/>
+                            <GridViewColumn Header="Author" Width="120">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Ellipse Width="20" Height="20" Margin="0,0,5,0">
+                                                <Ellipse.Fill>
+                                                    <ImageBrush ImageSource="{Binding UserProfilePicture, TargetNullValue='/Resources/default_user.png'}"/>
+                                                </Ellipse.Fill>
+                                            </Ellipse>
+                                            <TextBlock Text="{Binding Username}" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Caption" Width="200">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Caption}" TextTrimming="CharacterEllipsis"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Media" Width="50" DisplayMemberBinding="{Binding MediaUrls.Count}"/>
+                            <GridViewColumn Header="Likes" Width="50" DisplayMemberBinding="{Binding LikeCount}"/>
+                            <GridViewColumn Header="Comments" Width="70" DisplayMemberBinding="{Binding CommentCount}"/>
+                            <GridViewColumn Header="Created" Width="120" DisplayMemberBinding="{Binding CreatedAt, StringFormat='{}{0:yyyy-MM-dd}'}"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </materialDesign:Card>
+
+            <!-- Post Details -->
+            <materialDesign:Card Grid.Column="1" Padding="15">
+                <ScrollViewer>
+                    <StackPanel>
+                        <TextBlock Text="Post Details" FontSize="18" FontWeight="Bold" Margin="0,0,0,15"/>
+
+                        <TextBlock Text="No post selected" FontStyle="Italic" Foreground="{DynamicResource MaterialDesignBodyLight}"
+                                   Visibility="{Binding SelectedPost, Converter={StaticResource NullToVisibilityConverter}}"/>
+
+                        <StackPanel Visibility="{Binding SelectedPost, Converter={StaticResource NullToVisibilityConverter}, ConverterParameter=inverse}">
+                            <!-- Main post image (first in the list) -->
+                            <Border BorderThickness="1" BorderBrush="{DynamicResource MaterialDesignDivider}" Margin="0,0,0,15">
+                                <Image Source="{Binding SelectedPost.MediaUrls[0], TargetNullValue='/Resources/no_image.png'}" 
+                                       Height="150" Stretch="Uniform"/>
+                            </Border>
+
+                            <TextBlock Text="Post ID" FontWeight="Bold"/>
+                            <TextBlock Text="{Binding SelectedPost.Id}" Margin="0,0,0,10"/>
+
+                            <TextBlock Text="Author" FontWeight="Bold"/>
+                            <TextBlock Text="{Binding SelectedPost.Username}" Margin="0,0,0,10"/>
+
+                            <TextBlock Text="Caption" FontWeight="Bold"/>
+                            <TextBlock Text="{Binding SelectedPost.Caption}" TextWrapping="Wrap" Margin="0,0,0,10"/>
+
+                            <TextBlock Text="Created At" FontWeight="Bold"/>
+                            <TextBlock Text="{Binding SelectedPost.CreatedAt, StringFormat='{}{0:yyyy-MM-dd HH:mm}'}" Margin="0,0,0,10"/>
+
+                            <TextBlock Text="Engagement" FontWeight="Bold"/>
+                            <TextBlock Margin="0,0,0,20">
+                                <Run Text="{Binding SelectedPost.LikeCount}"/> likes, 
+                                <Run Text="{Binding SelectedPost.CommentCount}"/> comments
+                            </TextBlock>
+
+                            <!-- Remove Post Section -->
+                            <TextBlock Text="Moderation" FontWeight="Bold" Margin="0,0,0,5"/>
+                            <TextBox materialDesign:HintAssist.Hint="Removal reason" Margin="0,0,0,10" 
+                                     Text="{Binding RemovalReason}"/>
+
+                            <Button Content="Remove Post" Command="{Binding RemovePostCommand}" 
+                                    Style="{StaticResource MaterialDesignRaisedButton}" 
+                                    Background="Red" Foreground="White" Margin="0,0,0,10"/>
+                        </StackPanel>
+                    </StackPanel>
+                </ScrollViewer>
+            </materialDesign:Card>
+        </Grid>
+
+        <!-- Loading Indicator -->
+        <Grid Grid.Row="1" Background="#80000000" Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}">
+            <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}" IsIndeterminate="True" 
+                         Width="60" Height="60"/>
+        </Grid>
+    </Grid>
+</UserControl>
