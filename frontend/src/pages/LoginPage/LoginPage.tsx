@@ -19,11 +19,13 @@ const LoginPage = () => {
 
     setLoading(true)
     try {
-      loginUser(username, password)
-        .then((res) => {
-          console.log(res)
-        })
-       
+      loginUser(username, password).then((res) => {
+        if (res && res.status === 200) {
+            console.log("Login successful!", res);
+        } else {
+            setError("Invalid username or password!");
+        }
+      }); 
     } catch (err) {
       setError("Invalid username or password!")
     } finally {

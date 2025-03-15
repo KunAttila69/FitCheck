@@ -88,13 +88,13 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseCors("MyAllowSpecificOrigins");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
 app.UseStaticFiles();
 
-app.UseCors("MyAllowSpecificOrigins");
 
 // Add this after app.UseCors(); but before app.Run();
 // Initialize roles

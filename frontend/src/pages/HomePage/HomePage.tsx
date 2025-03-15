@@ -7,6 +7,14 @@ import Navbar from "../../components/Navbar/Navbar";
 const HomePage = () => { 
   const [profile, setProfile] = useState() 
   
+  useEffect(()=> {
+    getUserProfile()
+      .then(res => {
+        console.log(res)
+        setProfile(res)
+      })
+  }, [])
+
   return (
     <>
       <Navbar selectedPage="home"/>
