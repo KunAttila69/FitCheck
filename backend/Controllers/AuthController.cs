@@ -82,7 +82,11 @@ namespace FitCheck_Server.Controllers
                 return Unauthorized("Invalid credentials");
             }
 
-            var accessToken = await _authService.GenerateAccessToken(user);
+            var (accessToken, tokenError) = await _authService.GenerateAccessToken(user);
+            if (tokenError != null)
+            {
+                return BadRequest(new { error = tokenError });
+            }
             string refreshToken = _authService.GenerateRefreshToken();
 
             user.RefreshToken = refreshToken;
@@ -106,7 +110,11 @@ namespace FitCheck_Server.Controllers
                 return Unauthorized("Invalid or expired refresh token");
             }
 
-            var newAccessToken = await _authService.GenerateAccessToken(user);
+            var (newAccessToken, tokenError) = await _authService.GenerateAccessToken(user);
+            if (tokenError != null)
+            {
+                return BadRequest(new { error = tokenError });
+            }
             string newRefreshToken = _authService.GenerateRefreshToken();
 
             user.RefreshToken = newRefreshToken;
