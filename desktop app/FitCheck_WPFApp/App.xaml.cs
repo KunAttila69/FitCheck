@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 
 namespace FitCheck_WPFApp
 {
@@ -7,6 +8,10 @@ namespace FitCheck_WPFApp
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+
+            // Create and show main window
+            var mainWindow = new MainWindow();
+            mainWindow.Show();
         }
     }
 }

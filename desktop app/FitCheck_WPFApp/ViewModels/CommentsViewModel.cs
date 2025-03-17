@@ -12,6 +12,7 @@ namespace FitCheck_WPFApp.ViewModels
     {
         private readonly ApiService _apiService;
         private readonly LogService _logService;
+        private readonly AuthService _authService;
 
         private ObservableCollection<Comment> _comments;
         public ObservableCollection<Comment> Comments
@@ -57,13 +58,18 @@ namespace FitCheck_WPFApp.ViewModels
         public ICommand RemoveCommentCommand { get; }
         public ICommand RefreshCommand { get; }
 
-        public CommentsViewModel(ApiService apiService, LogService logService)
+        public CommentsViewModel(ApiService apiService, LogService logService, AuthService authService)
         {
             _apiService = apiService;
             _logService = logService;
+            _authService = authService;
             _comments = new ObservableCollection<Comment>();
 
-            RemoveCommentCommand = new RelayCommand(async param => await RemoveCommentAsync(), param => SelectedComment != null);
+            RemoveCommentCommand = new RelayCommand(
+                async param => await RemoveCommentAsync(),
+                param => SelectedComment != null && !string.IsNullOrWhiteSpace(RemovalReason)
+            );
+
             RefreshCommand = new RelayCommand(async param => await LoadCommentsAsync());
 
             Task.Run(LoadCommentsAsync);
@@ -89,19 +95,21 @@ namespace FitCheck_WPFApp.ViewModels
 
         private async Task RemoveCommentAsync()
         {
-            if (SelectedComment == null) return;
+            if (SelectedComment == null || string.IsNullOrWhiteSpace(RemovalReason))
+                return;
 
             try
             {
                 await _apiService.RemoveCommentAsync(SelectedComment.Id, RemovalReason);
                 await _logService.LogActionAsync(
                     AdminActionType.RemoveComment,
-                    "mskvszkyt", // Current logged in admin username
-                    "mskvszkyt",
+                    _authService.GetCurrentUsername(),
+                    _authService.GetCurrentUsername(),
                     SelectedComment.Id.ToString(),
-                    $"Comment {SelectedComment.Id} by {SelectedComment.AuthorUsername} was removed. Reason: {RemovalReason}"
+                    $"Comment removed. Reason: {RemovalReason}"
                 );
 
+                // Remove the comment from the list
                 Comments.Remove(SelectedComment);
                 SelectedComment = null;
                 RemovalReason = string.Empty;
@@ -114,7 +122,28 @@ namespace FitCheck_WPFApp.ViewModels
 
         private void FilterComments()
         {
-            // Implementation would filter comments based on search query
+            // Implement comment filtering based on search query
+            if (string.IsNullOrWhiteSpace(SearchQuery))
+            {
+                // If search query is empty, reload all comments
+                Task.Run(LoadCommentsAsync);
+                return;
+            }
+
+            // Filter the in-memory collection (could be enhanced with API filtering)
+            string searchLower = SearchQuery.ToLower();
+            ObservableCollection<Comment> filteredComments = new ObservableCollection<Comment>();
+
+            foreach (Comment comment in Comments)
+            {
+                if ((comment.Text != null && comment.Text.ToLower().Contains(searchLower)) ||
+                    (comment.AuthorUsername != null && comment.AuthorUsername.ToLower().Contains(searchLower)))
+                {
+                    filteredComments.Add(comment);
+                }
+            }
+
+            Comments = filteredComments;
         }
     }
 }
