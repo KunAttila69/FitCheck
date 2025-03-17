@@ -1,5 +1,7 @@
 import { useState } from "react";
 import styles from "./SignUpStyle.module.css"; 
+import { registerUser } from "../../services/authServices";
+import { useNavigate } from "react-router-dom";
 
 const SignUpPage = () => {
   const [username, setUsername] = useState("");
@@ -7,10 +9,10 @@ const SignUpPage = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate()
 
 
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
 
@@ -23,8 +25,19 @@ const SignUpPage = () => {
       setError("Passwords do not match!");
       return;
     }
+    
+    try {
+      const response = await registerUser(username, email, password);
  
-  };
+      if (!response || response.status !== 200) {
+        setError(response?.data.message || "An error occurred during registration.");
+      } else {
+        navigate("/login");
+      }
+    } catch (err) {
+      setError("An error occurred during registration. Please try again.");
+    }
+  }
 
   return (
     <div className={styles.signupContainer}>
