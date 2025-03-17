@@ -8,10 +8,6 @@ namespace FitCheck_WPFApp
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-
-            // Create and show main window
-            var mainWindow = new MainWindow();
-            mainWindow.Show();
         }
     }
 }

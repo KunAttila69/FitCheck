@@ -23,33 +23,26 @@ namespace FitCheck_WPFApp
         {
             InitializeComponent();
 
-            // Initialize services
             _authService = new AuthService();
             _apiService = new ApiService();
             _logService = new LogService();
 
-            // Initialize login view
             _loginView = new LoginView(_authService);
             _loginView.LoginSuccessful += OnLoginSuccessful;
 
-            // Set initial content to login view
             ContentPanel.Content = _loginView;
         }
 
-        private void OnLoginSuccessful(object sender, EventArgs e)
+        private async void OnLoginSuccessful(object sender, EventArgs e)
         {
-            // Pass the token to API service
             _apiService.SetAuthToken(_authService.GetAccessToken());
 
             if (_authService.IsAdmin())
             {
-                // Show admin navigation
                 AdminNavigation.Visibility = Visibility.Visible;
 
-                // Initialize admin views if they don't exist yet
                 InitializeAdminViews();
 
-                // Set initial admin view
                 ContentPanel.Content = _usersView;
             }
             else
@@ -57,8 +50,7 @@ namespace FitCheck_WPFApp
                 MessageBox.Show("You don't have administrator privileges for this application.",
                     "Access Denied", MessageBoxButton.OK, MessageBoxImage.Warning);
 
-                // Log the unauthorized access attempt
-                _logService.LogActionAsync(
+                await _logService.LogActionAsync(
                     AdminActionType.UnauthorizedAccess,
                     "unknown",
                     _authService.GetCurrentUsername(),
