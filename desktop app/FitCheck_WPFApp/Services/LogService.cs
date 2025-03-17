@@ -58,5 +58,10 @@ namespace FitCheck_WPFApp.Services
         {
             return _logs.OrderByDescending(l => l.Timestamp).ToList();
         }
+
+        internal async Task<IEnumerable<AdminLog>> GetLogsAsync(DateTime startDate, DateTime endDate)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -45,22 +45,23 @@ namespace FitCheck_WPFApp.ViewModels
 
         private void NavigateToPosts()
         {
-            CurrentViewModel = new PostsViewModel(_apiService, _logService);
+            CurrentViewModel = new PostsViewModel(_apiService, _logService, _authService);
         }
 
         private void NavigateToComments()
         {
-            CurrentViewModel = new CommentsViewModel(_apiService, _logService);
+            CurrentViewModel = new CommentsViewModel(_apiService, _logService, _authService);
         }
 
         private void NavigateToLogs()
         {
-            CurrentViewModel = new LogsViewModel(_logService);
+            CurrentViewModel = new LogsViewModel(_logService, _authService);
         }
 
         private void Logout()
         {
             _authService.Logout();
+            
             // Here you would typically navigate to login view or close the application
         }
     }

@@ -9,7 +9,8 @@ namespace FitCheck_WPFApp.Models
         RemovePost,
         RemoveComment,
         Login,
-        Logout
+        Logout,
+        UnauthorizedAccess
     }
 
     public class AdminLog
