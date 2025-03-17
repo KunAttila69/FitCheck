@@ -1,11 +1,7 @@
-import { authFetch, BASE_URL } from "./interceptor"
-type LoginResponse = {
-    refresh: string,
-    access: string
-}
+import { authFetch, BASE_URL } from "./interceptor" 
 
-export async function loginUser(username:string, password: string) {
-    try{
+export async function loginUser(username: string, password: string) {
+    try {
         const response = await fetch(BASE_URL + "/api/auth/login", {
             method: "POST",
             headers: {
@@ -15,22 +11,32 @@ export async function loginUser(username:string, password: string) {
                 username: username,
                 password: password
             })
-        })
-        
+        });
+
         if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
+            throw new Error(`HTTP error! Status: ${response.status}`);
         }
 
-        const tokens: LoginResponse = await response.json()
+        const tokens = await response.json();
+        console.log("Response JSON:", tokens);
+ 
+        if (!tokens.refreshToken || !tokens.accessToken) {
+            console.error("Tokens are missing required fields!");
+            return undefined;
+        }
 
-        localStorage.setItem("refresh", tokens.refresh)
-        localStorage.setItem("access", tokens.access)
+        console.log(`Refresh: ${tokens.refreshToken}, \nAccess: ${tokens.accessToken}`);
+        
+        localStorage.setItem("refresh", tokens.refreshToken);
+        localStorage.setItem("access", tokens.accessToken);
+        
         return { status: response.status, tokens };
-    }catch(err){
-        console.error(err)
-        return undefined
+    } catch (err) {
+        console.error("Login error:", err);
+        return undefined;
     }
 }
+
 
 export async function registerUser(username: string, email: string, password: string) {
     try {
