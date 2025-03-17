@@ -54,6 +54,12 @@ namespace FitCheck_Server.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("BanReason")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("BannedAt")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Bio")
                         .HasColumnType("TEXT");
 
@@ -69,6 +75,9 @@ namespace FitCheck_Server.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsBanned")
                         .HasColumnType("INTEGER");
 
                     b.Property<bool>("LockoutEnabled")
