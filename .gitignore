@@ -115,7 +115,6 @@ temp/
 tmp/
 
 # Media and upload files
-**/wwwroot/uploads/
 
 # Secrets
 appsettings.*.json
