@@ -11,6 +11,19 @@ import LeaderboardPage from './pages/LeaderboardPage/LeaderboardPage';
 import UploadPage from './pages/UploadPage/UploadPage';
 import { useState, useEffect } from 'react';
 import { getUserProfile } from './services/authServices';
+import { Link } from 'react-router-dom';
+ 
+function UnauthorizedPage() {
+  return (
+    <div className="unauthorized">
+      <h1>You are not signed in</h1>
+      <p>Please sign in to access the site.</p>
+      <Link to="/login">
+        <button>Go to Login</button>
+      </Link>
+    </div>
+  );
+}
 
 function App() {   
   const [profile, setProfile] = useState(null); 
@@ -47,6 +60,7 @@ function App() {
           </>
         ) : (
           <>
+            <Route path='/' element={<UnauthorizedPage />} />
             <Route path='/login' element={<LoginPage />} />
             <Route path='/signup' element={<SignUpPage />} /> 
           </>

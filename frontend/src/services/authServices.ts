@@ -110,3 +110,32 @@ export async function uploadPost(caption: string, files: File[]) {
         throw error;
     }
 }
+
+
+export const fetchFeed = async () => {
+    try {
+      const token = localStorage.getItem("access"); // Get token from localStorage
+  
+      if (!token) {
+        throw new Error("No auth token found, please log in again.");
+      }
+  
+      const response = await fetch(BASE_URL + "/api/posts/get-feed", {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${token}`, // Include token
+          "Content-Type": "application/json",
+        },
+        credentials: "include", // If your backend uses cookies
+      });
+  
+      if (!response.ok) {
+        throw new Error(`Failed to fetch feed: ${response.status}`);
+      }
+  
+      const data = await response.json();
+      return (data.posts || []);
+    } catch (error) {
+      console.error("Error fetching feed:", error);
+    }
+  };
