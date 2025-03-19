@@ -1,5 +1,5 @@
-import './App.css'
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import './App.css';
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import HomePage from './pages/HomePage/HomePage';
 import LoginPage from './pages/LoginPage/LoginPage';
 import SignUpPage from './pages/SignUpPage/SignUpPage';
@@ -9,23 +9,51 @@ import FriendsPage from './pages/FriendsPage/FriendsPage';
 import EditPage from './pages/EditPage/EditPage';
 import LeaderboardPage from './pages/LeaderboardPage/LeaderboardPage';
 import UploadPage from './pages/UploadPage/UploadPage';
+import { useState, useEffect } from 'react';
+import { getUserProfile } from './services/authServices';
 
-function App() { 
+function App() {   
+  const [profile, setProfile] = useState(null); 
+
+  const fetchProfile = async () => {
+    try {
+      const res = await getUserProfile();
+      if (res) {
+        setProfile(res);
+      }
+    } catch (err) { 
+      console.error("Error fetching profile:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchProfile();
+  }, []);
+
   return (
     <BrowserRouter>
-    <Routes>
-      <Route index element={<HomePage/>} />
-      <Route path='/notifications' element={<NotificationsPage/>} />
-      <Route path='/friends' element={<FriendsPage/>} />
-      <Route path='/edit' element={<EditPage/>} />
-      <Route path='/leaderboard' element={<LeaderboardPage/>} />
-      <Route path='/profile' element={<ProfilePage/>} />
-      <Route path='/login' element={<LoginPage />}/>
-      <Route path='/signup' element={<SignUpPage />}/>
-      <Route path='/upload' element={<UploadPage />}/>
-    </Routes>
-  </BrowserRouter>
-  )
+      <Routes>
+        {profile ? (
+          <>
+            <Route index element={<HomePage fetchProfile={fetchProfile} />} />
+            <Route path='/notifications' element={<NotificationsPage />} />
+            <Route path='/friends' element={<FriendsPage />} />
+            <Route path='/edit' element={<EditPage />} />
+            <Route path='/leaderboard' element={<LeaderboardPage />} />
+            <Route path='/profile' element={<ProfilePage />} />
+            <Route path='/upload' element={<UploadPage />} />
+            <Route path='/login' element={<LoginPage />} />
+            <Route path='/signup' element={<SignUpPage />} /> 
+          </>
+        ) : (
+          <>
+            <Route path='/login' element={<LoginPage />} />
+            <Route path='/signup' element={<SignUpPage />} /> 
+          </>
+        )}
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;

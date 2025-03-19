@@ -18,7 +18,7 @@ const Post = () => {
           <div className={styles.postFooter}>
             <div className={styles.postStats}>
               <button className={styles.likeBtn}></button>
-              <h4>50</h4>
+              <h4>51</h4>
               <button className={styles.commentBtn}></button>
               <h4>50</h4>
             </div>

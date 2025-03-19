@@ -4,19 +4,18 @@ import { getUserProfile } from "../../services/authServices"
 import Post from "../../components/Post/Post";
 import Navbar from "../../components/Navbar/Navbar";
 
-const HomePage = () => { 
-  const [profile, setProfile] = useState() 
-  
-  useEffect(()=> {
-    getUserProfile()
-      .then(res => {
-        console.log(res)
-        setProfile(res)
-      })
-  }, [])
+interface PageProps{
+  fetchProfile: () => void
+}
+
+const HomePage = ({fetchProfile}:PageProps) => { 
+  useEffect(() => { 
+    fetchProfile();
+  }, []);
 
   return (
     <>
+      
       <Navbar selectedPage="home"/>
       <main>
         <Post/>
