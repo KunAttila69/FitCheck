@@ -14,4 +14,15 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Comment> Comments { get; set; }
     public DbSet<Hashtag> Hashtags { get; set; }
 
+    public DbSet<UserFollower> UserFollowers { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        base.OnModelCreating(builder);
+
+        // Add unique constraint to prevent duplicate follows
+        builder.Entity<UserFollower>()
+            .HasIndex(uf => new { uf.FollowerId, uf.FollowedId })
+            .IsUnique();
+    }
 }

@@ -5,6 +5,7 @@ using FitCheck_Server.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 
@@ -68,6 +69,41 @@ namespace FitCheck_Server.Controllers
             }
 
             return Ok("Profile updated");
+        }
+
+        [HttpGet("{username}")]
+        public async Task<IActionResult> GetUserProfile(string username)
+        {
+            var user = await _userManager.FindByNameAsync(username);
+
+            if (user == null) return NotFound("User not found");
+
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var followersCount = await _context.UserFollowers
+                .CountAsync(uf => uf.FollowedId == user.Id);
+
+            var followingCount = await _context.UserFollowers
+                .CountAsync(uf => uf.FollowerId == user.Id);
+
+            bool isFollowing = false;
+            if (currentUserId != null)
+            {
+                isFollowing = await _context.UserFollowers
+                    .AnyAsync(uf => uf.FollowerId == currentUserId && uf.FollowedId == user.Id);
+            }
+
+            return Ok(new
+            {
+                Username = user.UserName,
+                Email = user.Email,
+                Bio = user.Bio,
+                ProfilePictureUrl = user.ProfilePictureUrl,
+                JoinedAt = user.CreatedAt,
+                FollowersCount = followersCount,
+                FollowingCount = followingCount,
+                IsFollowing = isFollowing
+            });
         }
         #endregion
 

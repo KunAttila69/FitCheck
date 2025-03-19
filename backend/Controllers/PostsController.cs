@@ -80,15 +80,35 @@ namespace FitCheck_Server.Controllers
         [HttpGet("get-feed")]
         public async Task<IActionResult> GetFeed([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
         {
-            var posts = await _context.Posts
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Get IDs of users that the current user follows
+            var followingUserIds = await _context.UserFollowers
+                .Where(uf => uf.FollowerId == currentUserId)
+                .Select(uf => uf.FollowedId)
+                .ToListAsync();
+
+            // Query for posts, prioritizing those from followed users
+            var postsQuery = _context.Posts
                 .Include(p => p.User)
                 .Include(p => p.MediaFiles)
+                .OrderByDescending(p => followingUserIds.Contains(p.UserId)) // Prioritize posts from followed users
+                .ThenByDescending(p => p.CreatedAt); // Then sort by date
+
+            // Apply paging
+            var posts = await postsQuery
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
                 .Select(p => new PostDtos
                 {
                     Id = p.Id,
                     Caption = p.Caption,
                     MediaUrls = p.MediaFiles.Select(m => m.FilePath).ToList(),
-                    LikeCount = p.Likes.Count
+                    LikeCount = p.Likes.Count,
+                    UserName = p.User.UserName,
+                    UserProfilePictureUrl = p.User.ProfilePictureUrl,
+                    CreatedAt = p.CreatedAt,
+                    IsFromFollowedUser = followingUserIds.Contains(p.UserId)
                 })
                 .ToListAsync();
 

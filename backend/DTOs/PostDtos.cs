@@ -4,9 +4,13 @@
     {
         public int Id { get; set; }
         public string Caption { get; set; }
-        public List<string> MediaUrls { get; set; } 
-        public List<CommentDto> Comments { get; set; }
+        public List<string> MediaUrls { get; set; }
         public int LikeCount { get; set; }
+        public List<CommentDto> Comments { get; set; } = new List<CommentDto>();
+        public string UserName { get; set; }
+        public string UserProfilePictureUrl { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public bool IsFromFollowedUser { get; set; }
     }
 
     public class CommentDto
