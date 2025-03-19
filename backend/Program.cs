@@ -96,7 +96,6 @@ app.MapControllers();
 app.UseStaticFiles();
 
 
-// Add this after app.UseCors(); but before app.Run();
 // Initialize roles
 using (var scope = app.Services.CreateScope())
 {
@@ -111,7 +110,7 @@ using (var scope = app.Services.CreateScope())
         }
     }
 
-    // Optionally create an initial admin user
+    // Creation of an initial admin user
     var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
     var adminUser = new ApplicationUser
     {
@@ -122,7 +121,7 @@ using (var scope = app.Services.CreateScope())
 
     if (await userManager.FindByNameAsync(adminUser.UserName) == null)
     {
-        var result = await userManager.CreateAsync(adminUser, "Admin@123"); // Change this password!
+        var result = await userManager.CreateAsync(adminUser, "Admin@123"); //TODO Change password
         if (result.Succeeded)
         {
             await userManager.AddToRoleAsync(adminUser, "Administrator");

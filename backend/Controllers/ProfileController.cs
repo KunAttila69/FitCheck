@@ -67,7 +67,7 @@ namespace FitCheck_Server.Controllers
                 return BadRequest(result.Errors);
             }
 
-            return NoContent();
+            return Ok("Profile updated");
         }
         #endregion
 

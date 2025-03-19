@@ -51,5 +51,42 @@ namespace FitCheck_Server.Services
 
             return await _userManager.GetRolesAsync(user);
         }
+
+        public async Task<bool> BanUserAsync(string userId, string? reason = null)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+                return false;
+
+            user.IsBanned = true;
+            user.BanReason = reason;
+            user.BannedAt = DateTime.UtcNow;
+
+            var result = await _userManager.UpdateAsync(user);
+            return result.Succeeded;
+        }
+
+        public async Task<bool> UnbanUserAsync(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+                return false;
+
+            user.IsBanned = false;
+            user.BanReason = null;
+            user.BannedAt = null;
+
+            var result = await _userManager.UpdateAsync(user);
+            return result.Succeeded;
+        }
+
+        public async Task<bool> IsUserBannedAsync(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+                return false;
+
+            return user.IsBanned;
+        }
     }
 }

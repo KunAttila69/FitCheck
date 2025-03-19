@@ -3,78 +3,25 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:FitCheck_WPFApp"
-        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        xmlns:views="clr-namespace:FitCheck_WPFApp.Views"
-        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-        TextElement.FontWeight="Regular"
-        TextElement.FontSize="13"
-        TextOptions.TextFormattingMode="Ideal"
-        TextOptions.TextRenderingMode="Auto"
-        Background="{DynamicResource MaterialDesignPaper}"
-        FontFamily="{DynamicResource MaterialDesignFont}"
         mc:Ignorable="d"
-        Title="FitCheck Admin Panel" Height="700" Width="1200"
+        Title="FitCheck Admin Panel" Height="800" Width="1200"
         WindowStartupLocation="CenterScreen">
-
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="220"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-        <!-- Left Menu -->
-        <Grid Grid.Column="0" Background="{DynamicResource MaterialDesignPrimaryDark}">
-            <StackPanel>
-                <TextBlock Text="FitCheck Admin" FontSize="22" FontWeight="Bold" Margin="15,25,15,30" 
-                           Foreground="White" TextAlignment="Center"/>
+        <!-- Admin Navigation -->
+        <StackPanel x:Name="AdminNavigation" Grid.Row="0" Background="#2c3e50" Orientation="Horizontal" Visibility="Collapsed">
+            <Button x:Name="UsersButton" Content="Users" Width="120" Height="40" Margin="10" Click="UsersButton_Click"/>
+            <Button x:Name="PostsButton" Content="Posts" Width="120" Height="40" Margin="10" Click="PostsButton_Click"/>
+            <Button x:Name="CommentsButton" Content="Comments" Width="120" Height="40" Margin="10" Click="CommentsButton_Click"/>
+            <Button x:Name="LogsButton" Content="Logs" Width="120" Height="40" Margin="10" Click="LogsButton_Click"/>
+            <Button x:Name="LogoutButton" Content="Logout" Width="120" Height="40" Margin="10" HorizontalAlignment="Right" Click="LogoutButton_Click"/>
+        </StackPanel>
 
-                <Button x:Name="BtnUsers" Style="{StaticResource MaterialDesignFlatButton}" Click="BtnUsers_Click"
-                        Height="50" Background="Transparent" Foreground="White">
-                    <StackPanel Orientation="Horizontal">
-                        <materialDesign:PackIcon Kind="AccountGroup" Height="25" Width="25" VerticalAlignment="Center"/>
-                        <TextBlock Text="Users" FontSize="16" Margin="15 0 0 0" VerticalAlignment="Center"/>
-                    </StackPanel>
-                </Button>
-
-                <Button x:Name="BtnPosts" Style="{StaticResource MaterialDesignFlatButton}" Click="BtnPosts_Click"
-                        Height="50" Background="Transparent" Foreground="White">
-                    <StackPanel Orientation="Horizontal">
-                        <materialDesign:PackIcon Kind="ImageMultiple" Height="25" Width="25" VerticalAlignment="Center"/>
-                        <TextBlock Text="Posts" FontSize="16" Margin="15 0 0 0" VerticalAlignment="Center"/>
-                    </StackPanel>
-                </Button>
-
-                <Button x:Name="BtnComments" Style="{StaticResource MaterialDesignFlatButton}" Click="BtnComments_Click"
-                        Height="50" Background="Transparent" Foreground="White">
-                    <StackPanel Orientation="Horizontal">
-                        <materialDesign:PackIcon Kind="CommentText" Height="25" Width="25" VerticalAlignment="Center"/>
-                        <TextBlock Text="Comments" FontSize="16" Margin="15 0 0 0" VerticalAlignment="Center"/>
-                    </StackPanel>
-                </Button>
-
-                <Button x:Name="BtnLogs" Style="{StaticResource MaterialDesignFlatButton}" Click="BtnLogs_Click"
-                        Height="50" Background="Transparent" Foreground="White">
-                    <StackPanel Orientation="Horizontal">
-                        <materialDesign:PackIcon Kind="FileClock" Height="25" Width="25" VerticalAlignment="Center"/>
-                        <TextBlock Text="Action Logs" FontSize="16" Margin="15 0 0 0" VerticalAlignment="Center"/>
-                    </StackPanel>
-                </Button>
-
-                <Separator Margin="10,20,10,20" Background="#50FFFFFF"/>
-
-                <Button x:Name="BtnLogout" Style="{StaticResource MaterialDesignFlatButton}" Click="BtnLogout_Click"
-                        Height="50" Background="Transparent" Foreground="White" VerticalAlignment="Bottom" Margin="0,150,0,0">
-                    <StackPanel Orientation="Horizontal">
-                        <materialDesign:PackIcon Kind="Logout" Height="25" Width="25" VerticalAlignment="Center"/>
-                        <TextBlock Text="Logout" FontSize="16" Margin="15 0 0 0" VerticalAlignment="Center"/>
-                    </StackPanel>
-                </Button>
-            </StackPanel>
-        </Grid>
-
-        <!-- Content Area -->
-        <Frame x:Name="MainContentFrame" Grid.Column="1" NavigationUIVisibility="Hidden"/>
-
+        <!-- Content Panel -->
+        <ContentControl x:Name="ContentPanel" Grid.Row="1" Margin="10"/>
     </Grid>
 </Window>
