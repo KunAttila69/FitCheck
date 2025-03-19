@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace FitCheck_WPFApp.Services
 {
     public class AuthService
     {
         private readonly HttpClient _httpClient;
-        private readonly string _baseUrl = "http://localhost:5000/api"; // Update with your actual API URL
+        private readonly string _baseUrl = "https://localhost:7293/api"; 
         private string _accessToken;
         private List<string> _userRoles;
         private string _currentUserId;
@@ -66,7 +67,7 @@ namespace FitCheck_WPFApp.Services
 
         public bool IsAdmin()
         {
-            return IsInRole("Admin");
+            return IsInRole("Administrator");
         }
 
         public string GetCurrentUsername()
