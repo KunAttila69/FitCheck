@@ -22,8 +22,14 @@ namespace FitCheck_Server.Services
             _userManager = userManager;
         }
 
-        public async Task<string> GenerateAccessToken(ApplicationUser user)
+        public async Task<(string? token, string? error)> GenerateAccessToken(ApplicationUser user)
         {
+            // Check if user is banned before generating token
+            if (user.IsBanned)
+            {
+                return (null, $"Account is banned. Reason: {user.BanReason ?? "No reason provided"}");
+            }
+
             var key = Encoding.UTF8.GetBytes(_config["JwtSettings:Key"]!);
 
             // Get user roles
@@ -51,7 +57,7 @@ namespace FitCheck_Server.Services
                 signingCredentials: new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)
             );
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            return (new JwtSecurityTokenHandler().WriteToken(token), null);
         }
 
         public string GenerateRefreshToken()
@@ -60,6 +66,12 @@ namespace FitCheck_Server.Services
             using var rng = RandomNumberGenerator.Create();
             rng.GetBytes(randomBytes);
             return Convert.ToBase64String(randomBytes);
+        }
+
+        // Helper method to validate if a user can authenticate
+        public bool CanUserAuthenticate(ApplicationUser user)
+        {
+            return !user.IsBanned;
         }
     }
 }

@@ -1,95 +1,102 @@
-﻿using FitCheck_WPFApp.Services;
-using FitCheck_WPFApp.ViewModels;
+﻿using FitCheck_WPFApp.Models;
+using FitCheck_WPFApp.Services;
 using FitCheck_WPFApp.Views;
+using System;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace FitCheck_WPFApp
 {
     public partial class MainWindow : Window
     {
+        private readonly AuthService _authService;
         private readonly ApiService _apiService;
         private readonly LogService _logService;
-        private readonly AuthService _authService;
+
+        private UsersView _usersView;
+        private PostsView _postsView;
+        private CommentsView _commentsView;
+        private LogsView _logsView;
+        private LoginView _loginView;
 
         public MainWindow()
         {
             InitializeComponent();
 
-            // Initialize services
+            _authService = new AuthService();
             _apiService = new ApiService();
             _logService = new LogService();
-            _authService = new AuthService();
 
-            // Check if user is authenticated
-            if (!_authService.IsAuthenticated())
+            _loginView = new LoginView(_authService);
+            _loginView.LoginSuccessful += OnLoginSuccessful;
+
+            ContentPanel.Content = _loginView;
+        }
+
+        private async void OnLoginSuccessful(object sender, EventArgs e)
+        {
+            _apiService.SetAuthToken(_authService.GetAccessToken());
+
+            if (_authService.IsAdmin())
             {
-                ShowLoginView();
+                AdminNavigation.Visibility = Visibility.Visible;
+
+                InitializeAdminViews();
+
+                ContentPanel.Content = _usersView;
+            }
+            else
+            {
+                MessageBox.Show("You don't have administrator privileges for this application.",
+                    "Access Denied", MessageBoxButton.OK, MessageBoxImage.Warning);
+
+                await _logService.LogActionAsync(
+                    AdminActionType.UnauthorizedAccess,
+                    "unknown",
+                    _authService.GetCurrentUsername(),
+                    "N/A",
+                    $"Unauthorized access attempt by {_authService.GetCurrentUsername()}"
+                );
+
                 return;
             }
-
-            // Navigate to Users view by default
-            ShowUsersView();
         }
 
-        private void ShowLoginView()
+        private void InitializeAdminViews()
         {
-            var loginView = new LoginView(_authService);
-            loginView.LoginSuccessful += (sender, e) => ShowUsersView();
-            MainContentFrame.Navigate(loginView);
+            _usersView = _usersView ?? new UsersView(_apiService, _logService, _authService);
+            _postsView = _postsView ?? new PostsView(_apiService, _logService, _authService);
+            _commentsView = _commentsView ?? new CommentsView(_apiService, _logService, _authService);
+            _logsView = _logsView ?? new LogsView(_logService, _authService);
         }
 
-        private void ShowUsersView()
+        private void UsersButton_Click(object sender, RoutedEventArgs e)
         {
-            var usersViewModel = new UsersViewModel(_apiService, _logService);
-            var usersView = new UsersView { DataContext = usersViewModel };
-            MainContentFrame.Navigate(usersView);
+            ContentPanel.Content = _usersView;
         }
 
-        private void ShowPostsView()
+        private void PostsButton_Click(object sender, RoutedEventArgs e)
         {
-            var postsViewModel = new PostsViewModel(_apiService, _logService);
-            var postsView = new PostsView { DataContext = postsViewModel };
-            MainContentFrame.Navigate(postsView);
+            ContentPanel.Content = _postsView;
         }
 
-        private void ShowCommentsView()
+        private void CommentsButton_Click(object sender, RoutedEventArgs e)
         {
-            var commentsViewModel = new CommentsViewModel(_apiService, _logService);
-            var commentsView = new CommentsView { DataContext = commentsViewModel };
-            MainContentFrame.Navigate(commentsView);
+            ContentPanel.Content = _commentsView;
         }
 
-        private void ShowLogsView()
+        private void LogsButton_Click(object sender, RoutedEventArgs e)
         {
-            var logsViewModel = new LogsViewModel(_logService);
-            var logsView = new LogsView { DataContext = logsViewModel };
-            MainContentFrame.Navigate(logsView);
+            ContentPanel.Content = _logsView;
         }
 
-        private void BtnUsers_Click(object sender, RoutedEventArgs e)
-        {
-            ShowUsersView();
-        }
-
-        private void BtnPosts_Click(object sender, RoutedEventArgs e)
-        {
-            ShowPostsView();
-        }
-
-        private void BtnComments_Click(object sender, RoutedEventArgs e)
-        {
-            ShowCommentsView();
-        }
-
-        private void BtnLogs_Click(object sender, RoutedEventArgs e)
-        {
-            ShowLogsView();
-        }
-
-        private void BtnLogout_Click(object sender, RoutedEventArgs e)
+        private void LogoutButton_Click(object sender, RoutedEventArgs e)
         {
             _authService.Logout();
-            ShowLoginView();
+
+            AdminNavigation.Visibility = Visibility.Collapsed;
+
+            ContentPanel.Content = _loginView;
         }
     }
 }

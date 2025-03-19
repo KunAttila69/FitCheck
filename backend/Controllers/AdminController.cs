@@ -38,7 +38,10 @@ namespace FitCheck_Server.Controllers
                     Id = user.Id,
                     Username = user.UserName,
                     Email = user.Email,
-                    Roles = roles
+                    Roles = roles,
+                    IsBanned = user.IsBanned,
+                    BanReason = user.BanReason,
+                    BannedAt = user.BannedAt
                 });
             }
 
@@ -84,6 +87,87 @@ namespace FitCheck_Server.Controllers
         {
             var roles = await _roleService.GetUserRolesAsync(userId);
             return Ok(new { Roles = roles });
+        }
+
+        [HttpPost("ban-user")]
+        public async Task<IActionResult> BanUser([FromBody] UserBanRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            // Check if trying to ban self
+            var currentUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (currentUserId == request.UserId)
+            {
+                return BadRequest(new { Message = "You cannot ban yourself" });
+            }
+
+            // Check if user exists and is not an administrator
+            var userToBan = await _userManager.FindByIdAsync(request.UserId);
+            if (userToBan == null)
+            {
+                return NotFound(new { Message = "User not found" });
+            }
+
+            if (await _userManager.IsInRoleAsync(userToBan, "Administrator"))
+            {
+                return BadRequest(new { Message = "Cannot ban an administrator" });
+            }
+
+            var result = await _roleService.BanUserAsync(request.UserId, request.Reason);
+            if (!result)
+            {
+                return BadRequest(new { Message = "Failed to ban user" });
+            }
+
+            return Ok(new { Message = "User banned successfully" });
+        }
+
+        [HttpPost("unban-user/{userId}")]
+        public async Task<IActionResult> UnbanUser(string userId)
+        {
+            if (string.IsNullOrEmpty(userId))
+            {
+                return BadRequest(new { Message = "User ID is required" });
+            }
+
+            var userToUnban = await _userManager.FindByIdAsync(userId);
+            if (userToUnban == null)
+            {
+                return NotFound(new { Message = "User not found" });
+            }
+
+            if (!userToUnban.IsBanned)
+            {
+                return BadRequest(new { Message = "User is not banned" });
+            }
+
+            var result = await _roleService.UnbanUserAsync(userId);
+            if (!result)
+            {
+                return BadRequest(new { Message = "Failed to unban user" });
+            }
+
+            return Ok(new { Message = "User unbanned successfully" });
+        }
+
+        [HttpGet("banned-status/{userId}")]
+        public async Task<IActionResult> GetBannedStatus(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return NotFound(new { Message = "User not found" });
+            }
+
+            return Ok(new
+            {
+                IsBanned = user.IsBanned,
+                BanReason = user.BanReason,
+                BannedAt = user.BannedAt
+            });
         }
     }
 }
