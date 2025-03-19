@@ -98,7 +98,6 @@ coverage/
 out/
 
 # SQLite Database files
-*.db
 *.db-shm
 *.db-wal
 *.sqlite
@@ -116,7 +115,6 @@ temp/
 tmp/
 
 # Media and upload files
-**/uploads/
 **/wwwroot/uploads/
 
 # Secrets
