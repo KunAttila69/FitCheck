@@ -37,7 +37,6 @@ namespace FitCheck_Server.Controllers
             if (userToFollow == null)
                 return NotFound("User not found");
 
-            // Check if already following
             var existingFollow = await _context.UserFollowers
                 .FirstOrDefaultAsync(uf => uf.FollowerId == currentUserId && uf.FollowedId == userId);
 
