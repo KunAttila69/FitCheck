@@ -114,7 +114,7 @@ export async function uploadPost(caption: string, files: File[]) {
 
 export const fetchFeed = async () => {
     try {
-      const token = localStorage.getItem("access"); // Get token from localStorage
+      const token = localStorage.getItem("access");
   
       if (!token) {
         throw new Error("No auth token found, please log in again.");
@@ -123,10 +123,9 @@ export const fetchFeed = async () => {
       const response = await fetch(BASE_URL + "/api/posts/get-feed", {
         method: "GET",
         headers: {
-          "Authorization": `Bearer ${token}`, // Include token
+          "Authorization": `Bearer ${token}`,
           "Content-Type": "application/json",
-        },
-        credentials: "include", // If your backend uses cookies
+        }, 
       });
   
       if (!response.ok) {

@@ -16,7 +16,6 @@ const HomePage = ({ fetchProfile }: PageProps) => {
     const loadFeed = async () => {
       fetchProfile();
       const posts = await fetchFeed();
-      console.log(posts)
       setFeed(posts || []);
     };
 
