@@ -31,17 +31,17 @@ namespace FitCheck_Server.Controllers
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             if (currentUserId == userId)
-                return BadRequest("You cannot follow yourself");
+                return BadRequest(new { Message = "You cannot follow yourself" });
 
             var userToFollow = await _userManager.FindByIdAsync(userId);
             if (userToFollow == null)
-                return NotFound("User not found");
+                return NotFound(new { Message = "User not found" });
 
             var existingFollow = await _context.UserFollowers
                 .FirstOrDefaultAsync(uf => uf.FollowerId == currentUserId && uf.FollowedId == userId);
 
             if (existingFollow != null)
-                return BadRequest("You are already following this user");
+                return BadRequest(new { Message = "You are already following this user" });
 
             var userFollow = new UserFollower
             {
@@ -65,7 +65,7 @@ namespace FitCheck_Server.Controllers
                 .FirstOrDefaultAsync(uf => uf.FollowerId == currentUserId && uf.FollowedId == userId);
 
             if (follow == null)
-                return NotFound("You are not following this user");
+                return NotFound(new { Message = "You are not following this user" });
 
             _context.UserFollowers.Remove(follow);
             await _context.SaveChangesAsync();
@@ -126,7 +126,7 @@ namespace FitCheck_Server.Controllers
 
             var user = await _userManager.FindByIdAsync(targetUserId);
             if (user == null)
-                return NotFound("User not found");
+                return NotFound(new { Message = "User not found" });
 
             var followersCount = await _context.UserFollowers
                 .CountAsync(uf => uf.FollowedId == targetUserId);

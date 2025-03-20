@@ -155,7 +155,7 @@ namespace FitCheck_Server.Controllers
             var existingLike = await _context.Likes
                 .FirstOrDefaultAsync(l => l.PostId == postId && l.UserId == userId);
 
-            if (existingLike != null) return BadRequest("Post already liked.");
+            if (existingLike != null) return BadRequest(new { Message = "Post already liked." });
 
             var like = new Like { PostId = postId, UserId = userId };
             _context.Likes.Add(like);
