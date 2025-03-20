@@ -134,7 +134,7 @@ export const fetchFeed = async () => {
       }
   
       const data = await response.json();
-      return (data.posts || []);
+      return (data || []);
     } catch (error) {
       console.error("Error fetching feed:", error);
     }
