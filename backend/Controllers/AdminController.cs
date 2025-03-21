@@ -39,9 +39,12 @@ namespace FitCheck_Server.Controllers
                     Username = user.UserName,
                     Email = user.Email,
                     Roles = roles,
+                    CreatedAt = user.CreatedAt,
                     IsBanned = user.IsBanned,
                     BanReason = user.BanReason,
-                    BannedAt = user.BannedAt
+                    BannedAt = user.BannedAt,
+                    Bio = user.Bio,
+                    ProfilePictureUrl = user.ProfilePictureUrl
                 });
             }
 

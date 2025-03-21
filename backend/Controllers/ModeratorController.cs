@@ -2,8 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using FitCheck_Server.Data;
+using FitCheck_Server.DTOs;
 using FitCheck_Server.Models;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace FitCheck_Server.Controllers
@@ -53,6 +55,15 @@ namespace FitCheck_Server.Controllers
             var comments = await _dbContext.Comments
                 .Include(c => c.User)
                 .Include(c => c.Post)
+                .Select(c => new ModeratorCommentDto
+                {
+                    Id = c.Id,
+                    Text = c.Text,
+                    CreatedAt = c.CreatedAt,
+                    AuthorUsername = c.User.UserName,
+                    AuthorProfilePicture = c.User.ProfilePictureUrl,
+                    PostId = c.PostId
+                })
                 .ToListAsync();
 
             return Ok(comments);
