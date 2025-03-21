@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 namespace FitCheck_WPFApp.Services
@@ -11,11 +13,20 @@ namespace FitCheck_WPFApp.Services
     public class ApiService
     {
         private readonly HttpClient _httpClient;
-        private readonly string _baseUrl = "http://localhost:7293/api"; // Update with your actual API URL
+        private readonly string _baseUrl = "https://localhost:7293/api"; 
 
         public ApiService()
         {
-            _httpClient = new HttpClient();
+            var handler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = (message, cert, chain, sslPolicyErrors) =>
+                {
+                    return true;
+                }
+            };
+
+            _httpClient = new HttpClient(handler);
+            _httpClient.BaseAddress = new Uri(_baseUrl);
         }
 
         public void SetAuthToken(string token)
@@ -37,20 +48,20 @@ namespace FitCheck_WPFApp.Services
             {
                 BannedUntil = banUntil
             };
-            var response = await _httpClient.PostAsJsonAsync($"{_baseUrl}/admin/users/{userId}/ban", banRequest);
+            var response = await _httpClient.PostAsJsonAsync($"{_baseUrl}/admin/ban-user", banRequest);
             response.EnsureSuccessStatusCode();
         }
 
         public async Task UnbanUserAsync(string userId)
         {
-            var response = await _httpClient.DeleteAsync($"{_baseUrl}/admin/users/{userId}/ban");
+            var response = await _httpClient.PostAsync($"{_baseUrl}/admin/unban-user/{userId}", null);
             response.EnsureSuccessStatusCode();
         }
 
         // Posts Endpoints
         public async Task<List<Post>> GetAllPostsAsync(int page = 1, int pageSize = 25)
         {
-            var response = await _httpClient.GetAsync($"{_baseUrl}/admin/posts?page={page}&pageSize={pageSize}");
+            var response = await _httpClient.GetAsync($"{_baseUrl}/moderator/posts?page={page}&pageSize={pageSize}");
             response.EnsureSuccessStatusCode();
             return await response.Content.ReadFromJsonAsync<List<Post>>();
         }
@@ -61,14 +72,14 @@ namespace FitCheck_WPFApp.Services
             {
                 Reason = reason
             };
-            var response = await _httpClient.DeleteAsync($"{_baseUrl}/admin/posts/{postId}");
+            var response = await _httpClient.DeleteAsync($"{_baseUrl}/moderator/posts/{postId}");
             response.EnsureSuccessStatusCode();
         }
 
         // Comments Endpoints
         public async Task<List<Comment>> GetAllCommentsAsync(int page = 1, int pageSize = 25)
         {
-            var response = await _httpClient.GetAsync($"{_baseUrl}/admin/comments?page={page}&pageSize={pageSize}");
+            var response = await _httpClient.GetAsync($"{_baseUrl}/moderator/comments?page={page}&pageSize={pageSize}");
             response.EnsureSuccessStatusCode();
             return await response.Content.ReadFromJsonAsync<List<Comment>>();
         }
@@ -79,7 +90,7 @@ namespace FitCheck_WPFApp.Services
             {
                 Reason = reason
             };
-            var response = await _httpClient.DeleteAsync($"{_baseUrl}/admin/comments/{commentId}");
+            var response = await _httpClient.DeleteAsync($"{_baseUrl}/moderator/comments/{commentId}");
             response.EnsureSuccessStatusCode();
         }
     }

@@ -2,23 +2,31 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
-using System.Windows;
 
 namespace FitCheck_WPFApp.Services
 {
     public class AuthService
     {
         private readonly HttpClient _httpClient;
-        private readonly string _baseUrl = "https://localhost:7293/api"; 
+        private readonly string _baseUrl = "https://localhost:7293/api";
         private string _accessToken;
         private List<string> _userRoles;
-        private string _currentUserId;
         private string _currentUsername;
 
         public AuthService()
         {
-            _httpClient = new HttpClient();
+            var handler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = (message, cert, chain, sslPolicyErrors) =>
+                {
+                    return true;
+                }
+            };
+
+            _httpClient = new HttpClient(handler);
             _userRoles = new List<string>();
         }
 
@@ -41,7 +49,6 @@ namespace FitCheck_WPFApp.Services
                 _userRoles = new List<string>(result.Roles ?? new List<string>());
                 _currentUsername = username;
 
-                // Set the token for API calls
                 return true;
             }
             catch
