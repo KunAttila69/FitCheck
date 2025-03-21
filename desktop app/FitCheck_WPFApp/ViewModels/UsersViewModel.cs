@@ -2,6 +2,7 @@
 using FitCheck_WPFApp.Services;
 using System;
 using System.Collections.ObjectModel;
+using System.Resources;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -77,6 +78,10 @@ namespace FitCheck_WPFApp.ViewModels
                     if (user.ProfilePictureUrl != null)
                     {
                         user.ProfilePictureUrl = _baseRootUrl + user.ProfilePictureUrl;
+                    }
+                    else
+                    {
+                        user.ProfilePictureUrl = @"Resources\default_user.png";
                     }
                 }
             }

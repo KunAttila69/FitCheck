@@ -57,6 +57,8 @@ namespace FitCheck_Server.Controllers
 
             if (user == null) return NotFound("User not found");
 
+            if (dto.Username != null && _userManager.Users.Any(u => u.UserName == dto.Username)) return BadRequest(new { Message = "The given username is already in use." });
+            
             // Update properties
             user.UserName = dto.Username ?? user.UserName;
             user.Email = dto.Email ?? user.Email;
