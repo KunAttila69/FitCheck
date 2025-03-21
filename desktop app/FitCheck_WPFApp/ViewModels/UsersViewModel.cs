@@ -12,6 +12,7 @@ namespace FitCheck_WPFApp.ViewModels
     {
         private readonly ApiService _apiService;
         private readonly LogService _logService;
+        private readonly string _baseRootUrl = "https://localhost:7293";
 
         private ObservableCollection<User> _users;
         public ObservableCollection<User> Users
@@ -71,11 +72,17 @@ namespace FitCheck_WPFApp.ViewModels
             {
                 var users = await _apiService.GetAllUsersAsync();
                 Users = new ObservableCollection<User>(users);
+                foreach (var user in Users)
+                {
+                    if (user.ProfilePictureUrl != null)
+                    {
+                        user.ProfilePictureUrl = _baseRootUrl + user.ProfilePictureUrl;
+                    }
+                }
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                // Log or handle the error
             }
             finally
             {
