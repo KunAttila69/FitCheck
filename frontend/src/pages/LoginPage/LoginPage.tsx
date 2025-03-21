@@ -1,12 +1,14 @@
 import { useState } from "react"
 import styles from "./LoginStyle.module.css";
 import { loginUser } from "../../services/authServices"
+import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
+  const navigate = useNavigate()
 
   const submitLoginForm = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -22,6 +24,7 @@ const LoginPage = () => {
       loginUser(username, password).then((res) => {
         if (res && res.status === 200) {
             console.log("Login successful!", res);
+            navigate("/")
         } else {
             setError("Invalid username or password!");
         }

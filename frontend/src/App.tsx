@@ -1,5 +1,5 @@
 import './App.css';
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import HomePage from './pages/HomePage/HomePage';
 import LoginPage from './pages/LoginPage/LoginPage';
 import SignUpPage from './pages/SignUpPage/SignUpPage';
@@ -14,6 +14,12 @@ import { getUserProfile } from './services/authServices';
 import { Link } from 'react-router-dom';
  
 function UnauthorizedPage() {
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    navigate("/")
+  },[])
+
   return (
     <div className="unauthorized">
       <h1>You are not signed in</h1>
