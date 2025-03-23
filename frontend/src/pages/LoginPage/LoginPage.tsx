@@ -3,7 +3,11 @@ import styles from "./LoginStyle.module.css";
 import { loginUser } from "../../services/authServices"
 import { useNavigate } from "react-router-dom";
 
-const LoginPage = () => {
+interface LoginProps{
+  fetchProfile: () => Promise<void>;
+}
+
+const LoginPage = ({fetchProfile}:LoginProps) => {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState<string | null>(null)
@@ -11,30 +15,30 @@ const LoginPage = () => {
   const navigate = useNavigate()
 
   const submitLoginForm = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError(null)
-
+    e.preventDefault();
+    setError(null);
+  
     if (!username || !password) {
-      setError("Username and password are required!")
-      return
+      setError("Username and password are required!");
+      return;
     }
-
-    setLoading(true)
+  
+    setLoading(true);
     try {
-      loginUser(username, password).then((res) => {
-        if (res && res.status === 200) {
-            console.log("Login successful!", res);
-            navigate("/")
-        } else {
-            setError("Invalid username or password!");
-        }
-      }); 
+      const res = await loginUser(username, password);
+      if (res && res.status === 200) {
+        console.log("Login successful!", res);
+        fetchProfile()
+        navigate("/");
+      } else {
+        setError("Invalid username or password!");
+      }
     } catch (err) {
-      setError("Invalid username or password!")
+      setError("Invalid username or password!");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className={styles.loginContainer}>

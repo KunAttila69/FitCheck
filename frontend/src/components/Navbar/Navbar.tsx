@@ -2,10 +2,11 @@ import { useState } from "react";
 import styles from "./Navbar.module.css";
 import {useNavigate} from "react-router-dom"
 interface NavbarProps{
-    selectedPage: string
+    selectedPage: string,
+    profilePic: null | string
 }
 
-const Navbar = ({selectedPage} : NavbarProps) => {
+const Navbar = ({selectedPage, profilePic} : NavbarProps) => {
     const [notificationCount, setNotificationCount] = useState(2)
     const navigate = useNavigate()
     return ( 
@@ -15,7 +16,7 @@ const Navbar = ({selectedPage} : NavbarProps) => {
                     <button></button>
                     <input type="text" placeholder="Search for user"/>
                 </div>
-                <div className={styles.profile} onClick={() => {navigate("/edit")}}></div>
+                <img className={styles.profile} src={profilePic != null ? profilePic : "../../src/images/FitCheck-logo.png"} onClick={() => {navigate("/edit")}}/>
             </div>
                 <div className={styles.iconContainer}>
                 <div className={`${styles.notifications} ${styles.icon}`} onClick={() => navigate("/notifications")}>{notificationCount > 0 ? <div className={styles.notificationCount}>{notificationCount}</div> : ""} {selectedPage == "notifications" ? <div className={styles.selected}/> : ""}</div>

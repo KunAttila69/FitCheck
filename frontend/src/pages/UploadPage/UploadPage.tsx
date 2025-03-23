@@ -3,7 +3,7 @@ import styles from "./UploadPage.module.css";
 import Navbar from "../../components/Navbar/Navbar"; 
 import { uploadPost } from "../../services/authServices";
 
-const UploadPage = () => {  
+const UploadPage = (profile: any) => {  
     const [mediaFiles, setMediaFiles] = useState<File[]>([]);
     const [previewFiles, setPreviewFiles] = useState<string[]>([]);
     const [caption, setCaption] = useState("");
@@ -40,7 +40,7 @@ const UploadPage = () => {
 
     return ( 
         <>
-            <Navbar selectedPage="post"/>
+            <Navbar selectedPage="post" profilePic={profile.profilePictureUrl}/>
             <main className={styles.editContainer}>
                 <form className={styles.uploadForm} onSubmit={handleUpload}>
                     <label className={styles.imageContainer}>
