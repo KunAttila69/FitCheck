@@ -72,8 +72,7 @@ namespace FitCheck_WPFApp.ViewModels
             try
             {
                 var users = await _apiService.GetAllUsersAsync();
-                Users = new ObservableCollection<User>(users);
-                foreach (var user in Users)
+                foreach (User user in users)
                 {
                     if (user.ProfilePictureUrl != null)
                     {
@@ -84,6 +83,7 @@ namespace FitCheck_WPFApp.ViewModels
                         user.ProfilePictureUrl = @"Resources\default_user.png";
                     }
                 }
+                Users = new ObservableCollection<User>(users);
             }
             catch (Exception ex)
             {

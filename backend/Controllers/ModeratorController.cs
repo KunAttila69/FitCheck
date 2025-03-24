@@ -29,6 +29,25 @@ namespace FitCheck_Server.Controllers
                 .Include(p => p.User)
                 .Include(p => p.MediaFiles)
                 .Include(p => p.Hashtags)
+                .Select(p => new ModeratorPostDto
+                {
+                    Id = p.Id,
+                    Caption = p.Caption,
+                    MediaUrls = p.MediaFiles.Select(m => m.FilePath).ToList(),
+                    LikeCount = p.Likes.Count,
+                    UserName = p.User.UserName,
+                    UserProfilePictureUrl = p.User.ProfilePictureUrl,
+                    CreatedAt = p.CreatedAt,
+                    Comments = p.Comments.Select(c => new ModeratorCommentDto
+                    {
+                        Id = c.Id,
+                        Text = c.Text,
+                        CreatedAt = c.CreatedAt,
+                        AuthorUsername = c.User.UserName,
+                        AuthorProfilePicture = c.User.ProfilePictureUrl,
+                        PostId = c.PostId
+                    }).ToList()
+                })
                 .ToListAsync();
 
             return Ok(posts);

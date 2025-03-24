@@ -66,7 +66,7 @@ namespace FitCheck_Server.Controllers
             _context.Posts.Add(post);
             await _context.SaveChangesAsync();
 
-            PostDtos postDto = new PostDtos
+            PostDto postDto = new PostDto
             {
                 Id = post.Id,
                 Caption = post.Caption,
@@ -99,7 +99,7 @@ namespace FitCheck_Server.Controllers
             var posts = await postsQuery
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
-                .Select(p => new PostDtos
+                .Select(p => new PostDto
                 {
                     Id = p.Id,
                     Caption = p.Caption,
@@ -128,7 +128,7 @@ namespace FitCheck_Server.Controllers
 
             if (post == null) return NotFound();
 
-            var postDto = new PostDtos
+            var postDto = new PostDto
             {
                 Id = post.Id,
                 Caption = post.Caption,
