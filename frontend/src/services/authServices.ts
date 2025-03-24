@@ -138,3 +138,110 @@ export const fetchFeed = async () => {
       console.error("Error fetching feed:", error);
     }
   };
+
+  export async function updateProfile(username: string, bio: string): Promise<boolean> {
+    try {
+      const token = localStorage.getItem("access");
+      if (!token) {
+        throw new Error("User not authenticated");
+      }
+  
+      const response = await fetch(BASE_URL + "/api/profile", {
+        method: "PUT",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          username,
+          bio
+        })
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Error updating profile:", errorData);
+        return false;
+      }
+  
+      const data = await response.json();
+      console.log("Profile updated:", data);
+      return true;
+    } catch (err) {
+      console.error("Error during profile update:", err);
+      return false;
+    }
+  }
+  
+ export async function changePassword(
+    currentPassword: string,
+    newPassword: string,
+    confirmPassword: string
+  ): Promise<boolean> {
+    try {
+      const token = localStorage.getItem("access");
+      if (!token) {
+        throw new Error("User not authenticated");
+      }
+  
+      const response = await fetch(BASE_URL + "/api/profile/changepassword", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          currentPassword,
+          newPassword,
+          confirmPassword
+        })
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Error changing password:", errorData);
+        return false;
+      }
+  
+      const data = await response.json();
+      console.log("Password changed:", data);
+      return true;
+    } catch (err) {
+      console.error("Error during password change:", err);
+      return false;
+    }
+  }
+  
+
+  export async function uploadAvatar(avatarFile: File): Promise<boolean> {
+    try {
+      const token = localStorage.getItem("access");
+      if (!token) {
+        throw new Error("User not authenticated");
+      }
+  
+      const formData = new FormData();
+      formData.append("avatar", avatarFile);
+  
+      const response = await fetch(BASE_URL + "/api/profile/upload-avatar", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+        },
+        body: formData
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Error uploading avatar:", errorData);
+        return false;
+      }
+  
+      const data = await response.json();
+      console.log("Avatar uploaded:", data);
+      return true;
+    } catch (err) {
+      console.error("Error during avatar upload:", err);
+      return false;
+    }
+  }

@@ -12,7 +12,13 @@ import UploadPage from './pages/UploadPage/UploadPage';
 import { useState, useEffect } from 'react';
 import { getUserProfile } from './services/authServices';
 import { Link } from 'react-router-dom';
- 
+
+interface UserProfile {
+  id: string;
+  name: string;
+  email: string;
+}
+
 function UnauthorizedPage() {
   return (
     <div className="unauthorized">
@@ -26,7 +32,8 @@ function UnauthorizedPage() {
 }
 
 function App() {   
-  const [profile, setProfile] = useState(null); 
+  const [profile, setProfile] = useState<UserProfile | null>(null); 
+  const [loading, setLoading] = useState<boolean>(true); 
 
   const fetchProfile = async () => {
     try {
@@ -36,6 +43,8 @@ function App() {
       }
     } catch (err) { 
       console.error("Error fetching profile:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -43,26 +52,31 @@ function App() {
     fetchProfile();
   }, []);
 
+  if (loading) {
+    return <h1>Loading...</h1>;
+  }
+
   return (
     <BrowserRouter>
       <Routes>
-        {profile ? (
+        {localStorage.getItem("access") ? (
           <>
-            <Route index element={<HomePage fetchProfile={fetchProfile} />} />
+            <Route index element={<HomePage profile={profile} />} />
             <Route path='/notifications' element={<NotificationsPage />} />
             <Route path='/friends' element={<FriendsPage />} />
-            <Route path='/edit' element={<EditPage />} />
+            <Route path='/edit' element={<EditPage profile={profile} />} />
             <Route path='/leaderboard' element={<LeaderboardPage />} />
             <Route path='/profile' element={<ProfilePage />} />
             <Route path='/upload' element={<UploadPage />} />
-            <Route path='/login' element={<LoginPage />} />
-            <Route path='/signup' element={<SignUpPage />} /> 
+            <Route path='/login' element={<Navigate to="/" replace />} />
+            <Route path='/signup' element={<Navigate to="/" replace />} />
           </>
         ) : (
           <>
-            <Route path='/' element={<UnauthorizedPage />} />
-            <Route path='/login' element={<LoginPage />} />
-            <Route path='/signup' element={<SignUpPage />} /> 
+            <Route path='/' element={<UnauthorizedPage />} /> 
+            <Route path='/login' element={<LoginPage fetchProfile={fetchProfile}/>} />
+            <Route path='/signup' element={<SignUpPage />} />
+            <Route path='*' element={<UnauthorizedPage />} />
           </>
         )}
       </Routes>
