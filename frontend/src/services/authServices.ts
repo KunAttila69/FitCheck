@@ -139,7 +139,7 @@ export const fetchFeed = async () => {
     }
   };
 
-  export async function updateProfile(username: string, bio: string): Promise<boolean> {
+  export async function updateProfile(username: string,email: string , bio: string): Promise<boolean> {
     try {
       const token = localStorage.getItem("access");
       if (!token) {
@@ -154,6 +154,7 @@ export const fetchFeed = async () => {
         },
         body: JSON.stringify({
           username,
+          email,
           bio
         })
       });
@@ -184,7 +185,7 @@ export const fetchFeed = async () => {
         throw new Error("User not authenticated");
       }
   
-      const response = await fetch(BASE_URL + "/api/profile/changepassword", {
+      const response = await fetch(BASE_URL + "/api/profile/change-password", {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${token}`,
@@ -213,22 +214,20 @@ export const fetchFeed = async () => {
   }
   
 
-  export async function uploadAvatar(avatarFile: File): Promise<boolean> {
+  export async function uploadAvatar(avatarFile: FormData): Promise<boolean> {
     try {
       const token = localStorage.getItem("access");
       if (!token) {
         throw new Error("User not authenticated");
       }
-  
-      const formData = new FormData();
-      formData.append("avatar", avatarFile);
+   
   
       const response = await fetch(BASE_URL + "/api/profile/upload-avatar", {
         method: "POST",
         headers: {
-          "Authorization": `Bearer ${token}`,
+          "Authorization": `Bearer ${token}` 
         },
-        body: formData
+        body: avatarFile
       });
   
       if (!response.ok) {

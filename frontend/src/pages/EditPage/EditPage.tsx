@@ -51,23 +51,8 @@ const EditPage = ({ profile }: PageProps) => {
   const handleSaveChanges = async () => { 
     if (name !== profile.username || aboutMe !== profile.bio) {
       try {
-        const response = await fetch(BASE_URL + "/api/profile", {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            username: name,
-            bio: aboutMe,
-            email: profile.email,
-          }),
-        });
-   
-        if (!response.ok) {
-          const text = await response.text();
-          alert(`There was an error updating the profile: ${text}`);
-          return;
-        }
+        const response = await updateProfile(name, profile.email, aboutMe) 
+        console.log(response)
       } catch (error) {
         console.error("Error updating profile:", error);
         alert("There was an error updating the profile.");
@@ -77,19 +62,11 @@ const EditPage = ({ profile }: PageProps) => {
    
     if (mediaFile) {
       const formData = new FormData();
-      formData.append("avatar", mediaFile);
+      formData.append("file", mediaFile);
   
-      try {
-        const response = await fetch(BASE_URL + "/api/profile/upload-avatar", {
-          method: "POST",
-          body: formData,
-        });
-  
-        if (!response.ok) {
-          const text = await response.text();
-          alert(`There was an error uploading the avatar: ${text}`);
-          return;
-        }
+      try { 
+        const response = await uploadAvatar(formData) 
+        console.log(response)
       } catch (error) {
         console.error("Error uploading avatar:", error);
         alert("There was an error uploading the avatar.");
@@ -97,8 +74,7 @@ const EditPage = ({ profile }: PageProps) => {
       }
     }
    
-    alert("Profile updated successfully!");
-    navigate("/profile"); 
+    alert("Profile updated successfully!"); 
   };
 
   return (
@@ -114,9 +90,12 @@ const EditPage = ({ profile }: PageProps) => {
 
           {previewFile ? (
             <img src={previewFile} alt="Profile" />
+          ) : profile.profilePictureUrl ? (
+            <img src={BASE_URL+profile.profilePictureUrl} alt="Profile" />
           ) : (
             <img src="../../src/images/FitCheck-logo.png" alt="Profile" />
           )}
+
         </div>
 
         <input
