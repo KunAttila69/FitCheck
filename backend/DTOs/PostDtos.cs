@@ -1,6 +1,6 @@
 ﻿namespace FitCheck_Server.DTOs
 {
-    public class PostDtos
+    public class PostDto
     {
         public int Id { get; set; }
         public string Caption { get; set; }
