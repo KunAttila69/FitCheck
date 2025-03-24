@@ -47,8 +47,8 @@
                 <ListView ItemsSource="{Binding Comments}" SelectedItem="{Binding SelectedComment}">
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Header="ID" Width="50" DisplayMemberBinding="{Binding Id}"/>
-                            <GridViewColumn Header="Author" Width="120">
+                            <GridViewColumn Header="ID" Width="Auto" DisplayMemberBinding="{Binding Id}"/>
+                            <GridViewColumn Header="Author" Width="Auto">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
@@ -62,15 +62,15 @@
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            <GridViewColumn Header="Post ID" Width="70" DisplayMemberBinding="{Binding PostId}"/>
-                            <GridViewColumn Header="Comment" Width="300">
+                            <GridViewColumn Header="Post ID" Width="Auto" DisplayMemberBinding="{Binding PostId}"/>
+                            <GridViewColumn Header="Comment" Width="Auto" >
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Text}" TextTrimming="CharacterEllipsis"/>
+                                        <TextBlock Text="{Binding Text}" TextTrimming="CharacterEllipsis" MaxWidth="200"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            <GridViewColumn Header="Created" Width="120" DisplayMemberBinding="{Binding CreatedAt, StringFormat='{}{0:yyyy-MM-dd}'}"/>
+                            <GridViewColumn Header="Created" Width="Auto" DisplayMemberBinding="{Binding CreatedAt, StringFormat='{}{0:yyyy-MM-dd}'}"/>
                         </GridView>
                     </ListView.View>
                 </ListView>

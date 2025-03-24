@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace FitCheck_WPFApp.Models
 {
@@ -12,5 +14,6 @@ namespace FitCheck_WPFApp.Models
         public DateTime CreatedAt { get; set; }
         public bool IsBanned { get; set; }
         public DateTime? BannedUntil { get; set; }
+        public IList<string> Roles { get; set; }
     }
 }
