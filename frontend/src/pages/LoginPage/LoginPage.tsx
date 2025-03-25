@@ -29,7 +29,7 @@ const LoginPage = ({fetchProfile}:LoginProps) => {
       if (res && res.status === 200) {
         console.log("Login successful!", res);
         fetchProfile()
-        navigate("/");
+        window.location.href = "/"
       } else {
         setError("Invalid username or password!");
       }

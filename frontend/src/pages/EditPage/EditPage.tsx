@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./EditPage.module.css";
-import { updateProfile, changePassword, uploadAvatar } from "../../services/authServices";
+import { updateProfile, changePassword, uploadAvatar, handleLogout } from "../../services/authServices";
 import { BASE_URL } from "../../services/interceptor";
 
 interface PageProps {
@@ -77,11 +77,16 @@ const EditPage = ({ profile }: PageProps) => {
     alert("Profile updated successfully!"); 
   };
 
+  const Logout = () => {
+    handleLogout();
+    window.location.href = "/login";
+  };
+
   return (
     <main className={styles.editContainer}>
       <header>
-        <div className={styles.home} onClick={() => navigate("/")} />
-        <div className={styles.logout} onClick={() => navigate("/login")} />
+        <div className={`${styles.home} ${styles.icon}`} onClick={() => window.location.href = "/"} />
+        <div className={`${styles.logout} ${styles.icon}`} onClick={() => Logout()} />
 
         <div className={styles.imageContainer}>
           <button className={styles.editBtn} onClick={() => document.getElementById("fileInput")?.click()}>

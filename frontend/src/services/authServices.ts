@@ -244,3 +244,7 @@ export const fetchFeed = async () => {
       return false;
     }
   }
+
+export const handleLogout = () =>{
+  localStorage.clear()
+}
