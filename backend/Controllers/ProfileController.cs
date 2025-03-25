@@ -42,7 +42,6 @@ namespace FitCheck_Server.Controllers
             return Ok(new ProfileDto
             {
                 Username = user.UserName,
-                Email = user.Email,
                 Bio = user.Bio,
                 ProfilePictureUrl = user.ProfilePictureUrl,
                 JoinedAt = user.CreatedAt
@@ -96,10 +95,8 @@ namespace FitCheck_Server.Controllers
             return Ok(new
             {
                 Username = user.UserName,
-                Email = user.Email,
                 Bio = user.Bio,
                 ProfilePictureUrl = user.ProfilePictureUrl,
-                JoinedAt = user.CreatedAt,
                 FollowersCount = followersCount,
                 FollowingCount = followingCount,
                 IsFollowing = isFollowing
@@ -145,7 +142,6 @@ namespace FitCheck_Server.Controllers
                 return BadRequest("No file uploaded");
             }
 
-            // Save the avatar
             var avatarPath = await _fileService.SaveAvatarAsync(file);
             user.ProfilePictureUrl = avatarPath;
 

@@ -11,12 +11,13 @@
         public string UserProfilePictureUrl { get; set; }
         public DateTime CreatedAt { get; set; }
         public bool IsFromFollowedUser { get; set; }
+        public bool IsLikedByCurrentUser { get; set; }
     }
 
     public class CommentDto
     {
         public string Text { get; set; }
-        public string AuthorUsername { get; set; } 
+        public string AuthorUsername { get; set; }
         public DateTime CreatedAt { get; set; }
     }
 

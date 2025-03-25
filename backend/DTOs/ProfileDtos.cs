@@ -5,10 +5,10 @@ namespace FitCheck_Server.DTOs
     public class ProfileDto
     {
         public string Username { get; set; }
-        public string Email { get; set; }
         public string Bio { get; set; }
         public string ProfilePictureUrl { get; set; }
-        public DateTime JoinedAt { get; set; }
+        public int LikesCount { get; set; }
+        public int FollowerCount { get; set; }
     }
 
     public class UpdateProfileDto
