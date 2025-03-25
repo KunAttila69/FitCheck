@@ -327,3 +327,33 @@ export const addFriend = async (userid: string) => {
     return null;
   }
 };
+
+export const likePost = async (postid: string) => {
+  try {
+    const token = localStorage.getItem("access");
+    if (!token) {
+      throw new Error("User not authenticated");
+    }
+
+    const response = await fetch(`${BASE_URL}/api/posts/${postid}/likes`, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to like post: ${response.statusText}`);
+    }
+ 
+    if (response.status !== 204) {
+      return await response.json();
+    } else { 
+      return {};
+    }
+  } catch (err) {
+    console.error("Error liking post:", err);
+    return null;
+  }
+};

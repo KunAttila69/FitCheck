@@ -1,7 +1,6 @@
 import { useState } from "react"
 import styles from "./LoginStyle.module.css";
-import { loginUser } from "../../services/authServices"
-import { useNavigate } from "react-router-dom";
+import { loginUser } from "../../services/authServices" 
 
 interface LoginProps{
   fetchProfile: () => Promise<void>;
@@ -11,8 +10,7 @@ const LoginPage = ({fetchProfile}:LoginProps) => {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState<string | null>(null)
-  const [loading, setLoading] = useState(false)
-  const navigate = useNavigate()
+  const [loading, setLoading] = useState(false) 
 
   const submitLoginForm = async (e: React.FormEvent) => {
     e.preventDefault();

@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import styles from "./FriendsPage.module.css"; 
+import { useEffect, useState } from "react"; 
 import Navbar from "../../components/Navbar/Navbar";
 import Friend from "../../components/Friend/Friend";
 import { getFriends } from "../../services/authServices";

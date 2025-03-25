@@ -2,6 +2,7 @@ import { BASE_URL } from "../../services/interceptor";
 import styles from "./Post.module.css";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { likePost } from "../../services/authServices";
 
 interface PostProps {
   id: number;
@@ -13,17 +14,31 @@ interface PostProps {
   mediaUrls: string[];
 }
 
-const Post = ({ userName, userProfilePictureUrl, caption, likeCount, comments, mediaUrls }: PostProps) => {
+const Post = ({ id, userName, userProfilePictureUrl, caption, likeCount, comments, mediaUrls }: PostProps) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const navigate = useNavigate();
   const [isExpanded, setIsExpanded] = useState(false);
-
+  const [likes, setLikes] = useState(likeCount);   
+  const navigate = useNavigate();
+ 
   const handlePrevImage = () => {
     setCurrentImageIndex((prevIndex) => (prevIndex === 0 ? mediaUrls.length - 1 : prevIndex - 1));
   };
 
   const handleNextImage = () => {
     setCurrentImageIndex((prevIndex) => (prevIndex === mediaUrls.length - 1 ? 0 : prevIndex + 1));
+  };
+ 
+  const handleLikeClick = async () => {
+    try {
+      const result = await likePost(id.toString());
+      if (result) {
+        setLikes((prevLikes) => prevLikes + 1);  
+      } else {
+        console.error("Failed to like the post");
+      }
+    } catch (err) {
+      console.error("Error liking the post:", err);
+    }
   };
 
   return (
@@ -39,12 +54,12 @@ const Post = ({ userName, userProfilePictureUrl, caption, likeCount, comments, m
           <h3 onClick={() => navigate(`/profile/${userName}`)} className={styles.username}>
             {userName}
           </h3>
-          <p 
-          className={`${styles.caption} ${isExpanded ? styles.expanded : ""}`}
-          onClick={() => setIsExpanded(!isExpanded)}
-        >
-          {caption}
-        </p>
+          <p
+            className={`${styles.caption} ${isExpanded ? styles.expanded : ""}`}
+            onClick={() => setIsExpanded(!isExpanded)}
+          >
+            {caption}
+          </p>
         </div>
       </div>
 
@@ -66,8 +81,13 @@ const Post = ({ userName, userProfilePictureUrl, caption, likeCount, comments, m
 
       <div className={styles.postFooter}>
         <div className={styles.postStats}>
-          <button className={styles.likeBtn}></button>
-          <h4>{likeCount}</h4>
+          <button
+            className={`${styles.likeBtn} ${likes > likeCount ? styles.liked : ""}`}
+            onClick={handleLikeClick}
+          >
+            ♥
+          </button>
+          <h4>{likes}</h4>
           <button className={styles.commentBtn}></button>
           <h4>{comments.length}</h4>
         </div>

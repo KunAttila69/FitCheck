@@ -30,9 +30,7 @@ header{
             cursor: pointer;
             background-size: cover; 
             padding: 7.5px;
-            opacity: .5;
-            & img{ 
-            }
+            opacity: .5; 
         }
     }
 }

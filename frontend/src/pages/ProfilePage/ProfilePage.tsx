@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import styles from "./ProfilePage.module.css";
-import { getProfile, getUserProfile } from "../../services/authServices";
+import { addFriend, getProfile, getUserProfile } from "../../services/authServices";
 import Post from "../../components/Post/Post"; 
 import { useNavigate, useParams } from "react-router-dom";
 import { BASE_URL } from "../../services/interceptor";
@@ -47,6 +47,16 @@ const ProfilePage = () => {
         fetchProfile();
     }, [username]); 
 
+    
+    // const handleAddFriend = async () => {
+    //     const result = await addFriend(profile.userId);
+    //     if (result) {
+    //       console.log("Friend added successfully:", result);
+    //     } else {
+    //       console.log("Error adding friend.");
+    //     }
+    //   };
+  
     return (
     <> 
         <nav>

@@ -13,7 +13,7 @@ const HomePage = ({ profile }: PageProps) => {
 
   useEffect(() => {
     const loadFeed = async () => { 
-      const posts = await fetchFeed();
+      const posts = await fetchFeed(); 
       setFeed(posts || []);
     };
     console.log(profile)
