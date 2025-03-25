@@ -63,11 +63,11 @@ function App() {
           <>
             <Route index element={<HomePage profile={profile} />} />
             <Route path='/notifications' element={<NotificationsPage />} />
-            <Route path='/friends' element={<FriendsPage />} />
+            <Route path='/friends' element={<FriendsPage profile={profile}/>} />
             <Route path='/edit' element={<EditPage profile={profile} />} />
             <Route path='/leaderboard' element={<LeaderboardPage />} />
-            <Route path='/profile' element={<ProfilePage />} />
-            <Route path='/upload' element={<UploadPage />} />
+            <Route path='/profile/:username' element={<ProfilePage />} />
+            <Route path='/upload' element={<UploadPage profile={profile}/>} />
             <Route path='/login' element={<Navigate to="/" replace />} />
             <Route path='/signup' element={<Navigate to="/" replace />} />
           </>

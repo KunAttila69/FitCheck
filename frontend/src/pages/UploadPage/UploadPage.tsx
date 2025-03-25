@@ -3,7 +3,11 @@ import styles from "./UploadPage.module.css";
 import Navbar from "../../components/Navbar/Navbar"; 
 import { uploadPost } from "../../services/authServices";
 
-const UploadPage = (profile: any) => {  
+interface PageProps{
+    profile: any
+}
+
+const UploadPage = ({profile}: PageProps) => {  
     const [mediaFiles, setMediaFiles] = useState<File[]>([]);
     const [previewFiles, setPreviewFiles] = useState<string[]>([]);
     const [caption, setCaption] = useState("");

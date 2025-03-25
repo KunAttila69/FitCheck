@@ -248,3 +248,82 @@ export const fetchFeed = async () => {
 export const handleLogout = () =>{
   localStorage.clear()
 }
+
+export const getFriends = async () => {
+  try {
+    const token = localStorage.getItem("access");
+    if (!token) {
+      throw new Error("User not authenticated");
+    }
+
+    const response = await fetch(BASE_URL + "/api/follow/following", {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json"
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch friends");
+    }
+
+    return await response.json();
+  } catch (err) {
+    console.error("Error fetching friends:", err);
+    return [];
+  }
+};
+
+export const getProfile = async (username: string) => {
+  try {
+    const token = localStorage.getItem("access");
+    if (!token) {
+      throw new Error("User not authenticated");
+    }
+
+    const response = await fetch(`${BASE_URL}/api/profile/${username}`, {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json"
+      }
+    });
+ 
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch profile: ${response.statusText}`);
+    }
+
+    return await response.json();
+  } catch (err) {
+    console.error("Error fetching profile:", err);
+    return null;
+  }
+};
+
+export const addFriend = async (userid: string) => {
+  try {
+    const token = localStorage.getItem("access");
+    if (!token) {
+      throw new Error("User not authenticated");
+    }
+
+    const response = await fetch(`${BASE_URL}/api/profile/${userid}`, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to add friend: ${response.statusText}`);
+    }
+
+    return await response.json();
+  } catch (err) {
+    console.error("Error adding friend:", err);
+    return null;
+  }
+};
