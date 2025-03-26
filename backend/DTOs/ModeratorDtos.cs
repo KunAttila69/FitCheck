@@ -22,15 +22,4 @@ namespace FitCheck_Server.DTOs
         public DateTime CreatedAt { get; set; }
         public List<ModeratorCommentDto> Comments { get; set; }
     }
-
-    public class ModeratorUserDto
-    {
-        public string Id { get; set; }
-        public string Username { get; set; }
-        public string Email { get; set; }
-        public bool IsBanned { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public string ProfilePictureUrl { get; set; }
-        public List<string> Roles { get; set; }
-    }
 }

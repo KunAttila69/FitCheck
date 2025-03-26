@@ -13,6 +13,7 @@ namespace FitCheck_WPFApp.ViewModels
         private readonly ApiService _apiService;
         private readonly LogService _logService;
         private readonly AuthService _authService;
+        private readonly string _baseRootUrl = "https://localhost:7293";
 
         private ObservableCollection<Post> _posts;
         public ObservableCollection<Post> Posts
@@ -104,6 +105,22 @@ namespace FitCheck_WPFApp.ViewModels
             try
             {
                 var posts = await _apiService.GetAllPostsAsync(CurrentPage, PageSize);
+                foreach (var p in posts)
+                {
+                    if (p.UserProfilePictureUrl != null)
+                    {
+                        p.UserProfilePictureUrl = _baseRootUrl + p.UserProfilePictureUrl;
+                    }
+                    else
+                    {
+                        p.UserProfilePictureUrl = @"Resources\default_user.png";
+                    }
+
+                    for (int i = 0; i < p.MediaUrls.Count; i++)
+                    {
+                        p.MediaUrls[i] = _baseRootUrl + p.MediaUrls[i];
+                    }
+                }
                 Posts = new ObservableCollection<Post>(posts);
             }
             catch (Exception ex)

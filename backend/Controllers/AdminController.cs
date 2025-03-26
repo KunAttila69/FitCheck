@@ -32,19 +32,19 @@ namespace FitCheck_Server.Controllers
 
             foreach (var user in users)
             {
-                var roles = await _userManager.GetRolesAsync(user);
+                IList<string> roles = await _userManager.GetRolesAsync(user);
                 userDetails.Add(new
                 {
                     Id = user.Id,
                     Username = user.UserName,
                     Email = user.Email,
-                    Roles = roles,
+                    Bio = user.Bio,
                     CreatedAt = user.CreatedAt,
                     IsBanned = user.IsBanned,
                     BanReason = user.BanReason,
                     BannedAt = user.BannedAt,
-                    Bio = user.Bio,
-                    ProfilePictureUrl = user.ProfilePictureUrl
+                    ProfilePictureUrl = user.ProfilePictureUrl,
+                    Roles = roles
                 });
             }
 
@@ -119,7 +119,7 @@ namespace FitCheck_Server.Controllers
                 return BadRequest(new { Message = "Cannot ban an administrator" });
             }
 
-            var result = await _roleService.BanUserAsync(request.UserId, request.Reason);
+            var result = await _roleService.BanUserAsync(request.UserId);
             if (!result)
             {
                 return BadRequest(new { Message = "Failed to ban user" });

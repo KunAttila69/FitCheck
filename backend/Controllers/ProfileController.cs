@@ -37,12 +37,11 @@ namespace FitCheck_Server.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var user = await _userManager.FindByIdAsync(userId);
 
-            if (user == null) return NotFound("User not found");
+            if (user == null) return NotFound(new { Message = "User not found" });
 
             return Ok(new ProfileDto
             {
                 Username = user.UserName,
-                Email = user.Email,
                 Bio = user.Bio,
                 ProfilePictureUrl = user.ProfilePictureUrl,
                 JoinedAt = user.CreatedAt
@@ -98,10 +97,8 @@ namespace FitCheck_Server.Controllers
             return Ok(new
             {
                 Username = user.UserName,
-                Email = user.Email,
                 Bio = user.Bio,
                 ProfilePictureUrl = user.ProfilePictureUrl,
-                JoinedAt = user.CreatedAt,
                 FollowersCount = followersCount,
                 FollowingCount = followingCount,
                 IsFollowing = isFollowing
@@ -147,7 +144,6 @@ namespace FitCheck_Server.Controllers
                 return BadRequest("No file uploaded");
             }
 
-            // Save the avatar
             var avatarPath = await _fileService.SaveAvatarAsync(file);
             user.ProfilePictureUrl = avatarPath;
 
@@ -157,31 +153,4 @@ namespace FitCheck_Server.Controllers
         }
         #endregion
     }
-
-    #region DTOs
-    public class ProfileDto
-    {
-        public string Username { get; set; }
-        public string Email { get; set; }
-        public string Bio { get; set; }
-        public string ProfilePictureUrl { get; set; }
-        public DateTime JoinedAt { get; set; }
-    }
-
-    public class UpdateProfileDto
-    {
-        public string? Username { get; set; }
-        [EmailAddress]
-        public string? Email { get; set; }
-        public string? Bio { get; set; }
-    }
-
-    public class ChangePasswordDto
-    {
-        [Required]
-        public string CurrentPassword { get; set; }
-        [Required]
-        public string NewPassword { get; set; }
-    }
-    #endregion
 }

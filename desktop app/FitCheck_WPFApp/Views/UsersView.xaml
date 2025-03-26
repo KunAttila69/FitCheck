@@ -50,7 +50,7 @@
                 <ListView ItemsSource="{Binding Users}" SelectedItem="{Binding SelectedUser}">
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Header="Username" Width="150">
+                            <GridViewColumn Header="Username" Width="Auto">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
@@ -64,8 +64,8 @@
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            <GridViewColumn Header="Email" Width="200" DisplayMemberBinding="{Binding Email}"/>
-                            <GridViewColumn Header="Status" Width="100">
+                            <GridViewColumn Header="Email" Width="Auto" DisplayMemberBinding="{Binding Email}"/>
+                            <GridViewColumn Header="Status" Width="Auto">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock>
@@ -87,7 +87,7 @@
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            <GridViewColumn Header="Joined Date" Width="120" DisplayMemberBinding="{Binding CreatedAt, StringFormat='{}{0:yyyy-MM-dd}'}"/>
+                            <GridViewColumn Header="Joined Date" Width="Auto" DisplayMemberBinding="{Binding CreatedAt, StringFormat='{}{0:yyyy-MM-dd}'}"/>
                         </GridView>
                     </ListView.View>
                 </ListView>

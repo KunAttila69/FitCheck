@@ -12,7 +12,7 @@ namespace FitCheck_WPFApp.Models
         public int CommentCount { get; set; }
         public string UserId { get; set; }
         public string Username { get; set; }
-        public string UserProfilePicture { get; set; }
+        public string UserProfilePictureUrl { get; set; }
         public DateTime CreatedAt { get; set; }
     }
 }
