@@ -47,14 +47,14 @@
                 <ListView ItemsSource="{Binding Posts}" SelectedItem="{Binding SelectedPost}">
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Header="ID" Width="50" DisplayMemberBinding="{Binding Id}"/>
-                            <GridViewColumn Header="Author" Width="120">
+                            <GridViewColumn Header="ID" Width="Auto" DisplayMemberBinding="{Binding Id}"/>
+                            <GridViewColumn Header="Author" Width="Auto">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
                                             <Ellipse Width="20" Height="20" Margin="0,0,5,0">
                                                 <Ellipse.Fill>
-                                                    <ImageBrush ImageSource="{Binding UserProfilePicture, TargetNullValue='/Resources/default_user.png'}"/>
+                                                    <ImageBrush ImageSource="{Binding UserProfilePictureUrl, TargetNullValue='/Resources/default_user.png'}"/>
                                                 </Ellipse.Fill>
                                             </Ellipse>
                                             <TextBlock Text="{Binding Username}" VerticalAlignment="Center"/>
@@ -62,17 +62,17 @@
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            <GridViewColumn Header="Caption" Width="200">
+                            <GridViewColumn Header="Caption" Width="Auto">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Caption}" TextTrimming="CharacterEllipsis"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            <GridViewColumn Header="Media" Width="50" DisplayMemberBinding="{Binding MediaUrls.Count}"/>
-                            <GridViewColumn Header="Likes" Width="50" DisplayMemberBinding="{Binding LikeCount}"/>
-                            <GridViewColumn Header="Comments" Width="70" DisplayMemberBinding="{Binding CommentCount}"/>
-                            <GridViewColumn Header="Created" Width="120" DisplayMemberBinding="{Binding CreatedAt, StringFormat='{}{0:yyyy-MM-dd}'}"/>
+                            <GridViewColumn Header="Media" Width="Auto" DisplayMemberBinding="{Binding MediaUrls.Count}"/>
+                            <GridViewColumn Header="Likes" Width="Auto" DisplayMemberBinding="{Binding LikeCount}"/>
+                            <GridViewColumn Header="Comments" Width="Auto" DisplayMemberBinding="{Binding CommentCount}"/>
+                            <GridViewColumn Header="Created" Width="Auto" DisplayMemberBinding="{Binding CreatedAt, StringFormat='{}{0:yyyy-MM-dd}'}"/>
                         </GridView>
                     </ListView.View>
                 </ListView>
@@ -88,10 +88,37 @@
                                    Visibility="{Binding SelectedPost, Converter={StaticResource NullToVisibilityConverter}}"/>
 
                         <StackPanel Visibility="{Binding SelectedPost, Converter={StaticResource NullToVisibilityConverter}, ConverterParameter=inverse}">
-                            <!-- Main post image (first in the list) -->
                             <Border BorderThickness="1" BorderBrush="{DynamicResource MaterialDesignDivider}" Margin="0,0,0,15">
-                                <Image Source="{Binding SelectedPost.MediaUrls[0], TargetNullValue='/Resources/no_image.png'}" 
-                                       Height="150" Stretch="Uniform"/>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+
+                                    <Image Source="{Binding ElementName=MediaListBox, Path=SelectedItem, TargetNullValue='/Resources/no_image.png'}" 
+                                    Height="150" Stretch="Uniform" Grid.Row="0"/>
+
+                                    <ListBox x:Name="MediaListBox" Grid.Row="1" 
+                                        ItemsSource="{Binding SelectedPost.MediaUrls}" 
+                                        SelectedIndex="0"
+                                        ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                        ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                                        BorderThickness="0"
+                                        Margin="0,5,0,0">
+                                        <ListBox.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <StackPanel Orientation="Horizontal"/>
+                                            </ItemsPanelTemplate>
+                                        </ListBox.ItemsPanel>
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border Width="50" Height="50" Margin="2">
+                                                    <Image Source="{Binding}" Stretch="UniformToFill"/>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
+                                </Grid>
                             </Border>
 
                             <TextBlock Text="Post ID" FontWeight="Bold"/>

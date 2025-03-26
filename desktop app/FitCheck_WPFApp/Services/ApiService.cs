@@ -46,7 +46,7 @@ namespace FitCheck_WPFApp.Services
         {
             var banRequest = new
             {
-                BannedUntil = banUntil
+                UserId = userId
             };
             var response = await _httpClient.PostAsJsonAsync($"{_baseUrl}/admin/ban-user", banRequest);
             response.EnsureSuccessStatusCode();
