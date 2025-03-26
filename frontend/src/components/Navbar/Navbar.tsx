@@ -21,7 +21,7 @@ const Navbar = ({selectedPage, profilePic} : NavbarProps) => {
             </div>
                 <div className={styles.iconContainer}>
                 <div className={`${styles.notifications} ${styles.icon}`} onClick={() => navigate("/notifications")}>{notificationCount > 0 ? <div className={styles.notificationCount}>{notificationCount}</div> : ""} {selectedPage == "notifications" ? <div className={styles.selected}/> : ""}</div>
-                <div className={`${styles.friends} ${styles.icon}`} onClick={() => navigate("/friends")}>{selectedPage == "friends" ? <div className={styles.selected}/> : ""}</div>
+                <div className={`${styles.friends} ${styles.icon}`} onClick={() => navigate("/following")}>{selectedPage == "following" ? <div className={styles.selected}/> : ""}</div>
                 <div className={`${styles.home} ${styles.icon}`} onClick={() => navigate("/")}>{selectedPage == "home" ? <div className={styles.selected}/> : ""}</div>
                 <div className={`${styles.addPhoto} ${styles.icon}`} onClick={() => navigate("/upload")}>{selectedPage == "post" ? <div className={styles.selected}/> : ""}</div>
                 <div className={`${styles.leaderboard} ${styles.icon}`} onClick={() => navigate("/leaderBoard")}>{selectedPage == "leaderboard" ? <div className={styles.selected}/> : ""}</div>

@@ -5,13 +5,14 @@ import LoginPage from './pages/LoginPage/LoginPage';
 import SignUpPage from './pages/SignUpPage/SignUpPage';
 import NotificationsPage from './pages/NotificationsPage/NotificationsPage';
 import ProfilePage from './pages/ProfilePage/ProfilePage';
-import FriendsPage from './pages/FriendsPage/FriendsPage';
+import FriendsPage from './pages/FollowingPage/FollowingPage';
 import EditPage from './pages/EditPage/EditPage';
 import LeaderboardPage from './pages/LeaderboardPage/LeaderboardPage';
 import UploadPage from './pages/UploadPage/UploadPage';
 import { useState, useEffect } from 'react';
 import { getUserProfile } from './services/authServices';
 import { Link } from 'react-router-dom';
+import FollowingPage from './pages/FollowingPage/FollowingPage';
 
 interface UserProfile {
   id: string;
@@ -63,7 +64,7 @@ function App() {
           <>
             <Route index element={<HomePage profile={profile} />} />
             <Route path='/notifications' element={<NotificationsPage />} />
-            <Route path='/friends' element={<FriendsPage profile={profile}/>} />
+            <Route path='/following' element={<FollowingPage profile={profile}/>} />
             <Route path='/edit' element={<EditPage profile={profile} />} />
             <Route path='/leaderboard' element={<LeaderboardPage />} />
             <Route path='/profile/:username' element={<ProfilePage />} />

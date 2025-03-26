@@ -249,7 +249,7 @@ export const handleLogout = () =>{
   localStorage.clear()
 }
 
-export const getFriends = async () => {
+export const getFollowing = async () => {
   try {
     const token = localStorage.getItem("access");
     if (!token) {
@@ -265,12 +265,12 @@ export const getFriends = async () => {
     });
 
     if (!response.ok) {
-      throw new Error("Failed to fetch friends");
+      throw new Error("Failed to fetch following");
     }
 
     return await response.json();
   } catch (err) {
-    console.error("Error fetching friends:", err);
+    console.error("Error fetching following:", err);
     return [];
   }
 };
@@ -302,14 +302,14 @@ export const getProfile = async (username: string) => {
   }
 };
 
-export const addFriend = async (userid: string) => {
+export const addFollow = async (userid: string) => {
   try {
     const token = localStorage.getItem("access");
     if (!token) {
       throw new Error("User not authenticated");
     }
 
-    const response = await fetch(`${BASE_URL}/api/profile/${userid}`, {
+    const response = await fetch(`${BASE_URL}/api/follow/${userid}`, {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${token}`,
@@ -318,12 +318,38 @@ export const addFriend = async (userid: string) => {
     });
 
     if (!response.ok) {
-      throw new Error(`Failed to add friend: ${response.statusText}`);
+      throw new Error(`Failed to follow: ${response.statusText}`);
     }
 
     return await response.json();
   } catch (err) {
-    console.error("Error adding friend:", err);
+    console.error("Error following:", err);
+    return null;
+  }
+};
+
+export const deleteFollow = async (userid: string) => {
+  try {
+    const token = localStorage.getItem("access");
+    if (!token) {
+      throw new Error("User not authenticated");
+    }
+
+    const response = await fetch(`${BASE_URL}/api/follow/${userid}`, {
+      method: "DELETE",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to unfollow: ${response.statusText}`);
+    }
+
+    return await response.json();
+  } catch (err) {
+    console.error("Error unfollowing:", err);
     return null;
   }
 };
