@@ -2,7 +2,7 @@ import { BASE_URL } from "../../services/interceptor";
 import styles from "./Post.module.css";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { likePost } from "../../services/authServices";
+import { likePost, unlikePost } from "../../services/authServices";
 
 interface PostProps {
   id: number;
@@ -12,12 +12,14 @@ interface PostProps {
   likeCount: number;
   comments: { userName: string; text: string }[];
   mediaUrls: string[];
+  isLikedByCurrentUser: boolean;
 }
 
-const Post = ({ id, userName, userProfilePictureUrl, caption, likeCount, comments, mediaUrls }: PostProps) => {
+const Post = ({ id, userName, userProfilePictureUrl, caption, likeCount, comments, mediaUrls, isLikedByCurrentUser }: PostProps) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isExpanded, setIsExpanded] = useState(false);
-  const [likes, setLikes] = useState(likeCount);   
+  const [likes, setLikes] = useState(likeCount);
+  const [isLiked, setLiked] = useState(isLikedByCurrentUser);
   const navigate = useNavigate();
  
   const handlePrevImage = () => {
@@ -32,12 +34,27 @@ const Post = ({ id, userName, userProfilePictureUrl, caption, likeCount, comment
     try {
       const result = await likePost(id.toString());
       if (result) {
-        setLikes((prevLikes) => prevLikes + 1);  
+        setLikes((prevLikes) => prevLikes + 1);
+        setLiked(true)
       } else {
         console.error("Failed to like the post");
       }
     } catch (err) {
       console.error("Error liking the post:", err);
+    }
+  };
+
+  const handleUnlikeClick = async () => {
+    try {
+      const result = await unlikePost(id.toString());
+      if (result) {
+        setLikes((prevLikes) => prevLikes - 1);  
+        setLiked(false)
+      } else {
+        console.error("Failed to unlike the post");
+      }
+    } catch (err) {
+      console.error("Error unliking the post:", err);
     }
   };
 
@@ -82,8 +99,8 @@ const Post = ({ id, userName, userProfilePictureUrl, caption, likeCount, comment
       <div className={styles.postFooter}>
         <div className={styles.postStats}>
           <button
-            className={`${styles.likeBtn} ${likes > likeCount ? styles.liked : ""}`}
-            onClick={handleLikeClick}
+            className={`${styles.likeBtn} ${isLiked ? styles.liked : ""}`}
+            onClick={isLiked ? handleUnlikeClick : handleLikeClick}
           >
             ♥
           </button>

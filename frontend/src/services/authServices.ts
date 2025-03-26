@@ -351,8 +351,10 @@ export const deleteFollow = async (userid: string) => {
     if (!response.ok) {
       throw new Error(`Failed to unfollow: ${response.statusText}`);
     }
-
-    return await response.json();
+    
+    if (await response.status === 204) {
+      return true
+    }
   } catch (err) {
     console.error("Error unfollowing:", err);
     return null;
@@ -373,6 +375,36 @@ export const likePost = async (postid: string) => {
 
     const response = await fetch(`${BASE_URL}/api/posts/${postIdNumber}/likes`, {
       method: "POST",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+      },
+    });
+
+    console.log("Response Status:", response.status);
+ 
+    const text = await response.text(); 
+    return text ? JSON.parse(text) : {};
+
+  } catch (err) {
+    console.error("Error liking post:", err);
+    return null;
+  }
+};
+
+export const unlikePost = async (postid: string) => {
+  try {
+    const token = localStorage.getItem("access");
+    if (!token) {
+      throw new Error("User not authenticated");
+    }
+
+    const postIdNumber = Number(postid);
+    if (isNaN(postIdNumber)) {
+      throw new Error("Invalid post ID format");
+    }
+
+    const response = await fetch(`${BASE_URL}/api/posts/${postIdNumber}/likes`, {
+      method: "DELETE",
       headers: {
         "Authorization": `Bearer ${token}`,
       },
