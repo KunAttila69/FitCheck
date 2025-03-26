@@ -8,6 +8,7 @@ using System.Security.Claims;
 using System.Text.RegularExpressions;
 using FitCheck_Server.Models;
 using FitCheck_Server.Data;
+using Microsoft.Extensions.Hosting;
 
 namespace FitCheck_Server.Controllers
 {
@@ -109,7 +110,13 @@ namespace FitCheck_Server.Controllers
                     UserProfilePictureUrl = p.User.ProfilePictureUrl,
                     CreatedAt = p.CreatedAt,
                     IsFromFollowedUser = followingUserIds.Contains(p.UserId),
-                    IsLikedByCurrentUser = p.Likes.Any(l => l.UserId == currentUserId)
+                    IsLikedByCurrentUser = p.Likes.Any(l => l.UserId == currentUserId),
+                    Comments = p.Comments.Select(c => new CommentDto
+                    {
+                        Text = c.Text,
+                        AuthorUsername = c.User.UserName,
+                        CreatedAt = c.CreatedAt
+                    }).ToList()
                 })
                 .ToListAsync();
 
@@ -143,7 +150,13 @@ namespace FitCheck_Server.Controllers
                     UserName = p.User.UserName,
                     UserProfilePictureUrl = p.User.ProfilePictureUrl,
                     CreatedAt = p.CreatedAt,
-                    IsLikedByCurrentUser = p.Likes.Any(l => l.UserId == currentUserId)
+                    IsLikedByCurrentUser = p.Likes.Any(l => l.UserId == currentUserId),
+                    Comments = p.Comments.Select(c => new CommentDto
+                    {
+                        Text = c.Text,
+                        AuthorUsername = c.User.UserName,
+                        CreatedAt = c.CreatedAt
+                    }).ToList()
                 })
                 .ToListAsync();
 
@@ -168,6 +181,10 @@ namespace FitCheck_Server.Controllers
             if (post == null) return NotFound();
 
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var followingUserIds = await _context.UserFollowers
+                .Where(uf => uf.FollowerId == currentUserId)
+                .Select(uf => uf.FollowedId)
+                .ToListAsync();
 
             var postDto = new PostDto
             {
@@ -175,6 +192,10 @@ namespace FitCheck_Server.Controllers
                 Caption = post.Caption,
                 MediaUrls = post.MediaFiles.Select(m => m.FilePath).ToList(),
                 LikeCount = post.Likes.Count,
+                UserName = post.User.UserName,
+                UserProfilePictureUrl = post.User.ProfilePictureUrl,
+                CreatedAt = post.CreatedAt,
+                IsFromFollowedUser = followingUserIds.Contains(post.UserId),
                 IsLikedByCurrentUser = post.Likes.Any(l => l.UserId == currentUserId),
                 Comments = post.Comments.Select(c => new CommentDto
                 {
