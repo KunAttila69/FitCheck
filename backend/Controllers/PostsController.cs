@@ -108,11 +108,50 @@ namespace FitCheck_Server.Controllers
                     UserName = p.User.UserName,
                     UserProfilePictureUrl = p.User.ProfilePictureUrl,
                     CreatedAt = p.CreatedAt,
-                    IsFromFollowedUser = followingUserIds.Contains(p.UserId)
+                    IsFromFollowedUser = followingUserIds.Contains(p.UserId),
+                    IsLikedByCurrentUser = p.Likes.Any(l => l.UserId == currentUserId)
                 })
                 .ToListAsync();
 
             return Ok(posts);
+        }
+
+        [HttpGet("user/{username}")]
+        public async Task<IActionResult> GetUserPosts(string username, [FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+        {
+            // Find the user by username
+            var user = await _userManager.FindByNameAsync(username);
+            if (user == null) return NotFound("User not found");
+
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Get user's posts with pagination
+            var posts = await _context.Posts
+                .Include(p => p.User)
+                .Include(p => p.MediaFiles)
+                .Include(p => p.Likes)
+                .Where(p => p.UserId == user.Id)
+                .OrderByDescending(p => p.CreatedAt)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .Select(p => new PostDtos
+                {
+                    Id = p.Id,
+                    Caption = p.Caption,
+                    MediaUrls = p.MediaFiles.Select(m => m.FilePath).ToList(),
+                    LikeCount = p.Likes.Count,
+                    UserName = p.User.UserName,
+                    UserProfilePictureUrl = p.User.ProfilePictureUrl,
+                    CreatedAt = p.CreatedAt,
+                    IsLikedByCurrentUser = p.Likes.Any(l => l.UserId == currentUserId)
+                })
+                .ToListAsync();
+
+            return Ok(new
+            {
+                Posts = posts,
+                TotalCount = await _context.Posts.CountAsync(p => p.UserId == user.Id)
+            });
         }
 
         [HttpGet("{postId}")]
@@ -128,12 +167,15 @@ namespace FitCheck_Server.Controllers
 
             if (post == null) return NotFound();
 
-            var postDto = new PostDto
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var postDto = new PostDtos
             {
                 Id = post.Id,
                 Caption = post.Caption,
                 MediaUrls = post.MediaFiles.Select(m => m.FilePath).ToList(),
                 LikeCount = post.Likes.Count,
+                IsLikedByCurrentUser = post.Likes.Any(l => l.UserId == currentUserId),
                 Comments = post.Comments.Select(c => new CommentDto
                 {
                     Text = c.Text,
