@@ -351,8 +351,10 @@ export const deleteFollow = async (userid: string) => {
     if (!response.ok) {
       throw new Error(`Failed to unfollow: ${response.statusText}`);
     }
-
-    return await response.json();
+    
+    if (await response.status === 204) {
+      return true
+    }
   } catch (err) {
     console.error("Error unfollowing:", err);
     return null;
@@ -385,6 +387,58 @@ export const likePost = async (postid: string) => {
 
   } catch (err) {
     console.error("Error liking post:", err);
+    return null;
+  }
+};
+
+export const unlikePost = async (postid: string) => {
+  try {
+    const token = localStorage.getItem("access");
+    if (!token) {
+      throw new Error("User not authenticated");
+    } 
+
+    const response = await fetch(`${BASE_URL}/api/posts/${postid}/likes`, {
+      method: "DELETE",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+      },
+    });
+
+    console.log("Response Status:", response.status);
+ 
+    const text = await response.text(); 
+    return text ? JSON.parse(text) : {};
+
+  } catch (err) {
+    console.error("Error liking post:", err);
+    return null;
+  }
+};
+
+export const addComment = async (postId:string, text:string) => {
+  try {
+    const token = localStorage.getItem("access");
+    if (!token) {
+      throw new Error("User not authenticated");
+    }
+
+    const response = await fetch(`${BASE_URL}/api/posts/${postId}/comments`, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ text }), 
+    });
+
+    console.log("Response Status:", response.status);
+
+    const responseText = await response.text(); 
+    return responseText ? JSON.parse(responseText) : {}; 
+
+  } catch (err) {
+    console.error("Error adding comment:", err);
     return null;
   }
 };
