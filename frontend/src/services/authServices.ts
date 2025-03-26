@@ -396,14 +396,9 @@ export const unlikePost = async (postid: string) => {
     const token = localStorage.getItem("access");
     if (!token) {
       throw new Error("User not authenticated");
-    }
+    } 
 
-    const postIdNumber = Number(postid);
-    if (isNaN(postIdNumber)) {
-      throw new Error("Invalid post ID format");
-    }
-
-    const response = await fetch(`${BASE_URL}/api/posts/${postIdNumber}/likes`, {
+    const response = await fetch(`${BASE_URL}/api/posts/${postid}/likes`, {
       method: "DELETE",
       headers: {
         "Authorization": `Bearer ${token}`,
@@ -417,6 +412,33 @@ export const unlikePost = async (postid: string) => {
 
   } catch (err) {
     console.error("Error liking post:", err);
+    return null;
+  }
+};
+
+export const addComment = async (postId:string, text:string) => {
+  try {
+    const token = localStorage.getItem("access");
+    if (!token) {
+      throw new Error("User not authenticated");
+    }
+
+    const response = await fetch(`${BASE_URL}/api/posts/${postId}/comments`, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ text }), 
+    });
+
+    console.log("Response Status:", response.status);
+
+    const responseText = await response.text(); 
+    return responseText ? JSON.parse(responseText) : {}; 
+
+  } catch (err) {
+    console.error("Error adding comment:", err);
     return null;
   }
 };
