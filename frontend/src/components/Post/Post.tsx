@@ -10,12 +10,13 @@ interface PostProps {
   userProfilePictureUrl: string | null;
   caption: string;
   likeCount: number;
-  comments: { userName: string; text: string }[];
+  comments: { authorUsername: string; text: string }[];
   mediaUrls: string[];
   isLikedByCurrentUser: boolean;
+  yourName: string
 }
 
-const Post = ({ id, userName, userProfilePictureUrl, caption, likeCount, comments, mediaUrls, isLikedByCurrentUser }: PostProps) => {
+const Post = ({ id, userName, userProfilePictureUrl, caption, likeCount, comments, mediaUrls, isLikedByCurrentUser, yourName }: PostProps) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isExpanded, setIsExpanded] = useState(false);
   const [likes, setLikes] = useState(likeCount);
@@ -67,7 +68,7 @@ const Post = ({ id, userName, userProfilePictureUrl, caption, likeCount, comment
     try {
       const result = await addComment(id.toString(), commentText);
       if (result) {
-        setPostComments([...postComments, { userName: "You", text: commentText }]);
+        setPostComments([...postComments, { authorUsername: "You", text: commentText }]);
         setCommentText("");
       } else {
         console.error("Failed to add comment");
@@ -130,9 +131,9 @@ const Post = ({ id, userName, userProfilePictureUrl, caption, likeCount, comment
         <div className={styles.commentContainer}>
           {postComments.slice(0, 3).map((comment, index) => (
             <div key={index} className={styles.comment}>
-              <img src="../../src/images/FitCheck-logo.png" alt="Commenter" />
-              <h4>{comment.userName}: </h4>
-              <p>{comment.text}</p>
+              <img src="../../src/images/FitCheck-logo.png" alt="Commenter" onClick={() => navigate(`/profile/${comment.authorUsername}`)}/>
+              <h4>{comment.authorUsername != yourName ? comment.authorUsername : "You"}: </h4>
+              <p> {comment.text}</p>
             </div>
           ))}
         </div>
