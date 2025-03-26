@@ -26,9 +26,9 @@ namespace FitCheck_Server.Models
         public PrivacySetting Privacy { get; set; } = PrivacySetting.Public;
 
         [Required]
-        public string UserId { get; set; }
+        public string? UserId { get; set; }
         [ForeignKey(nameof(UserId))]
-        public ApplicationUser User { get; set; }
+        public ApplicationUser? User { get; set; }
     }
 
     public enum PrivacySetting
