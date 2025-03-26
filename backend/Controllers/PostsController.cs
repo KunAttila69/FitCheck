@@ -134,7 +134,7 @@ namespace FitCheck_Server.Controllers
                 .OrderByDescending(p => p.CreatedAt)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
-                .Select(p => new PostDtos
+                .Select(p => new PostDto
                 {
                     Id = p.Id,
                     Caption = p.Caption,
@@ -169,7 +169,7 @@ namespace FitCheck_Server.Controllers
 
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var postDto = new PostDtos
+            var postDto = new PostDto
             {
                 Id = post.Id,
                 Caption = post.Caption,
