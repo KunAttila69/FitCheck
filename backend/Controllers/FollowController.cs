@@ -1,6 +1,7 @@
 ﻿using FitCheck_Server.Data;
 using FitCheck_Server.DTOs;
 using FitCheck_Server.Models;
+using FitCheck_Server.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -16,13 +17,15 @@ namespace FitCheck_Server.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly NotificationService _notificationService;
 
         public FollowController(
             ApplicationDbContext context,
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager, NotificationService notificationService)
         {
             _context = context;
             _userManager = userManager;
+            _notificationService = notificationService;
         }
 
         [HttpPost("{userId}")]
@@ -52,6 +55,8 @@ namespace FitCheck_Server.Controllers
 
             _context.UserFollowers.Add(userFollow);
             await _context.SaveChangesAsync();
+
+            await _notificationService.CreateFollowNotificationAsync(currentUserId,userId);
 
             return Ok(new { message = "Successfully followed user" });
         }

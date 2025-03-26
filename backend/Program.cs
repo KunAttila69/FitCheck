@@ -66,6 +66,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<FileService>();
 builder.Services.AddScoped<RoleService>();
+builder.Services.AddScoped<NotificationService>();
 
 builder.Services.AddCors(options =>
 {
