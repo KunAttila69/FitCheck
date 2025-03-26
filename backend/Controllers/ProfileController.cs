@@ -101,6 +101,7 @@ namespace FitCheck_Server.Controllers
 
             return Ok(new
             {
+                UserId = user.Id,
                 Username = user.UserName,
                 Bio = user.Bio,
                 ProfilePictureUrl = user.ProfilePictureUrl,

@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import styles from "./ProfilePage.module.css";
-import { addFriend, getProfile, getUserProfile } from "../../services/authServices";
+import { addFollow, getProfile, getUserProfile } from "../../services/authServices";
 import Post from "../../components/Post/Post"; 
 import { useNavigate, useParams } from "react-router-dom";
 import { BASE_URL } from "../../services/interceptor";
 
 interface Profile {
+    userId: string
     username: string;
     bio?: string;
     friendsCount: number;
@@ -48,14 +49,19 @@ const ProfilePage = () => {
     }, [username]); 
 
     
-    const handleAddFriend = async () => {
-        const result = await addFriend(profile.userId);
-        if (result) {
+    const handleFollow = async () => {
+        try {
+            if (!profile?.userId) {
+               console.log("User ID is missing.");
+                return;
+          }
+          const result = await addFollow(profile.userId);
           console.log("Friend added successfully:", result);
-        } else {
-          console.log("Error adding friend.");
+        } catch (error) {
+            console.error("Error adding friend:", error);
         }
-      };
+    };
+      
   
     return (
     <> 
@@ -65,10 +71,9 @@ const ProfilePage = () => {
                 <div>
                     <h3>{profile?.username || "Loading..."}</h3>
                     <p>{profile?.bio || "No bio available"}</p>
-                </div>
-                <div className={styles.buttonContainer}>
-                    <div className={`${styles.home} ${styles.icon}`} onClick={() => navigate("/")}></div>
-                </div>
+                </div> 
+                <div className={`${styles.home} ${styles.icon}`} onClick={() => navigate("/")}></div>
+                
             </div>
             <div className={styles.profileStats}>
                 <div className={styles.friendsContainer}>
@@ -84,7 +89,7 @@ const ProfilePage = () => {
                     <h2>{profile?.posts?.length ?? 0}</h2>
                 </div>
             </div>
-            <button className={styles.addFriend}>Add Friend</button>
+            <button className={styles.addFriend} onClick={() => {handleFollow()}}>Follow</button>
         </nav>
         <main>
   {/* {profile?.posts ? (

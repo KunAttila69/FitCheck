@@ -14,6 +14,7 @@ const HomePage = ({ profile }: PageProps) => {
   useEffect(() => {
     const loadFeed = async () => { 
       const posts = await fetchFeed(); 
+      console.log(posts)
       setFeed(posts || []);
     };
     console.log(profile)
