@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace FitCheck_WPFApp.Services
 {
@@ -20,21 +21,39 @@ namespace FitCheck_WPFApp.Services
 
         private void LoadLogs()
         {
-            if (File.Exists(_logFilePath))
+            try
             {
-                string json = File.ReadAllText(_logFilePath);
-                _logs = JsonSerializer.Deserialize<List<AdminLog>>(json) ?? new List<AdminLog>();
+                if (File.Exists(_logFilePath))
+                {
+                    string json = File.ReadAllText(_logFilePath);
+                    _logs = JsonSerializer.Deserialize<List<AdminLog>>(json) ?? new List<AdminLog>();
+                }
+                else
+                {
+                    _logs = new List<AdminLog>();
+                    // Create the file with empty array
+                    File.WriteAllText(_logFilePath, JsonSerializer.Serialize(_logs));
+                }
             }
-            else
+            catch (Exception e)
             {
+                MessageBox.Show(_logFilePath + " could not be loaded. " + e.Message + "New log file initialized.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 _logs = new List<AdminLog>();
             }
         }
 
         private async Task SaveLogsAsync()
         {
-            string json = JsonSerializer.Serialize(_logs);
-            await File.WriteAllTextAsync(_logFilePath, json);
+            try
+            {
+                var options = new JsonSerializerOptions { WriteIndented = true };
+                string json = JsonSerializer.Serialize(_logs, options);
+                await File.WriteAllTextAsync(_logFilePath, json);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show(_logFilePath + " could not be saved.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         public async Task LogActionAsync(AdminActionType actionType, string adminId, string adminUsername, string targetId, string description)
@@ -59,9 +78,19 @@ namespace FitCheck_WPFApp.Services
             return _logs.OrderByDescending(l => l.Timestamp).ToList();
         }
 
-        internal async Task<IEnumerable<AdminLog>> GetLogsAsync(DateTime startDate, DateTime endDate)
+        public Task<IEnumerable<AdminLog>> GetLogsAsync(DateTime startDate, DateTime endDate)
         {
-            throw new NotImplementedException();
+            var startDateUtc = startDate.Kind != DateTimeKind.Utc ? startDate.ToUniversalTime() : startDate;
+            var endDateUtc = endDate.Kind != DateTimeKind.Utc ? endDate.ToUniversalTime() : endDate;
+
+            endDateUtc = endDateUtc.AddDays(1);
+
+            var filteredLogs = _logs
+                .Where(l => l.Timestamp >= startDateUtc && l.Timestamp < endDateUtc)
+                .OrderByDescending(l => l.Timestamp)
+                .ToList();
+
+            return Task.FromResult<IEnumerable<AdminLog>>(filteredLogs);
         }
     }
 }

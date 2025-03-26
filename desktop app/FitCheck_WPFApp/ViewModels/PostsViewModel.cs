@@ -143,13 +143,12 @@ namespace FitCheck_WPFApp.ViewModels
                 await _apiService.RemovePostAsync(SelectedPost.Id, RemovalReason);
                 await _logService.LogActionAsync(
                     AdminActionType.RemovePost,
-                    _authService.GetCurrentUsername(),
+                    _authService.GetCurrentUserId(),
                     _authService.GetCurrentUsername(),
                     SelectedPost.Id.ToString(),
-                    $"Post removed. Reason: {RemovalReason}"
+                    $"Post by {SelectedPost.Username} removed. Reason: {RemovalReason}"
                 );
 
-                // Remove from the list
                 Posts.Remove(SelectedPost);
                 SelectedPost = null;
                 RemovalReason = string.Empty;

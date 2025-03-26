@@ -7,6 +7,7 @@ using System.Net.Http.Json;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace FitCheck_WPFApp.Services
 {
@@ -42,14 +43,17 @@ namespace FitCheck_WPFApp.Services
             return await response.Content.ReadFromJsonAsync<List<User>>();
         }
 
-        public async Task BanUserAsync(string userId, DateTime? banUntil = null)
+        public async Task BanUserAsync(string userId, string banReason)
         {
             var banRequest = new
             {
-                UserId = userId
+                UserId = userId,
+                BanReason = banReason
             };
             var response = await _httpClient.PostAsJsonAsync($"{_baseUrl}/admin/ban-user", banRequest);
             response.EnsureSuccessStatusCode();
+            string responseMessage = await response.Content.ReadAsStringAsync();
+            MessageBox.Show(responseMessage);
         }
 
         public async Task UnbanUserAsync(string userId)

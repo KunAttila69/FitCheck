@@ -57,7 +57,7 @@
                                                     <ImageBrush ImageSource="{Binding AuthorProfilePicture, TargetNullValue='/Resources/default_user.png'}"/>
                                                 </Ellipse.Fill>
                                             </Ellipse>
-                                            <TextBlock Text="{Binding AuthorUsername}" VerticalAlignment="Center"/>
+                                            <TextBlock Text="{Binding AuthorUsername}" VerticalAlignment="Center" MaxWidth="150"/>
                                         </StackPanel>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>

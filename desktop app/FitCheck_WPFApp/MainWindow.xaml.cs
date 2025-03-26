@@ -36,6 +36,7 @@ namespace FitCheck_WPFApp
         private async void OnLoginSuccessful(object sender, EventArgs e)
         {
             _apiService.SetAuthToken(_authService.GetAccessToken());
+            await _authService.LogLoginAsync(_logService);
 
             if (_authService.IsAdmin())
             {
@@ -52,14 +53,24 @@ namespace FitCheck_WPFApp
 
                 await _logService.LogActionAsync(
                     AdminActionType.UnauthorizedAccess,
-                    "unknown",
+                    _authService.GetCurrentUserId(),
                     _authService.GetCurrentUsername(),
                     "N/A",
                     $"Unauthorized access attempt by {_authService.GetCurrentUsername()}"
                 );
 
+                await _authService.Logout();
                 return;
             }
+        }
+
+        private async void LogoutButton_Click(object sender, RoutedEventArgs e)
+        {
+            await _authService.Logout(_logService);
+
+            AdminNavigation.Visibility = Visibility.Collapsed;
+
+            ContentPanel.Content = _loginView;
         }
 
         private void InitializeAdminViews()
@@ -88,15 +99,6 @@ namespace FitCheck_WPFApp
         private void LogsButton_Click(object sender, RoutedEventArgs e)
         {
             ContentPanel.Content = _logsView;
-        }
-
-        private void LogoutButton_Click(object sender, RoutedEventArgs e)
-        {
-            _authService.Logout();
-
-            AdminNavigation.Visibility = Visibility.Collapsed;
-
-            ContentPanel.Content = _loginView;
         }
     }
 }

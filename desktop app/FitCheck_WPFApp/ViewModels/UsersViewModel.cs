@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Resources;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace FitCheck_WPFApp.ViewModels
@@ -13,6 +14,7 @@ namespace FitCheck_WPFApp.ViewModels
     {
         private readonly ApiService _apiService;
         private readonly LogService _logService;
+        private readonly AuthService _authService;
         private readonly string _baseRootUrl = "https://localhost:7293";
 
         private ObservableCollection<User> _users;
@@ -53,10 +55,11 @@ namespace FitCheck_WPFApp.ViewModels
         public ICommand UnbanUserCommand { get; }
         public ICommand RefreshCommand { get; }
 
-        public UsersViewModel(ApiService apiService, LogService logService)
+        public UsersViewModel(ApiService apiService, LogService logService, AuthService authService)
         {
             _apiService = apiService;
             _logService = logService;
+            _authService = authService;
             _users = new ObservableCollection<User>();
 
             BanUserCommand = new RelayCommand(async param => await BanUserAsync(), param => SelectedUser != null && !SelectedUser.IsBanned);
@@ -101,23 +104,25 @@ namespace FitCheck_WPFApp.ViewModels
 
             try
             {
-                await _apiService.BanUserAsync(SelectedUser.Id);
+                // Make sure we have a reason for the ban
+                string reason = await ShowBanDialogAsync();
+                if (string.IsNullOrEmpty(reason))
+                    return; // User cancelled the operation
+
+                await _apiService.BanUserAsync(SelectedUser.Id, reason);
                 await _logService.LogActionAsync(
                     AdminActionType.BanUser,
-                    "admin", // Replace with actual admin ID
-                    "admin", // Replace with actual admin username
+                    _authService.GetCurrentUserId(),
+                    _authService.GetCurrentUsername(),
                     SelectedUser.Id,
-                    $"User {SelectedUser.Username} was banned"
+                    $"User {SelectedUser.Username} was banned. Reason: {reason}"
                 );
 
-                // Update user in the list
-                SelectedUser.IsBanned = true;
-                SelectedUser.BannedUntil = null;
+                await LoadUsersAsync();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                // Log or handle the error
             }
         }
 
@@ -130,23 +135,107 @@ namespace FitCheck_WPFApp.ViewModels
                 await _apiService.UnbanUserAsync(SelectedUser.Id);
                 await _logService.LogActionAsync(
                     AdminActionType.UnbanUser,
-                    "admin", // Replace with actual admin ID
-                    "admin", // Replace with actual admin username
+                    _authService.GetCurrentUserId(),
+                    _authService.GetCurrentUsername(),
                     SelectedUser.Id,
                     $"User {SelectedUser.Username} was unbanned"
                 );
 
-                // Update user in the list
-                SelectedUser.IsBanned = false;
-                SelectedUser.BannedUntil = null;
+                await LoadUsersAsync();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                // Log or handle the error
             }
         }
 
+        private Task<string> ShowBanDialogAsync()
+        {
+            var tcs = new TaskCompletionSource<string>();
+
+            // Create a simple dialog for entering ban reason
+            var dialog = new Window
+            {
+                Title = "Ban User",
+                Width = 400,
+                Height = 200,
+                WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                WindowStyle = WindowStyle.ToolWindow,
+                ResizeMode = ResizeMode.NoResize
+            };
+
+            var grid = new Grid();
+            grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Auto) });
+            grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+            grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Auto) });
+
+            var label = new TextBlock
+            {
+                Text = "Please provide a reason for banning this user:",
+                Margin = new Thickness(10, 10, 10, 5)
+            };
+            Grid.SetRow(label, 0);
+
+            var textBox = new TextBox
+            {
+                Margin = new Thickness(10),
+                AcceptsReturn = true,
+                TextWrapping = TextWrapping.Wrap,
+                VerticalAlignment = VerticalAlignment.Stretch
+            };
+            Grid.SetRow(textBox, 1);
+
+            var buttonPanel = new StackPanel
+            {
+                Orientation = Orientation.Horizontal,
+                HorizontalAlignment = HorizontalAlignment.Right,
+                Margin = new Thickness(10)
+            };
+            Grid.SetRow(buttonPanel, 2);
+
+            var cancelButton = new Button
+            {
+                Content = "Cancel",
+                Width = 80,
+                Margin = new Thickness(5, 0, 0, 0)
+            };
+            cancelButton.Click += (s, e) =>
+            {
+                tcs.SetResult(null);
+                dialog.Close();
+            };
+
+            var confirmButton = new Button
+            {
+                Content = "Ban User",
+                Width = 100,
+                Margin = new Thickness(5, 0, 0, 0),
+                IsDefault = true
+            };
+            confirmButton.Click += (s, e) =>
+            {
+                tcs.SetResult(textBox.Text);
+                dialog.Close();
+            };
+
+            buttonPanel.Children.Add(confirmButton);
+            buttonPanel.Children.Add(cancelButton);
+
+            grid.Children.Add(label);
+            grid.Children.Add(textBox);
+            grid.Children.Add(buttonPanel);
+
+            dialog.Content = grid;
+            dialog.Closing += (s, e) =>
+            {
+                if (!tcs.Task.IsCompleted)
+                    tcs.SetResult(null);
+            };
+
+            dialog.Show();
+
+            return tcs.Task;
+        }
         private void FilterUsers()
         {
             // Implementation would filter users based on search query

@@ -107,7 +107,6 @@ namespace FitCheck_Server.Controllers
                 return BadRequest(new { Message = "You cannot ban yourself" });
             }
 
-            // Check if user exists and is not an administrator
             var userToBan = await _userManager.FindByIdAsync(request.UserId);
             if (userToBan == null)
             {
@@ -119,13 +118,13 @@ namespace FitCheck_Server.Controllers
                 return BadRequest(new { Message = "Cannot ban an administrator" });
             }
 
-            var result = await _roleService.BanUserAsync(request.UserId);
+            var result = await _roleService.BanUserAsync(request.UserId, request.BanReason);
             if (!result)
             {
                 return BadRequest(new { Message = "Failed to ban user" });
             }
 
-            return Ok(new { Message = "User banned successfully" });
+            return Ok(new { Message = "User banned successfully." });
         }
 
         [HttpPost("unban-user/{userId}")]

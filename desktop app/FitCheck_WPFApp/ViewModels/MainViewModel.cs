@@ -40,7 +40,7 @@ namespace FitCheck_WPFApp.ViewModels
 
         private void NavigateToUsers()
         {
-            CurrentViewModel = new UsersViewModel(_apiService, _logService);
+            CurrentViewModel = new UsersViewModel(_apiService, _logService, _authService);
         }
 
         private void NavigateToPosts()

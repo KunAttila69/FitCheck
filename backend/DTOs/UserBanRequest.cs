@@ -6,5 +6,6 @@ namespace FitCheck_Server.DTOs
     {
         [Required]
         public string UserId { get; set; } = string.Empty;
+        public string BanReason { get; set; } = string.Empty;
     }
 }
