@@ -361,23 +361,23 @@ export const likePost = async (postid: string) => {
       throw new Error("User not authenticated");
     }
 
-    const response = await fetch(`${BASE_URL}/api/posts/${postid}/likes`, {
+    const postIdNumber = Number(postid);
+    if (isNaN(postIdNumber)) {
+      throw new Error("Invalid post ID format");
+    }
+
+    const response = await fetch(`${BASE_URL}/api/posts/${postIdNumber}/likes`, {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${token}`,
-        "Content-Type": "application/json",
       },
     });
 
-    if (!response.ok) {
-      throw new Error(`Failed to like post: ${response.statusText}`);
-    }
+    console.log("Response Status:", response.status);
  
-    if (response.status !== 204) {
-      return await response.json();
-    } else { 
-      return {};
-    }
+    const text = await response.text(); 
+    return text ? JSON.parse(text) : {};
+
   } catch (err) {
     console.error("Error liking post:", err);
     return null;
