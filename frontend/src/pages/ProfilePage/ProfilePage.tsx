@@ -48,14 +48,14 @@ const ProfilePage = () => {
     }, [username]); 
 
     
-    // const handleAddFriend = async () => {
-    //     const result = await addFriend(profile.userId);
-    //     if (result) {
-    //       console.log("Friend added successfully:", result);
-    //     } else {
-    //       console.log("Error adding friend.");
-    //     }
-    //   };
+    const handleAddFriend = async () => {
+        const result = await addFriend(profile.userId);
+        if (result) {
+          console.log("Friend added successfully:", result);
+        } else {
+          console.log("Error adding friend.");
+        }
+      };
   
     return (
     <> 

@@ -317,16 +317,21 @@ export const addFollow = async (userid: string) => {
       },
     });
 
+    console.log("Response Status:", response.status);
+
     if (!response.ok) {
       throw new Error(`Failed to follow: ${response.statusText}`);
     }
 
-    return await response.json();
+    const text = await response.text();
+    return text ? JSON.parse(text) : {};
+
   } catch (err) {
     console.error("Error following:", err);
     return null;
   }
 };
+
 
 export const deleteFollow = async (userid: string) => {
   try {
