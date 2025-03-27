@@ -172,9 +172,10 @@
     font-size: 24px;
     cursor: pointer;
     color: #ccc;
+    background-color: #FFF;
     transition: color 0.3s;
   }
   
   .likeBtn.liked {
-    color: red;  /* Color when the post is liked */
+    color: red;
   }

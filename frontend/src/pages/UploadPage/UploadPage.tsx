@@ -34,6 +34,10 @@ const UploadPage = ({profile}: PageProps) => {
             alert("Please select at least one file.");
             return;
         }
+        if (caption.trim() === "") {
+            alert("Please write a caption.");
+            return;
+        }
 
         await uploadPost(caption, mediaFiles);
         alert("Post uploaded successfully!");
