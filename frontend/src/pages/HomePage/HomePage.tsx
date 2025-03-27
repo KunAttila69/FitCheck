@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import "./HomePageStyle.module.css";
-import { fetchFeed, getUserProfile } from "../../services/authServices";
+import { fetchFeed } from "../../services/authServices";
 import Post from "../../components/Post/Post";
 import Navbar from "../../components/Navbar/Navbar"; 
 

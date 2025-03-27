@@ -9,6 +9,7 @@
     background-color: var(--main-color);
     color: var(--white);
     font-family: "Sigmar One", sans-serif;
+    
 }
 
 .signupContainer > h1 {
@@ -35,36 +36,35 @@
     letter-spacing: 2px;
 }
 
-form {
-    padding: 15px;
-    display: flex;
-    flex-direction: column; 
-}
-
-form label {
-    font-size: 1.1rem;
-    margin-top: 10px;
-    text-align: left;
-    font-weight: bold;
-}
-
-form input {
-    padding: 12px;
-    font-size: 1rem;
-    border: 2px solid black;
-    border-radius: 5px;
-    background: #fff;
-    margin-top: 5px;
-    transition: all 0.3s ease-in-out;
-}
-
-form input:focus {
-    outline: none;
-    border-color: var(--highlight);
-    box-shadow: 0 0 5px var(--highlight);
-}
-
 .formContainer{
+    form {
+        padding: 15px;
+        display: flex;
+        flex-direction: column; 
+    }
+    
+    form label {
+        font-size: 1.1rem;
+        margin-top: 10px;
+        text-align: left;
+        font-weight: bold;
+    }
+    
+    form input {
+        padding: 12px;
+        font-size: 1rem;
+        border: 2px solid black;
+        border-radius: 5px;
+        background: #fff;
+        margin-top: 5px;
+        transition: all 0.3s ease-in-out;
+    }
+    
+    form input:focus {
+        outline: none;
+        border-color: var(--highlight);
+        box-shadow: 0 0 5px var(--highlight);
+    }
     p, label{ 
         color: #000;
     }

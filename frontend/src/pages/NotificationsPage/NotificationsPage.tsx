@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react"; 
-import Navbar from "../../components/Navbar/Navbar";
-import { useNavigate } from "react-router-dom";
+import Navbar from "../../components/Navbar/Navbar"; 
 import Notification from "../../components/Notification/Notification";
 import { getNotifications } from "../../services/authServices";
   

@@ -21,9 +21,4 @@ body{
     background-color: #f4eded; 
     width: 100vw; 
 }
-
-.loginPopup{
-    position: absolute;
-    height: 100%;
-    width: 100%; 
-}
+ 
