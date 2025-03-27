@@ -23,8 +23,7 @@ const Post = ({ id, userName, userProfilePictureUrl, caption, likeCount, comment
   const [isLiked, setLiked] = useState(isLikedByCurrentUser);
   const [commentText, setCommentText] = useState("");
   const [postComments, setPostComments] = useState(comments);
-  const navigate = useNavigate();
-  console.log(comments)
+  const navigate = useNavigate();  
 
   const handlePrevImage = () => {
     setCurrentImageIndex((prevIndex) => (prevIndex === 0 ? mediaUrls.length - 1 : prevIndex - 1));
