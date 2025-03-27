@@ -45,7 +45,7 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-// Add Authorization with Policies
+// Authorization 
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("RequireUserRole", policy => policy.RequireRole("User"));
