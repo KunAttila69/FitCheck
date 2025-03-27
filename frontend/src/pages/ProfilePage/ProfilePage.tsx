@@ -37,8 +37,11 @@ const ProfilePage = () => {
             try {
                 const data = await getProfile(username || "");
                 console.log("Fetched Profile Data:", data);
+                if (data == null) {
+                    navigate("/profile/not-found")
+                }
                 setProfile(data);
-            } catch (error) {
+            } catch (error) { 
                 console.error("Error fetching profile:", error);
             }
         };

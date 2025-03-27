@@ -130,7 +130,7 @@ const Post = ({ id, userName, userProfilePictureUrl, caption, likeCount, comment
         <div className={styles.commentContainer}>
           {postComments.slice(0, 3).map((comment, index) => (
             <div key={index} className={styles.comment}>
-              <img src="../../src/images/FitCheck-logo.png" alt="Commenter" onClick={() => navigate(`/profile/${comment.authorUsername}`)}/>
+              <img src="images/FitCheck-logo.png" alt="Commenter" onClick={() => navigate(`/profile/${comment.authorUsername}`)}/>
               <h4>{comment.authorUsername != yourName ? comment.authorUsername : "You"}: </h4>
               <p> {comment.text}</p>
             </div>

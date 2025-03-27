@@ -13,6 +13,7 @@ import { useState, useEffect } from 'react';
 import { getUserProfile } from './services/authServices';
 import { Link } from 'react-router-dom';
 import FollowingPage from './pages/FollowingPage/FollowingPage';
+import UserNotFoundPage from './pages/UserNotFoundPage/UserNotFoundPage';
 
 interface UserProfile {
   id: string;
@@ -68,6 +69,7 @@ function App() {
             <Route path='/edit' element={<EditPage profile={profile} />} />
             <Route path='/leaderboard' element={<LeaderboardPage profile={profile}/>} />
             <Route path='/profile/:username' element={<ProfilePage />} />
+            <Route path='/profile/not-found' element={<UserNotFoundPage />} />
             <Route path='/upload' element={<UploadPage profile={profile}/>} />
             <Route path='/login' element={<Navigate to="/" replace />} />
             <Route path='/signup' element={<Navigate to="/" replace />} />
