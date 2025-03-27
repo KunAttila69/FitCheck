@@ -114,12 +114,6 @@ namespace FitCheck_Server.Controllers
                     CreatedAt = p.CreatedAt,
                     IsFromFollowedUser = followingUserIds.Contains(p.UserId),
                     IsLikedByCurrentUser = p.Likes.Any(l => l.UserId == currentUserId),
-                    Comments = p.Comments.Select(c => new CommentDto
-                    {
-                        Text = c.Text,
-                        AuthorUsername = c.User.UserName,
-                        CreatedAt = c.CreatedAt
-                    }).ToList()
                 })
                 .ToListAsync();
 
@@ -154,12 +148,6 @@ namespace FitCheck_Server.Controllers
                     UserProfilePictureUrl = p.User.ProfilePictureUrl,
                     CreatedAt = p.CreatedAt,
                     IsLikedByCurrentUser = p.Likes.Any(l => l.UserId == currentUserId),
-                    Comments = p.Comments.Select(c => new CommentDto
-                    {
-                        Text = c.Text,
-                        AuthorUsername = c.User.UserName,
-                        CreatedAt = c.CreatedAt
-                    }).ToList()
                 })
                 .ToListAsync();
 
@@ -200,12 +188,6 @@ namespace FitCheck_Server.Controllers
                 CreatedAt = post.CreatedAt,
                 IsFromFollowedUser = followingUserIds.Contains(post.UserId),
                 IsLikedByCurrentUser = post.Likes.Any(l => l.UserId == currentUserId),
-                Comments = post.Comments.Select(c => new CommentDto
-                {
-                    Text = c.Text,
-                    AuthorUsername = c.User.UserName,
-                    CreatedAt = c.CreatedAt
-                }).ToList()
             };
 
             return Ok(postDto);
@@ -275,6 +257,7 @@ namespace FitCheck_Server.Controllers
             {
                 Text = savedComment.Text,
                 AuthorUsername = savedComment.User.UserName,
+                AuthorProfilePictureUrl = savedComment.User.ProfilePictureUrl,
                 CreatedAt = savedComment.CreatedAt
             };
 
@@ -293,6 +276,7 @@ namespace FitCheck_Server.Controllers
                 {
                     Text = c.Text,
                     AuthorUsername = c.User.UserName,
+                    AuthorProfilePictureUrl = c.User.ProfilePictureUrl,
                     CreatedAt = c.CreatedAt
                 })
                 .ToListAsync();

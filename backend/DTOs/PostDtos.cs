@@ -6,7 +6,6 @@
         public string? Caption { get; set; }
         public List<string>? MediaUrls { get; set; }
         public int LikeCount { get; set; }
-        public List<CommentDto> Comments { get; set; } = new List<CommentDto>();
         public string? UserName { get; set; }
         public string? UserProfilePictureUrl { get; set; }
         public DateTime CreatedAt { get; set; }
@@ -18,6 +17,7 @@
     {
         public string? Text { get; set; }
         public string? AuthorUsername { get; set; }
+        public string? AuthorProfilePictureUrl { get; set; }
         public DateTime CreatedAt { get; set; }
     }
 
