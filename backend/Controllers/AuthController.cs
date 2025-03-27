@@ -40,13 +40,13 @@ namespace FitCheck_Server.Controllers
             ApplicationUser? existingUser = await _userManager.FindByNameAsync(request.Username);
             if (existingUser != null)
             {
-                return BadRequest("Username is already taken.");
+                return BadRequest(new { Message = "Username is already taken." });
             }
 
             existingUser = await _userManager.FindByEmailAsync(request.Email);
             if (existingUser != null)
             {
-                return BadRequest("Email is already in use.");
+                return BadRequest(new { Message = "Email is already in use." });
             }
 
             ApplicationUser? user = new ApplicationUser
@@ -65,7 +65,7 @@ namespace FitCheck_Server.Controllers
             // Assign the default User role
             await _userManager.AddToRoleAsync(user, "User");
 
-            return Ok("User registered successfully.");
+            return Ok(new { Message = "User registered successfully." });
         }
 
         [HttpPost("login")]
@@ -79,7 +79,7 @@ namespace FitCheck_Server.Controllers
             ApplicationUser? user = await _userManager.FindByNameAsync(request.Username);
             if (user == null || !await _userManager.CheckPasswordAsync(user, request.Password))
             {
-                return Unauthorized("Invalid credentials");
+                return Unauthorized(new { Message = "Invalid credentials" });
             }
 
             var (accessToken, tokenError) = await _authService.GenerateAccessToken(user);
@@ -107,7 +107,7 @@ namespace FitCheck_Server.Controllers
 
             if (user == null || user.RefreshTokenExpiry < DateTime.UtcNow)
             {
-                return Unauthorized("Invalid or expired refresh token");
+                return Unauthorized(new { Message = "Invalid or expired refresh token" });
             }
 
             var (newAccessToken, tokenError) = await _authService.GenerateAccessToken(user);

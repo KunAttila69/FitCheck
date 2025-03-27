@@ -8,14 +8,24 @@
         padding: 10px;
         & div{
             padding: 0 10px;
-        }
-        & p{
-            width: 250px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
+        } 
     }
+}
+
+.caption {
+    width: 250px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+}
+
+.caption.expanded {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
+    word-break: break-word;
+    overflow-wrap: break-word;
 }
 
 .posterProfile{
@@ -59,10 +69,7 @@
 .likeBtn{
     height: 30px;
     width: 30px;
-    border: none;
-    background: none;
-    background-size: cover;
-    background-image: url("../../images/like.png");
+    border: none; 
 }
 .commentBtn{
     height: 30px;
@@ -71,4 +78,104 @@
     background: none;
     background-size: cover;
     background-image: url("../../images/comment.png");
+} 
+
+.imageWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: black;
+  width: 100%;
+  max-width: 800px;
+  height: auto;
 }
+
+.postImage {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  background-color: black;
+}
+
+.prevBtn,
+.nextBtn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  font-size: 24px;
+}
+
+.prevBtn {
+  left: 10px;
+}
+
+.nextBtn {
+  right: 10px;
+}
+
+.sliderContainer {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    background-color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+  }
+  
+  .imageWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: black;
+    width: 100%;
+    height: 400px; 
+    max-width: 800px;
+  }
+  
+  .postImage {
+    width: auto;
+    height: 100%; 
+    max-height: 500px; 
+    object-fit: contain; 
+    background-color: black;
+  }
+  
+  .prevBtn,
+  .nextBtn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 24px;
+  }
+  
+  .prevBtn {
+    left: 10px;
+  }
+  
+  .nextBtn {
+    right: 10px;
+  }
+  
+  .likeBtn {
+    font-size: 24px;
+    cursor: pointer;
+    color: #ccc;
+    background-color: #FFF;
+    transition: color 0.3s;
+  }
+  
+  .likeBtn.liked {
+    color: red;
+  }

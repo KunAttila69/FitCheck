@@ -3,7 +3,11 @@ import styles from "./UploadPage.module.css";
 import Navbar from "../../components/Navbar/Navbar"; 
 import { uploadPost } from "../../services/authServices";
 
-const UploadPage = () => {  
+interface PageProps{
+    profile: any
+}
+
+const UploadPage = ({profile}: PageProps) => {  
     const [mediaFiles, setMediaFiles] = useState<File[]>([]);
     const [previewFiles, setPreviewFiles] = useState<string[]>([]);
     const [caption, setCaption] = useState("");
@@ -30,6 +34,10 @@ const UploadPage = () => {
             alert("Please select at least one file.");
             return;
         }
+        if (caption.trim() === "") {
+            alert("Please write a caption.");
+            return;
+        }
 
         await uploadPost(caption, mediaFiles);
         alert("Post uploaded successfully!");
@@ -40,7 +48,7 @@ const UploadPage = () => {
 
     return ( 
         <>
-            <Navbar selectedPage="post"/>
+            <Navbar selectedPage="post" profilePic={profile.profilePictureUrl}/>
             <main className={styles.editContainer}>
                 <form className={styles.uploadForm} onSubmit={handleUpload}>
                     <label className={styles.imageContainer}>

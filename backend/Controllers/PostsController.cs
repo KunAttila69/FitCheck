@@ -20,15 +20,18 @@ namespace FitCheck_Server.Controllers
         private readonly ApplicationDbContext _context;
         private readonly FileService _fileService;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly NotificationService _notificationService;
 
         public PostsController(
             ApplicationDbContext context,
             FileService fileService,
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager,
+            NotificationService notificationService)
         {
             _context = context;
             _fileService = fileService;
             _userManager = userManager;
+            _notificationService = notificationService;
         }
 
         #region Post Endpoints
@@ -218,12 +221,13 @@ namespace FitCheck_Server.Controllers
             var existingLike = await _context.Likes
                 .FirstOrDefaultAsync(l => l.PostId == postId && l.UserId == userId);
 
-            if (existingLike != null) return BadRequest("Post already liked.");
+            if (existingLike != null) return BadRequest(new { Message = "Post already liked." });
 
             var like = new Like { PostId = postId, UserId = userId };
             _context.Likes.Add(like);
             await _context.SaveChangesAsync();
 
+            await _notificationService.CreateLikeNotificationAsync(userId, postId);
             return Ok();
         }
 
@@ -274,6 +278,7 @@ namespace FitCheck_Server.Controllers
                 CreatedAt = savedComment.CreatedAt
             };
 
+            await _notificationService.CreateCommentNotificationAsync(userId, postId);
             return Ok(commentDto);
         }
 

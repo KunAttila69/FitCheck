@@ -13,6 +13,8 @@ namespace FitCheck_WPFApp.ViewModels
         private readonly ApiService _apiService;
         private readonly LogService _logService;
         private readonly AuthService _authService;
+        private readonly string _baseRootUrl = "https://localhost:7293";
+
 
         private ObservableCollection<Comment> _comments;
         public ObservableCollection<Comment> Comments
@@ -81,6 +83,17 @@ namespace FitCheck_WPFApp.ViewModels
             try
             {
                 var comments = await _apiService.GetAllCommentsAsync();
+                foreach (var c in comments)
+                {
+                    if (c.AuthorProfilePicture != null)
+                    {
+                        c.AuthorProfilePicture = _baseRootUrl + c.AuthorProfilePicture;
+                    }
+                    else
+                    {
+                        c.AuthorProfilePicture = @"Resources\default_user.png";
+                    }
+                }
                 Comments = new ObservableCollection<Comment>(comments);
             }
             catch (Exception ex)

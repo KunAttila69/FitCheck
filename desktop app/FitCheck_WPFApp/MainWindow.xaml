@@ -14,11 +14,11 @@
 
         <!-- Admin Navigation -->
         <StackPanel x:Name="AdminNavigation" Grid.Row="0" Background="#2c3e50" Orientation="Horizontal" Visibility="Collapsed">
-            <Button x:Name="UsersButton" Content="Users" Width="120" Height="40" Margin="10" Click="UsersButton_Click"/>
-            <Button x:Name="PostsButton" Content="Posts" Width="120" Height="40" Margin="10" Click="PostsButton_Click"/>
-            <Button x:Name="CommentsButton" Content="Comments" Width="120" Height="40" Margin="10" Click="CommentsButton_Click"/>
-            <Button x:Name="LogsButton" Content="Logs" Width="120" Height="40" Margin="10" Click="LogsButton_Click"/>
-            <Button x:Name="LogoutButton" Content="Logout" Width="120" Height="40" Margin="10" HorizontalAlignment="Right" Click="LogoutButton_Click"/>
+            <Button x:Name="UsersButton" Content="Users" Width="120" Height="40" Margin="10" Click="UsersButton_Click" Foreground="White"/>
+            <Button x:Name="PostsButton" Content="Posts" Width="120" Height="40" Margin="10" Click="PostsButton_Click" Foreground="White"/>
+            <Button x:Name="CommentsButton" Content="Comments" Width="120" Height="40" Margin="10" Click="CommentsButton_Click" Foreground="White"/>
+            <Button x:Name="LogsButton" Content="Logs" Width="120" Height="40" Margin="10" Click="LogsButton_Click" Foreground="White"/>
+            <Button x:Name="LogoutButton" Content="Logout" Width="120" Height="40" Margin="10" HorizontalAlignment="Left" Click="LogoutButton_Click" Foreground="White"/>
         </StackPanel>
 
         <!-- Content Panel -->

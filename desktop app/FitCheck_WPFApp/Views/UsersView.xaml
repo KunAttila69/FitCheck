@@ -50,13 +50,13 @@
                 <ListView ItemsSource="{Binding Users}" SelectedItem="{Binding SelectedUser}">
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Header="Username" Width="150">
+                            <GridViewColumn Header="Username" Width="Auto">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
                                             <Ellipse Width="30" Height="30" Margin="0,0,10,0">
                                                 <Ellipse.Fill>
-                                                    <ImageBrush ImageSource="{Binding ProfilePictureUrl, TargetNullValue='/Resources/default_user.png'}"/>
+                                                    <ImageBrush ImageSource="{Binding ProfilePictureUrl}"/>
                                                 </Ellipse.Fill>
                                             </Ellipse>
                                             <TextBlock Text="{Binding Username}" VerticalAlignment="Center"/>
@@ -64,8 +64,8 @@
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            <GridViewColumn Header="Email" Width="200" DisplayMemberBinding="{Binding Email}"/>
-                            <GridViewColumn Header="Status" Width="100">
+                            <GridViewColumn Header="Email" Width="Auto" DisplayMemberBinding="{Binding Email}"/>
+                            <GridViewColumn Header="Status" Width="Auto">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock>
@@ -87,7 +87,7 @@
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            <GridViewColumn Header="Joined Date" Width="120" DisplayMemberBinding="{Binding CreatedAt, StringFormat='{}{0:yyyy-MM-dd}'}"/>
+                            <GridViewColumn Header="Joined Date" Width="Auto" DisplayMemberBinding="{Binding CreatedAt, StringFormat='{}{0:yyyy-MM-dd}'}"/>
                         </GridView>
                     </ListView.View>
                 </ListView>
@@ -103,7 +103,7 @@
                                    Visibility="{Binding SelectedUser, Converter={StaticResource NullToVisibilityConverter}}"/>
 
                         <StackPanel Visibility="{Binding SelectedUser, Converter={StaticResource NullToVisibilityConverter}, ConverterParameter=inverse}">
-                            <Image Source="{Binding SelectedUser.ProfilePictureUrl, TargetNullValue='/Resources/default_user.png'}" 
+                            <Image Source="{Binding SelectedUser.ProfilePictureUrl}" 
                                    Height="100" Width="100" Stretch="UniformToFill" Margin="0,0,0,15"/>
 
                             <TextBlock Text="Username" FontWeight="Bold"/>

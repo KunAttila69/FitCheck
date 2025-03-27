@@ -21,9 +21,15 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Resource Include="Resources\default_user.png" />
-		<Resource Include="Resources\no_image.png" />
-		<Resource Include="Resources\app_icon.ico" />
+		<Resource Include="Resources\default_user.png">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Resources\no_image.png">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Resources\app_icon.ico">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Resource>
 	</ItemGroup>
 
 </Project>
