@@ -1,119 +1,144 @@
 import { useEffect, useState } from "react";
 import styles from "./ProfilePage.module.css";
-import { addFollow, getProfile, getUserProfile } from "../../services/authServices";
+import { addFollow, getProfile, getUserProfile, getUserPosts } from "../../services/authServices";
 import Post from "../../components/Post/Post"; 
 import { useNavigate, useParams } from "react-router-dom";
 import { BASE_URL } from "../../services/interceptor";
 
+interface PostData {
+    id: number;
+    content: string;
+    userProfilePictureUrl?: string;
+    likeCount?: number; 
+    mediaUrls?: string[];
+    isLikedByCurrentUser: boolean;
+    yourName: string;
+}
+
 interface Profile {
-    userId: string
+    userId: string;
     username: string;
     bio?: string;
     friendsCount: number;
     likesCount: number;
-    profilePictureUrl: string | null;
-    posts: { id: number; content: string }[]; 
+    profilePictureUrl: string | null; 
 }
 
-const ProfilePage = () => { 
+interface ProfilePageProps {
+    yourName: string | undefined;
+}
+
+const ProfilePage = ({yourName} : ProfilePageProps) => { 
     const { username } = useParams<{ username: string }>();
     const [profile, setProfile] = useState<Profile | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [posts, setPosts] = useState<PostData[]>([]);
+    const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
 
     useEffect(() => {
-        const checkIfOwnProfile = async () => {
-            try { 
-                const user = await getUserProfile();
-
-                if (user?.username === username) { 
-                    navigate("/");
-                }
-            } catch (error) {
-                console.error("Error fetching user profile:", error);
-            }
-        };
-
         const fetchProfile = async () => {
             try {
-                const data = await getProfile(username || "");
-                console.log("Fetched Profile Data:", data);
-                if (data == null) {
-                    navigate("/profile/not-found")
+                const user = await getUserProfile();
+                if (user?.username === username) {
+                    navigate("/");
+                    return;
                 }
-                setProfile(data);
-            } catch (error) { 
-                console.error("Error fetching profile:", error);
+                const data = await getProfile(username || "");
+                if (!data) {
+                    navigate("/profile/not-found");
+                } else {
+                    setProfile(data);
+                }
+            } catch (err) {
+                console.error("Error fetching profile:", err);
+                setError("Failed to load profile.");
+            } finally {
+                setLoading(false);
             }
         };
- 
-        checkIfOwnProfile();
-         
-        fetchProfile();
-    }, [username]); 
 
-    
+        const fetchPosts = async () => {
+            try {
+                const userPosts = await getUserPosts(username || "");
+                console.log(userPosts)
+                setPosts(userPosts);
+            } catch (err) {
+                console.error("Error fetching posts:", err);
+            }
+        };
+
+        fetchProfile();
+        fetchPosts();
+    }, [username, navigate]); 
+
     const handleFollow = async () => {
+        if (!profile?.userId) return;
         try {
-            if (!profile?.userId) {
-               console.log("User ID is missing.");
-                return;
-          }
-          const result = await addFollow(profile.userId);
-          console.log("Friend added successfully:", result);
+            await addFollow(profile.userId);
+            console.log("Friend added successfully.");
         } catch (error) {
             console.error("Error adding friend:", error);
         }
     };
-      
-  
+
+    if (loading) return <p>Loading profile...</p>;
+    if (error) return <p>{error}</p>;
+
     return (
-    <> 
-        <nav>
-            <div className={styles.profileHeader}>
-                <img src={profile?.profilePictureUrl == null ? "../../src/images/FitCheck-logo.png" : BASE_URL+profile?.profilePictureUrl} className={styles.profilePic} alt="Profile" />
-                <div>
-                    <h3>{profile?.username || "Loading..."}</h3>
-                    <p>{profile?.bio || "No bio available"}</p>
-                </div> 
-                <div className={`${styles.home} ${styles.icon}`} onClick={() => navigate("/")}></div>
-                
-            </div>
-            <div className={styles.profileStats}>
-                <div className={styles.friendsContainer}>
-                    <h5>Friends</h5>
-                    <h2>{profile?.friendsCount ?? 0}</h2>
+        <> 
+            <nav>
+                <div className={styles.profileHeader}>
+                    <img 
+                        src={profile?.profilePictureUrl ? BASE_URL + profile.profilePictureUrl : "/images/FitCheck-logo.png"} 
+                        className={styles.profilePic} 
+                        alt="Profile" 
+                    />
+                    <div>
+                        <h3>{profile?.username || "Loading..."}</h3>
+                        <p>{profile?.bio || "No bio available"}</p>
+                    </div> 
+                    <div className={`${styles.home} ${styles.icon}`} onClick={() => navigate("/")}></div>
                 </div>
-                <div className={styles.likesContainer}>
-                    <h5>Likes</h5>
-                    <h2>{profile?.likesCount ?? 0}</h2>
+
+                <div className={styles.profileStats}>
+                    <div className={styles.friendsContainer}>
+                        <h5>Friends</h5>
+                        <h2>{profile?.friendsCount ?? 0}</h2>
+                    </div>
+                    <div className={styles.likesContainer}>
+                        <h5>Likes</h5>
+                        <h2>{profile?.likesCount ?? 0}</h2>
+                    </div>
+                    <div className={styles.postCountContainer}>
+                        <h5>Posts</h5>
+                        <h2>{posts.length}</h2>
+                    </div>
                 </div>
-                <div className={styles.postCountContainer}>
-                    <h5>Posts</h5>
-                    <h2>{profile?.posts?.length ?? 0}</h2>
-                </div>
-            </div>
-            <button className={styles.addFriend} onClick={() => {handleFollow()}}>Follow</button>
-        </nav>
-        <main>
-  {/* {profile?.posts ? (
-    profile.posts.map((post) => (
-      <Post 
-        key={post.id}
-        id={post.id}
-        userName={profile.username}
-        userProfilePictureUrl={post.userProfilePictureUrl || null}
-        caption={post.content}
-        likeCount={post.likeCount ?? 0} 
-        comments={post.comments ?? []}
-        mediaUrls={post.mediaUrls ?? []}
-      />
-    ))
-  ) : (
-    <p>Loading posts...</p>
-  )} */}
-</main>
-    </>
-  );
+                <button className={styles.addFriend} onClick={handleFollow}>Follow</button>
+            </nav>
+
+            <main>
+                {posts.length > 0 ? (
+                    posts.map((post) => (
+                        <Post 
+                            key={post.id}
+                            id={post.id}
+                            userName={profile?.username || ""}
+                            userProfilePictureUrl={post.userProfilePictureUrl || ""}
+                            caption={post.content}
+                            likeCount={post.likeCount ?? 0}  
+                            mediaUrls={post.mediaUrls ?? []}
+                            isLikedByCurrentUser={post.isLikedByCurrentUser}
+                            yourName={yourName || ""}
+                        />
+                    ))
+                ) : (
+                    <p>No posts yet.</p>
+                )}
+            </main>
+        </>
+    );
 };
 
 export default ProfilePage;

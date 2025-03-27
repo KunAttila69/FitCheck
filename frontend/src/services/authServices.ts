@@ -493,3 +493,25 @@ export const getComments = async (postId:string) => {
     return null;
   }
 }
+
+export const getUserPosts = async (username: string) => {
+    try {
+      const token = localStorage.getItem("access");
+      if (!token) {
+        throw new Error("User not authenticated");
+      }
+  
+      const response = await fetch(`${BASE_URL}/api/posts/user/${username}`, {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json",
+        } 
+      });
+   
+      return response.json()
+    } catch (err) {
+      console.error("Error fetching posts:", err);
+      return null;
+    }
+}

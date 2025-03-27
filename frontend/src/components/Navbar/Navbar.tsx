@@ -9,13 +9,19 @@ interface NavbarProps{
 
 const Navbar = ({selectedPage, profilePic} : NavbarProps) => {
     const [notificationCount, setNotificationCount] = useState(2)
+    const [searchText, setSearchText] = useState("")
     const navigate = useNavigate()
+
+    const handleSearch = () => {
+        navigate("/profile/"+searchText)
+    }
+
     return ( 
         <nav>
             <div className={styles.searchRow}>
                 <div className={styles.search}>
-                    <button></button>
-                    <input type="text" placeholder="Search for user"/>
+                    <button onClick={handleSearch}></button>
+                    <input type="text" value={searchText} onChange={e => setSearchText(e.target.value)} placeholder="Search for user"/>
                 </div>
                 <img className={styles.profile} src={profilePic != null ? BASE_URL + profilePic : "images/FitCheck-logo.png"} onClick={() => {navigate("/edit")}}/>
             </div>
