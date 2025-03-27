@@ -81,7 +81,7 @@ const Post = ({ id, userName, userProfilePictureUrl, caption, likeCount, comment
     <div className={styles.postContainer}>
       <div className={styles.postHeader}>
         <img
-          src={userProfilePictureUrl != null ? BASE_URL + userProfilePictureUrl : "../../src/images/FitCheck-logo.png"}
+          src={userProfilePictureUrl != null ? BASE_URL + userProfilePictureUrl : "images/FitCheck-logo.png"}
           onClick={() => navigate(`/profile/${userName}`)}
           className={styles.posterProfile}
           alt="Profile"

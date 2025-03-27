@@ -66,7 +66,7 @@ function App() {
             <Route path='/notifications' element={<NotificationsPage />} />
             <Route path='/following' element={<FollowingPage profile={profile}/>} />
             <Route path='/edit' element={<EditPage profile={profile} />} />
-            <Route path='/leaderboard' element={<LeaderboardPage />} />
+            <Route path='/leaderboard' element={<LeaderboardPage profile={profile}/>} />
             <Route path='/profile/:username' element={<ProfilePage />} />
             <Route path='/upload' element={<UploadPage profile={profile}/>} />
             <Route path='/login' element={<Navigate to="/" replace />} />

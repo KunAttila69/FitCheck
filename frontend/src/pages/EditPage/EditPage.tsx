@@ -98,7 +98,7 @@ const EditPage = ({ profile }: PageProps) => {
           ) : profile.profilePictureUrl ? (
             <img src={BASE_URL+profile.profilePictureUrl} alt="Profile" />
           ) : (
-            <img src="../../src/images/FitCheck-logo.png" alt="Profile" />
+            <img src="images/FitCheck-logo.png" alt="Profile" />
           )}
 
         </div>

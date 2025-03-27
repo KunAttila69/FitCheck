@@ -17,7 +17,7 @@ const Navbar = ({selectedPage, profilePic} : NavbarProps) => {
                     <button></button>
                     <input type="text" placeholder="Search for user"/>
                 </div>
-                <img className={styles.profile} src={profilePic != null ? BASE_URL + profilePic : "../../src/images/FitCheck-logo.png"} onClick={() => {navigate("/edit")}}/>
+                <img className={styles.profile} src={profilePic != null ? BASE_URL + profilePic : "images/FitCheck-logo.png"} onClick={() => {navigate("/edit")}}/>
             </div>
                 <div className={styles.iconContainer}>
                 <div className={`${styles.notifications} ${styles.icon}`} onClick={() => navigate("/notifications")}>{notificationCount > 0 ? <div className={styles.notificationCount}>{notificationCount}</div> : ""} {selectedPage == "notifications" ? <div className={styles.selected}/> : ""}</div>
