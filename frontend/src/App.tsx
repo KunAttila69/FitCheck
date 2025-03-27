@@ -64,7 +64,7 @@ function App() {
         {localStorage.getItem("access") ? (
           <>
             <Route index element={<HomePage profile={profile} />} />
-            <Route path='/notifications' element={<NotificationsPage />} />
+            <Route path='/notifications' element={<NotificationsPage profile={profile}/>} />
             <Route path='/following' element={<FollowingPage profile={profile}/>} />
             <Route path='/edit' element={<EditPage profile={profile} />} />
             <Route path='/leaderboard' element={<LeaderboardPage profile={profile}/>} />

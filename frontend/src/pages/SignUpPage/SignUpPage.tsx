@@ -17,27 +17,33 @@ const SignUpPage = () => {
     setError(null);
 
     if (!username || !email || !password || !confirmPassword) {
-      setError("All fields are required!");
-      return;
+        setError("All fields are required!");
+        return;
+    }
+
+    if (password.length < 6) {
+        setError("Password must be at least 6 characters long.");
+        return;
     }
 
     if (password !== confirmPassword) {
-      setError("Passwords do not match!");
-      return;
+        setError("Passwords do not match!");
+        return;
     }
-    
+
     try {
-      const response = await registerUser(username, email, password);
- 
-      if (!response || response.status !== 200) {
-        setError(response?.data.message || "An error occurred during registration.");
-      } else {
-        navigate("/login");
-      }
+        const response = await registerUser(username, email, password);
+
+        if (response.status !== 200) {
+            setError(response.error);
+        } else {
+            navigate("/login");
+        }
     } catch (err) {
-      setError("An error occurred during registration. Please try again.");
+        console.error("Unexpected error:", err);
+        setError("Unexpected error occurred. Please try again.");
     }
-  }
+};
 
   return (
     <div className={styles.signupContainer}>

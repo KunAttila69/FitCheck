@@ -1,26 +1,41 @@
-import {  useState } from "react"; 
+import { useEffect, useState } from "react"; 
 import Navbar from "../../components/Navbar/Navbar";
 import { useNavigate } from "react-router-dom";
 import Notification from "../../components/Notification/Notification";
+import { getNotifications } from "../../services/authServices";
+  
 
-const NotificationsPage = () => {
-  const navigate = useNavigate() 
-  const [profile, setProfile] = useState() 
-  const notifications = [
-    {user: "Gipsz Jakab", userPic: "../../images/img.png", actionType: 1, post: "../../images/img.png"},
-    {user: "Beton Jakab", userPic: "../../images/img.png", actionType: 2, post: null}
-  ]
+interface PageProps {
+  profile: any;
+}
+
+const NotificationsPage = ({ profile }: PageProps) => { 
+  const [notifications, setNotifications] = useState([]);
+
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      try {
+        const data = await getNotifications(); 
+        console.log(data)
+        setNotifications(data.notifications);
+      } catch (err) {
+        console.error("Error fetching notifications:", err);
+      }
+    };
+
+    fetchNotifications();
+  }, []);
 
   return (
     <>
-      <Navbar selectedPage="notifications"/>
+      <Navbar selectedPage="notifications" profilePic={profile.profilePictureUrl} />
       <main>
-        {notifications.map((notif, i) => {
-            return <Notification notif={notif} key={i}/>
-        })}
+        {notifications.length > 0 && notifications.map((notif, i) => (
+          <Notification notif={notif} key={i} />
+        ))}
       </main>
     </>
-  )
-}
+  );
+};
 
-export default NotificationsPage
+export default NotificationsPage;

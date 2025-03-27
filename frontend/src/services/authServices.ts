@@ -39,31 +39,27 @@ export async function loginUser(username: string, password: string) {
 
 
 export async function registerUser(username: string, email: string, password: string) {
-    try {
-        const response = await fetch(BASE_URL + "/api/auth/register", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                username: username,
-                email: email,
-                password: password,
-            }),
-        });
+  try {
+      const response = await fetch(BASE_URL + "/api/auth/register", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ username, email, password }),
+      });
 
-        if (!response.ok) { 
-            const errorData = await response.json();
-            console.error("Registration error:", errorData);
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
+      if (!response.ok) { 
+          const errorData = await response.json();
+          console.error("Registration error:", errorData);
+          return { status: response.status, error: errorData.message || "Registration failed." };
+      }
 
-        const data = await response.json();
-        return { status: response.status, data };
-    } catch (err) {
-        console.error("Error during registration:", err);
-        return undefined;
-    }
+      const data = await response.json();
+      return { status: response.status, data };
+  } catch (err) {
+      console.error("Error during registration:", err);
+      return { status: 500, error: "Network error. Please try again later." };
+  }
 }
 
 export async function getUserProfile() {
@@ -515,3 +511,24 @@ export const getUserPosts = async (username: string) => {
       return null;
     }
 }
+
+export const getNotifications = async () => {
+  try {
+    const token = localStorage.getItem("access");
+    if (!token) {
+      throw new Error("User not authenticated");
+    }
+
+    const response = await fetch(`${BASE_URL}/api/notifications`, {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json",
+      } 
+    }); 
+    return response.json()
+  } catch (err) {
+    console.error("Error fetching posts:", err);
+    return null;
+  }
+} 
