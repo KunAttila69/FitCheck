@@ -1,8 +1,8 @@
 import { BASE_URL } from "../../services/interceptor";
 import styles from "./Post.module.css";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-import { likePost, unlikePost, addComment } from "../../services/authServices";
+import { useEffect, useState } from "react";
+import { likePost, unlikePost, addComment, getComments } from "../../services/authServices";
 
 interface PostProps {
   id: number;
@@ -10,28 +10,37 @@ interface PostProps {
   userProfilePictureUrl: string | null;
   caption: string;
   likeCount: number;
-  comments: { authorUsername: string; text: string }[];
   mediaUrls: string[];
   isLikedByCurrentUser: boolean;
-  yourName: string
+  yourName: string;
 }
 
-const Post = ({ id, userName, userProfilePictureUrl, caption, likeCount, comments, mediaUrls, isLikedByCurrentUser, yourName }: PostProps) => {
+interface Comment {
+  authorUsername: string;
+  text: string;
+}
+
+const Post = ({ id, userName, userProfilePictureUrl, caption, likeCount, mediaUrls, isLikedByCurrentUser, yourName }: PostProps) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isExpanded, setIsExpanded] = useState(false);
   const [likes, setLikes] = useState(likeCount);
   const [isLiked, setLiked] = useState(isLikedByCurrentUser);
   const [commentText, setCommentText] = useState("");
-  const [postComments, setPostComments] = useState(comments);
-  const navigate = useNavigate();  
+  const [postComments, setPostComments] = useState<Comment[]>([]);
+  const navigate = useNavigate();
 
-  const handlePrevImage = () => {
-    setCurrentImageIndex((prevIndex) => (prevIndex === 0 ? mediaUrls.length - 1 : prevIndex - 1));
-  };
+  useEffect(() => {
+    const fetchComments = async () => {
+      try {
+        const comments = await getComments(id.toString());
+        setPostComments(comments || []);
+      } catch (error) {
+        console.error("Error fetching comments:", error);
+      }
+    };
 
-  const handleNextImage = () => {
-    setCurrentImageIndex((prevIndex) => (prevIndex === mediaUrls.length - 1 ? 0 : prevIndex + 1));
-  };
+    fetchComments();
+  }, [id]);
 
   const handleLikeClick = async () => {
     try {
@@ -62,12 +71,15 @@ const Post = ({ id, userName, userProfilePictureUrl, caption, likeCount, comment
   };
 
   const handleCommentSubmit = async () => {
-    if (!commentText.trim()) return;  
+    if (!commentText.trim()) return;
 
     try {
       const result = await addComment(id.toString(), commentText);
       if (result) {
-        setPostComments([...postComments, { authorUsername: "You", text: commentText }]);
+        setPostComments((prevComments) => [
+          ...prevComments,
+          { authorUsername: "You", text: commentText },
+        ]);
         setCommentText("");
       } else {
         console.error("Failed to add comment");
@@ -81,7 +93,7 @@ const Post = ({ id, userName, userProfilePictureUrl, caption, likeCount, comment
     <div className={styles.postContainer}>
       <div className={styles.postHeader}>
         <img
-          src={userProfilePictureUrl != null ? BASE_URL + userProfilePictureUrl : "images/FitCheck-logo.png"}
+          src={userProfilePictureUrl ? BASE_URL + userProfilePictureUrl : "images/FitCheck-logo.png"}
           onClick={() => navigate(`/profile/${userName}`)}
           className={styles.posterProfile}
           alt="Profile"
@@ -96,24 +108,17 @@ const Post = ({ id, userName, userProfilePictureUrl, caption, likeCount, comment
         </div>
       </div>
 
-      {mediaUrls.length > 0 &&
-        (mediaUrls.length > 1 ? (
-          <div className={styles.sliderContainer}>
-            <button className={styles.prevBtn} onClick={handlePrevImage}>
-              ‹
-            </button>
-            <div className={styles.imageWrapper}>
-              <img src={BASE_URL + mediaUrls[currentImageIndex]} alt="Post media" className={styles.postImage} />
-            </div>
-            <button className={styles.nextBtn} onClick={handleNextImage}>
-              ›
-            </button>
-          </div>
-        ) : (
-          <div className={styles.imageWrapper}>
-            <img src={BASE_URL + mediaUrls[0]} alt="Post media" className={styles.postImage} />
-          </div>
-        ))}
+      {mediaUrls.length > 0 && (
+        <div className={styles.imageWrapper}>
+          <img src={BASE_URL + mediaUrls[currentImageIndex]} alt="Post media" className={styles.postImage} />
+          {mediaUrls.length > 1 && (
+            <>
+              <button className={styles.prevBtn} onClick={() => setCurrentImageIndex((prev) => (prev === 0 ? mediaUrls.length - 1 : prev - 1))}>‹</button>
+              <button className={styles.nextBtn} onClick={() => setCurrentImageIndex((prev) => (prev === mediaUrls.length - 1 ? 0 : prev + 1))}>›</button>
+            </>
+          )}
+        </div>
+      )}
 
       <div className={styles.postFooter}>
         <div className={styles.postStats}>
@@ -125,19 +130,19 @@ const Post = ({ id, userName, userProfilePictureUrl, caption, likeCount, comment
           <h4>{postComments.length}</h4>
         </div>
       </div>
- 
+
       {postComments.length > 0 && (
         <div className={styles.commentContainer}>
           {postComments.slice(0, 3).map((comment, index) => (
             <div key={index} className={styles.comment}>
               <img src="images/FitCheck-logo.png" alt="Commenter" onClick={() => navigate(`/profile/${comment.authorUsername}`)}/>
-              <h4>{comment.authorUsername != yourName ? comment.authorUsername : "You"}: </h4>
+              <h4>{comment.authorUsername !== yourName ? comment.authorUsername : "You"}: </h4>
               <p> {comment.text}</p>
             </div>
           ))}
         </div>
       )}
- 
+
       <div className={styles.commentInputContainer}>
         <input
           type="text"

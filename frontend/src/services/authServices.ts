@@ -471,3 +471,25 @@ export const getLeaderBoard = async () => {
     return null;
   }
 }
+
+export const getComments = async (postId:string) => {
+  try {
+    const token = localStorage.getItem("access");
+    if (!token) {
+      throw new Error("User not authenticated");
+    }
+
+    const response = await fetch(`${BASE_URL}/api/posts/${postId}/comments`, {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json",
+      } 
+    });
+ 
+    return response.json()
+  } catch (err) {
+    console.error("Error fetching comments:", err);
+    return null;
+  }
+}
