@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import Friend from "../../components/Friend/Friend";
 import { getFollowing } from "../../services/authServices";
+import Popup from "../../components/Popup/Popup";
 
 interface FriendType {
   userId: string;
@@ -14,9 +15,16 @@ interface PageProps {
   profile: any;
 }
 
+interface MessageType{
+  text: string,
+  type: number
+}
+
+
 const FollowingPage = ({ profile }: PageProps) => {
   const [following, setFollowing] = useState<FriendType[]>([]);
   const [loading, setLoading] = useState(true);
+  const [message, setMessage] = useState<MessageType | null>(null)
 
   useEffect(() => {
     const fetchFriends = async () => {
@@ -33,8 +41,14 @@ const FollowingPage = ({ profile }: PageProps) => {
     );
   };
 
+  const handleMessage = (message: string, type: number) => {
+    console.log(message +" "+ type)
+    setMessage({text: message, type})
+  }
+
   return (
     <>
+      {message && (<Popup message={message.text} type={message.type} reset={() => {setMessage(null)}}/>)}
       <Navbar selectedPage="following" profilePic={profile.profilePictureUrl} />
       <main>
         {loading ? (
@@ -45,6 +59,7 @@ const FollowingPage = ({ profile }: PageProps) => {
               friend={follow} 
               key={i} 
               onUnfollow={() => handleUnfollow(follow.userId)} 
+              handleMessage={handleMessage}
             />
           ))
         ) : (

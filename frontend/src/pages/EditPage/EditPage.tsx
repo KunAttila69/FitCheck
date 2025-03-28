@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import styles from "./EditPage.module.css";
 import { updateProfile, changePassword, uploadAvatar, handleLogout } from "../../services/authServices";
 import { BASE_URL } from "../../services/interceptor";
+import Popup from "../../components/Popup/Popup"; // Import Popup component
 
 interface PageProps {
   profile: any;
@@ -21,6 +22,8 @@ const EditPage = ({ profile }: PageProps) => {
   const [mediaFile, setMediaFile] = useState<File | null>(null);
   const [previewFile, setPreviewFile] = useState<string | null>(null);
 
+  const [message, setMessage] = useState<{ text: string, type: number } | null>(null);
+
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files && files.length > 0) {
@@ -32,19 +35,24 @@ const EditPage = ({ profile }: PageProps) => {
   };
 
   const handlePasswordChange = async () => {
+    if(oldPassword == "" || newPassword == "" || confirmPassword == ""){
+      setMessage({ text: "Empty input fields.", type: 1});
+      return;
+    }
+
     if (newPassword !== confirmPassword) {
-      alert("Passwords do not match!");
+      setMessage({ text: "Passwords do not match!", type: 1 }); 
       return;
     }
 
     const success = await changePassword(oldPassword, newPassword, confirmPassword);
     if (success) {
-      alert("Password changed successfully!");
+      setMessage({ text: "Password changed successfully!", type: 2 });
       setOldPassword("");
       setNewPassword("");
       setConfirmPassword("");
     } else {
-      alert("There was an error changing the password.");
+      setMessage({ text: "There was an error changing the password.", type: 1 });
     }
   };
 
@@ -52,10 +60,11 @@ const EditPage = ({ profile }: PageProps) => {
     if (name !== profile.username || aboutMe !== profile.bio) {
       try {
         const response = await updateProfile(name, profile.email, aboutMe) 
-        console.log(response)
+        console.log(response);
+        setMessage({ text: "Profile updated successfully!", type: 2 }); 
       } catch (error) {
         console.error("Error updating profile:", error);
-        alert("There was an error updating the profile.");
+        setMessage({ text: "There was an error updating the profile.", type: 1 }); 
         return;
       }
     }
@@ -66,15 +75,14 @@ const EditPage = ({ profile }: PageProps) => {
   
       try { 
         const response = await uploadAvatar(formData) 
-        console.log(response)
+        console.log(response);
+        setMessage({ text: "Avatar uploaded successfully!", type: 2 }); 
       } catch (error) {
         console.error("Error uploading avatar:", error);
-        alert("There was an error uploading the avatar.");
+        setMessage({ text: "There was an error uploading the avatar.", type: 1 }); 
         return;
       }
     }
-   
-    alert("Profile updated successfully!"); 
   };
 
   const Logout = () => {
@@ -83,10 +91,18 @@ const EditPage = ({ profile }: PageProps) => {
   };
 
   return (
-    <main className={styles.editContainer}>
+    <main className={styles.editContainer}> 
+      {message && (
+        <Popup 
+          message={message.text} 
+          type={message.type} 
+          reset={() => setMessage(null)}
+        />
+      )}
+
       <header>
         <div className={`${styles.home} ${styles.icon}`} onClick={() => window.location.href = "/"} />
-        <div className={`${styles.logout} ${styles.icon}`} onClick={() => Logout()} />
+        <div className={`${styles.logout} ${styles.icon}`} onClick={Logout} />
 
         <div className={styles.imageContainer}>
           <button className={styles.editBtn} onClick={() => document.getElementById("fileInput")?.click()}>
@@ -96,11 +112,10 @@ const EditPage = ({ profile }: PageProps) => {
           {previewFile ? (
             <img src={previewFile} alt="Profile" />
           ) : profile.profilePictureUrl ? (
-            <img src={BASE_URL+profile.profilePictureUrl} alt="Profile" />
+            <img src={BASE_URL + profile.profilePictureUrl} alt="Profile" />
           ) : (
             <img src="images/FitCheck-logo.png" alt="Profile" />
           )}
-
         </div>
 
         <input
@@ -109,7 +124,7 @@ const EditPage = ({ profile }: PageProps) => {
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
-
+ 
         <textarea
           className={styles.aboutMeSection}
           value={aboutMe}
@@ -149,7 +164,7 @@ const EditPage = ({ profile }: PageProps) => {
               onChange={(e) => setConfirmPassword(e.target.value)}
             />
 
-            <button type="button" className={styles.confirmButton} onClick={handlePasswordChange}>
+            <button type="button" className={styles.confirmPasswordButton} onClick={handlePasswordChange}>
               Confirm Password Change
             </button>
           </div>
@@ -162,10 +177,11 @@ const EditPage = ({ profile }: PageProps) => {
 
       <input
         type="file"
+        accept="image/*,video/*"
         id="fileInput"
         style={{ display: "none" }}
         onChange={handleFileSelect}
-      />
+      /> 
     </main>
   );
 };

@@ -34,11 +34,12 @@ const Notification = ({ notif }: NotificationProps) => {
   }, [notif]);
 
   return (
-    <div className={styles.notification} onClick={() => navigate(`/post/${notif.id}`)}>
+    <div className={styles.notification} >
       <img
         src={notif.actorProfilePictureUrl ? BASE_URL + notif.actorProfilePictureUrl : "/images/FitCheck-logo.png"}
         alt="User Profile"
         className={styles.actorProfilePic}
+        onClick={() => navigate(`/profile/${notif.actorUsername}`)}
       />
       <div className={styles.textContainer}>
         <h4>{notif.actorUsername}</h4>

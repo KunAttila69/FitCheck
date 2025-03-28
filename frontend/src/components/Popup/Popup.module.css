@@ -1,0 +1,67 @@
+.popup {
+    z-index: 100;
+    position: fixed;
+    top: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 275px;
+    max-width: 80%;
+    padding: 20px;
+    animation: show-error .5s forwards;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 5px;
+    outline: 2px solid white;
+    color: var(--white);
+    font-weight: bolder;
+    & button{
+        height: 25px;
+        width: 25px;
+        border-radius: 5px;
+        background-color: transparent;
+        border: none;
+        color: white;
+        outline: 2px solid #fff;
+        margin-left: 20px;
+        transition: .25s all;
+        &:hover{
+            cursor: pointer;
+            background: #ddd;
+        }
+    }
+}
+
+.error{
+    background-color: rgba(255, 0, 0, 0.8); 
+}
+
+.success{
+    background-color: rgba(0, 255, 0, 0.8);
+    color: var(--main-color);
+}
+
+@keyframes show-error {
+    0% {
+        top: -100px;
+        opacity: 0;
+    }
+    20% {
+        top: 50px;
+        opacity: 1;
+        transform: translateX(calc(-50% - 10px)) rotate(-2.5deg); 
+    }
+    40% {
+        transform: translateX(calc(-50% + 10px)) rotate(2.5deg);
+    }
+    60% {
+        transform: translateX(calc(-50% - 10px)) rotate(-2.5deg);
+    }
+    80% {
+        transform: translateX(calc(-50% + 10px)) rotate(2.5deg);
+    }
+    100% {
+        top: 50px;
+        transform: translateX(-50%) rotate(0);
+    }
+}

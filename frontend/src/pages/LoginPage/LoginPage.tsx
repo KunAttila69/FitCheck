@@ -1,6 +1,7 @@
 import { useState } from "react";
 import styles from "./LoginStyle.module.css";
 import { loginUser } from "../../services/authServices";
+import Popup from "../../components/Popup/Popup";
 
 interface LoginProps {
   fetchProfile: () => Promise<void>;
@@ -41,10 +42,7 @@ const LoginPage = ({ fetchProfile }: LoginProps) => {
   return (
     <div className={styles.loginContainer}>
       {error && (
-        <div className={styles.error}>
-          <p>{error}</p>
-          <button onClick={() => { setError(null) }}>X</button>
-        </div>
+        <Popup message={error} type={1} reset={() => {setError(null)}}/>
       )}
       <h1>Welcome to FitCheck</h1>
       <div className={styles.formContainer}>

@@ -105,7 +105,7 @@ const ProfilePage = ({yourProfile} : ProfilePageProps) => {
     
                 <div className={styles.profileStats}>
                     <div>
-                        <h5>Friends</h5>
+                        <h5>Followers</h5>
                         <h2>{profile?.friendsCount ?? 0}</h2>
                     </div>
                     <div>

@@ -2,15 +2,22 @@ import { useState } from "react";
 import styles from "./UploadPage.module.css";
 import Navbar from "../../components/Navbar/Navbar"; 
 import { uploadPost } from "../../services/authServices";
+import Popup from "../../components/Popup/Popup";
 
 interface PageProps{
     profile: any
+}
+
+interface MessageType{
+    text: string,
+    type: number
 }
 
 const UploadPage = ({profile}: PageProps) => {  
     const [mediaFiles, setMediaFiles] = useState<File[]>([]);
     const [previewFiles, setPreviewFiles] = useState<string[]>([]);
     const [caption, setCaption] = useState("");
+    const [message, setMessage] = useState<MessageType | null>(null)
 
     const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
         const files = event.target.files;
@@ -31,16 +38,18 @@ const UploadPage = ({profile}: PageProps) => {
     const handleUpload = async (event: React.FormEvent) => {
         event.preventDefault();
         if (mediaFiles.length === 0) {
-            alert("Please select at least one file.");
+            setMessage({text: "Please select at least one file.", type: 1}); 
+            console.log(message)
             return;
         }
         if (caption.trim() === "") {
-            alert("Please write a caption.");
+            setMessage({text: "Please write a caption.", type: 1}); 
+            console.log(message)
             return;
         }
 
         await uploadPost(caption, mediaFiles);
-        alert("Post uploaded successfully!");
+        setMessage({text:"Post uploaded successfully!", type: 2});
         setMediaFiles([]);
         setPreviewFiles([]);
         setCaption("");
@@ -48,6 +57,7 @@ const UploadPage = ({profile}: PageProps) => {
 
     return ( 
         <>
+            {message && (<Popup message={message.text} type={message.type} reset={() => {setMessage(null)}}/>)}
             <Navbar selectedPage="post" profilePic={profile.profilePictureUrl}/>
             <main className={styles.editContainer}>
                 <form className={styles.uploadForm} onSubmit={handleUpload}>

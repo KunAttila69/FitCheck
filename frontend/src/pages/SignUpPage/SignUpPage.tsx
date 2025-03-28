@@ -2,6 +2,7 @@ import { useState } from "react";
 import styles from "./SignUpStyle.module.css"; 
 import { registerUser } from "../../services/authServices";
 import { useNavigate } from "react-router-dom";
+import Popup from "../../components/Popup/Popup";
 
 const SignUpPage = () => {
   const [username, setUsername] = useState("");
@@ -46,10 +47,7 @@ const SignUpPage = () => {
   return (
     <div className={styles.signupContainer}>
       {error && (
-        <div className={styles.error}>
-          <p>{error}</p>
-          <button onClick={() => setError(null)}>X</button>
-        </div>
+        <Popup message={error} type={1} reset={() => {setError(null)}}/>
       )}
       <h1>Welcome to FitCheck</h1>
       <div className={styles.formContainer}>

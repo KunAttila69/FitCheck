@@ -14,8 +14,7 @@ const NotificationsPage = ({ profile }: PageProps) => {
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
-        const data = await getNotifications(); 
-        console.log(data)
+        const data = await getNotifications();  
         setNotifications(data.notifications);
       } catch (err) {
         console.error("Error fetching notifications:", err);
@@ -29,9 +28,14 @@ const NotificationsPage = ({ profile }: PageProps) => {
     <>
       <Navbar selectedPage="notifications" profilePic={profile.profilePictureUrl} />
       <main>
-        {notifications.length > 0 && notifications.map((notif, i) => (
+        {notifications.length > 0 ? (notifications.map((notif, i) => (
           <Notification notif={notif} key={i} />
-        ))}
+        )))
+        :
+        (
+          <p>No new notifications.</p>
+        )
+        }
       </main>
     </>
   );
