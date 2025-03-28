@@ -6,8 +6,10 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
+using System.Text.Json.Serialization;
+using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
+using Newtonsoft.Json;
 
 namespace FitCheck_WPFApp.Services
 {
@@ -52,8 +54,6 @@ namespace FitCheck_WPFApp.Services
             };
             var response = await _httpClient.PostAsJsonAsync($"{_baseUrl}/admin/ban-user", banRequest);
             response.EnsureSuccessStatusCode();
-            string responseMessage = await response.Content.ReadAsStringAsync();
-            MessageBox.Show(responseMessage);
         }
 
         public async Task UnbanUserAsync(string userId)
@@ -96,6 +96,59 @@ namespace FitCheck_WPFApp.Services
             };
             var response = await _httpClient.DeleteAsync($"{_baseUrl}/moderator/comments/{commentId}");
             response.EnsureSuccessStatusCode();
+        }
+
+        // Roles Endpoints
+
+        public async Task<List<string>> GetUserRolesAsync(string userId)
+        {
+            var response = await _httpClient.GetAsync($"api/admin/user-roles/{userId}");
+            response.EnsureSuccessStatusCode();
+
+            var content = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<UserRolesResponse>(content);
+            return result.Roles;
+        }
+
+        public async Task AssignRoleToUserAsync(string userId, string roleName)
+        {
+            var request = new UserRoleRequest
+            {
+                UserId = userId,
+                RoleName = roleName
+            };
+
+            var json = JsonConvert.SerializeObject(request);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PostAsync("api/admin/assign-role", content);
+            response.EnsureSuccessStatusCode();
+        }
+
+        public async Task RemoveRoleFromUserAsync(string userId, string roleName)
+        {
+            var request = new UserRoleRequest
+            {
+                UserId = userId,
+                RoleName = roleName
+            };
+
+            var json = JsonConvert.SerializeObject(request);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PostAsync("api/admin/remove-role", content);
+            response.EnsureSuccessStatusCode();
+        }
+
+        private class UserRolesResponse
+        {
+            public List<string> Roles { get; set; }
+        }
+
+        public class UserRoleRequest
+        {
+            public string UserId { get; set; }
+            public string RoleName { get; set; }
         }
     }
 }
