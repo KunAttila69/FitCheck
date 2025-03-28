@@ -45,7 +45,7 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-// Add Authorization with Policies
+// Authorization 
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("RequireUserRole", policy => policy.RequireRole("User"));
@@ -66,6 +66,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<FileService>();
 builder.Services.AddScoped<RoleService>();
+builder.Services.AddScoped<NotificationService>();
 
 builder.Services.AddCors(options =>
 {

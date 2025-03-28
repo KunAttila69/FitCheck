@@ -1,6 +1,7 @@
 ﻿using FitCheck_Server.Data;
 using FitCheck_Server.DTOs;
 using FitCheck_Server.Models;
+using FitCheck_Server.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -16,13 +17,15 @@ namespace FitCheck_Server.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly NotificationService _notificationService;
 
         public FollowController(
             ApplicationDbContext context,
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager, NotificationService notificationService)
         {
             _context = context;
             _userManager = userManager;
+            _notificationService = notificationService;
         }
 
         [HttpPost("{userId}")]
@@ -31,17 +34,17 @@ namespace FitCheck_Server.Controllers
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             if (currentUserId == userId)
-                return BadRequest("You cannot follow yourself");
+                return BadRequest(new { Message = "You cannot follow yourself" });
 
             var userToFollow = await _userManager.FindByIdAsync(userId);
             if (userToFollow == null)
-                return NotFound("User not found");
+                return NotFound(new { Message = "User not found" });
 
             var existingFollow = await _context.UserFollowers
                 .FirstOrDefaultAsync(uf => uf.FollowerId == currentUserId && uf.FollowedId == userId);
 
             if (existingFollow != null)
-                return BadRequest("You are already following this user");
+                return BadRequest(new { Message = "You are already following this user" });
 
             var userFollow = new UserFollower
             {
@@ -52,6 +55,8 @@ namespace FitCheck_Server.Controllers
 
             _context.UserFollowers.Add(userFollow);
             await _context.SaveChangesAsync();
+
+            await _notificationService.CreateFollowNotificationAsync(currentUserId,userId);
 
             return Ok(new { message = "Successfully followed user" });
         }
@@ -65,7 +70,7 @@ namespace FitCheck_Server.Controllers
                 .FirstOrDefaultAsync(uf => uf.FollowerId == currentUserId && uf.FollowedId == userId);
 
             if (follow == null)
-                return NotFound("You are not following this user");
+                return NotFound(new { Message = "You are not following this user" });
 
             _context.UserFollowers.Remove(follow);
             await _context.SaveChangesAsync();
@@ -126,7 +131,7 @@ namespace FitCheck_Server.Controllers
 
             var user = await _userManager.FindByIdAsync(targetUserId);
             if (user == null)
-                return NotFound("User not found");
+                return NotFound(new { Message = "User not found" });
 
             var followersCount = await _context.UserFollowers
                 .CountAsync(uf => uf.FollowedId == targetUserId);

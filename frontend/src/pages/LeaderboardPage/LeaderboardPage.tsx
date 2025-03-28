@@ -1,43 +1,44 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar/Navbar";
-import styles from "./LeaderboardPage.module.css"
+import styles from "./LeaderboardPage.module.css";
+import { getLeaderBoard } from "../../services/authServices";
+import { BASE_URL } from "../../services/interceptor";
 
-const LeaderboardPage = () => {
-    const [topList, setTopList] = useState([
-        {
-            "rank": 1,
-            "profile": "../../images/img.png",
-            "name": "gipsz.Jakab",
-            "likes": 123132
-        },
-        {
-            "rank": 2,
-            "profile": "../../images/img.png",
-            "name": "gipsz.Péter",
-            "likes": 12313
-        },
-        {
-            "rank": 3,
-            "profile": "../../images/img.png",
-            "name": "beton.Jakab",
-            "likes": 123
-        },{
-            "rank": 4,
-            "profile": "../../images/img.png",
-            "name": "nagy árpád",
-            "likes": 1
-        },{
-            "rank": 5,
-            "profile": "../../images/img.png",
-            "name": "Példa Péter",
-            "likes": 0
-        }
-    ])
-    return ( 
+interface PageProps {
+    profile: any;
+}
+
+interface UserType{
+    profilePictureUrl: string,
+    username: string,
+    rank: number,
+    likeCount: number,
+}
+
+const LeaderboardPage = ({ profile }: PageProps) => {
+    const [topList, setTopList] = useState<UserType[] | null>(null);
+
+
+
+    useEffect(() => {
+        const fetchLeaderboard = async () => {
+            try {
+                const response = await getLeaderBoard();
+                console.log(response);
+                setTopList(response?.topUsers || []); // Ensure topUsers exists
+            } catch (error) {
+                console.error("Failed to fetch leaderboard:", error);
+            }
+        };
+
+        fetchLeaderboard();
+    }, []);
+
+    return (
         <>
-            <Navbar selectedPage={"leaderboard"}/>
+            <Navbar selectedPage="leaderboard" profilePic={profile.profilePictureUrl} />
             <main>
-                <table className={styles.leaderboard}>
+                {topList != null && <table className={styles.leaderboard}>
                     <thead>
                         <tr>
                             <td>Rank</td>
@@ -46,20 +47,24 @@ const LeaderboardPage = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {topList.map(user => {
-                            return(
-                                <tr>
-                                    <td>{user.rank}</td>
-                                    <td className={styles.nameContainer}><img src={user.profile}/>{user.name}</td>
-                                    <td>{user.likes}</td>
-                                </tr>
-                            )
-                        })}
+                        {topList.map((user: UserType) => (
+                            <tr key={user.rank}>
+                                <td>{user.rank}</td>
+                                <td className={styles.nameContainer}>
+                                    <img 
+                                        src={user.profilePictureUrl !== null ? BASE_URL + user.profilePictureUrl : "/images/FitCheck-logo.png"} 
+                                        alt={user.username} 
+                                    />
+                                    {user.username}
+                                </td>
+                                <td>{user.likeCount}</td>
+                            </tr>
+                        ))}
                     </tbody>
-                </table>
-            </main> 
+                </table>}
+            </main>
         </>
     );
-}
- 
+};
+
 export default LeaderboardPage;

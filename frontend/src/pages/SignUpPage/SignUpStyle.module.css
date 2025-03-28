@@ -1,98 +1,118 @@
-.signupContainer{
-    width: 100vw;
-    height: 100vh;
+.signupContainer {
+    width: 100vw;  
+    padding: 20px 20px;
     display: flex;
     flex-direction: column;
-    justify-content: space-evenly;
-    align-items: center; 
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-color: var(--main-color);
+    color: var(--white);
+    font-family: "Sigmar One", sans-serif;
+    
+}
 
-    &>h1{
-        width: 70%;
-        letter-spacing: 2px;
-        color: var(--main-color);
-        text-align: center;
-        font-family: "Sigmar One";
-    }
+.signupContainer > h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    letter-spacing: 2px;
+    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.formContainer {
+    width: 325px;
+    background: var(--white); 
+    border-radius: 10px;
+    box-shadow: 0 0 10px 2px var(--main-color);
+}
+
+.formContainer h1 {
+    font-size: 2rem;
+    background: var(--highlight);
+    color: var(--white);
+    padding: 15px;
+    border-radius: 5px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
 }
 
 .formContainer{
-    min-width: 250px; 
-    box-shadow: 0 0 3px 2px var(--main-color);
-    border-radius: 5px;
-    display: flex;
-    flex-direction: column; 
-    background-color: var(--white);
-    & h1{
-        width: 100%;
+    form {
         padding: 15px;
-        text-align: center;
-        font-size: 2rem;
-        background: var(--highlight);
-        border-radius: 5px;
-        font-family: "Sigmar One";
-        letter-spacing: 2.5px;
-        color: #FFF;
-    }
-    & form{
         display: flex;
         flex-direction: column; 
-        padding: 5px 30px;
-        & label{
-            margin-top: 5px;
-            font-family: "Sigmar One";
-            letter-spacing: 1.5px;
-        }
-        & input{
-            border: none;
-            width: 100%;
-            padding: 10px 10px;
-            font-size: 17.5px; 
-            border-radius: 2px;
-            outline: 2px solid black;
-            background: #FFF; 
-            margin: 2px 0 5px 0;
-            &:focus{
-                outline: none;
-                box-shadow: 0 0 4px 4px var(--highlight);    
-            }
-        }
-        & input[type="submit"]{ 
-            padding: 5px;
-            margin-top: 15px;
-            border-radius: 5px;
-            background-color: var(--highlight);
-            font-family: "Sigmar One";
-            text-transform: uppercase;
-            color: #FFF;
-            font-size: 2rem;
-            transition: all .25s;
-            &:hover{
-                cursor: pointer;
-                box-shadow: 0 0 10px 4px #1c7ecf80;    
-            }
-        }
     }
-    & p{
-        font-family: "Sigmar One";
-        margin: 10px auto;
-        & a{
-            text-align: center;
-            text-decoration: none;
-            color: var(--links);
-            font-family: inherit;
-            transition: all .25s; 
-            &:hover{
-                transform: scale(1.1);
-                text-decoration: underline;
-                color: #67afeb;
-            }
-        }
+    
+    form label {
+        font-size: 1.1rem;
+        margin-top: 10px;
+        text-align: left;
+        font-weight: bold;
+    }
+    
+    form input {
+        padding: 12px;
+        font-size: 1rem;
+        border: 2px solid black;
+        border-radius: 5px;
+        background: #fff;
+        margin-top: 5px;
+        transition: all 0.3s ease-in-out;
+    }
+    
+    form input:focus {
+        outline: none;
+        border-color: var(--highlight);
+        box-shadow: 0 0 5px var(--highlight);
+    }
+    p, label{ 
+        color: #000;
+    }
+    
+    p {
+        margin-top: 15px;
+        font-size: 1rem;
+    }
+    
+    p a {
+        color: var(--links);
+        text-decoration: none;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+    
+    p a:hover {
+        text-decoration: underline;
+        transform: scale(1.1);
+        color: #67afeb;
+    }
+    button {
+        padding: 12px;
+        margin-top: 20px;
+        border-radius: 5px;
+        background-color: var(--highlight);
+        font-size: 1.3rem;
+        text-transform: uppercase;
+        color: var(--white);
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s;
+        outline: 2px solid var(--white);
+    }
+    
+    button:hover {
+        background: var(--contrast);
+        transform: scale(1.05);
+        outline: 2px solid var(--highlight);
+        box-shadow: 0 0 10px 4px var(--highlight);
     }
 }
+
 
 .error{
     position: absolute;
     top: -100px;
+    max-width: 80%;
     padding: 20px;
     background-color: rgba(255, 0, 0, 0.8);
     animation: show-error .5s forwards;

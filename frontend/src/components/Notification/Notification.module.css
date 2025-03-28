@@ -1,56 +1,89 @@
-.notification{
+.notification {
     width: 100%;
     display: flex;
-    border-radius: 5px;
-    padding: 10px 5px;
-    background-color: var(--white); 
-    margin: 7.5px 0;
-    box-shadow: 0 0 3px 2px var(--main-color); 
-    align-items: center; 
-    & p{
-        font-size: .75rem;
-    }
-    & img{
-        width: 45px;
-        margin-right: 10px;
-        border-radius: 50%;
-    }
-    & .reactionContainer{ 
-        width: 20%;
-        display: flex;
-        justify-content: flex-end;
-        padding: 10px;
-        margin-left: auto;
-        & img{
-            height: 50px;
-            width: 50px;
-            outline: 2px solid black;
-            border-radius: 5px;
-        }
-        & .acceptBtn{
-            background-color: var(--links);
-            color: #fff;
-            margin: 7.5px 0;
-            border-radius: 5px;
-            border: none;
-            cursor: pointer;
-            letter-spacing: 1px;
-            font-family: "Sigmar One";
-            padding: 7.5px;
-            margin-right: 10px;
-            transition: .5s all;
-            &:hover{
-                box-shadow: 0 0 10px 4px var(--contrast);    
-            
-            }
-        }
-        & .declineBtn{
-            background: none;
-            border: none;
-            font-weight: bolder;
-            color: #555;
-            cursor: pointer;
-            font-size: 1.5rem;
-        }
-    }
+    align-items: center;
+    border-radius: 8px;
+    padding: 12px;
+    background-color: #ffffff; /* White */
+    margin: 10px 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.notification:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.notification img {
+    width: 50px;
+    height: 50px; 
+    object-fit: cover;
+    cursor: pointer;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.notification img:hover {
+    opacity: 0.8;
+}
+
+.textContainer {
+    flex: 1;
+    margin-left: 10px;
+}
+
+.textContainer h4 {
+    font-size: 1rem;
+    font-weight: bold;
+    margin: 0;
+    color: #222222; /* Dark gray */
+}
+
+.textContainer p {
+    font-size: 0.85rem;
+    color: #666666; /* Medium gray */
+    margin: 3px 0 0;
+}
+
+.reactionContainer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-left: auto;
+}
+
+.reactionContainer .postThumbnail {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    cursor: pointer;
+    border: 2px solid #007bff; /* Blue */
+    transition: transform 0.2s ease-in-out;
+}
+
+.reactionContainer .postThumbnail:hover {
+    transform: scale(1.05);
+}
+
+.reactionContainer .declineBtn {
+    background: none;
+    border: none;
+    font-weight: bold;
+    color: #555555; /* Gray */
+    cursor: pointer;
+    font-size: 1.5rem;
+    transition: color 0.2s ease-in-out;
+}
+
+.reactionContainer .declineBtn:hover {
+    color: #ff3b3b; /* Red */
+}
+
+.actorProfilePic{
+    border-radius: 50%;
+}
+
+.postThumbnail{
+    border-radius: 2.5px;
 }

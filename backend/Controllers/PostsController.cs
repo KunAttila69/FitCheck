@@ -8,6 +8,7 @@ using System.Security.Claims;
 using System.Text.RegularExpressions;
 using FitCheck_Server.Models;
 using FitCheck_Server.Data;
+using Microsoft.Extensions.Hosting;
 
 namespace FitCheck_Server.Controllers
 {
@@ -19,15 +20,18 @@ namespace FitCheck_Server.Controllers
         private readonly ApplicationDbContext _context;
         private readonly FileService _fileService;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly NotificationService _notificationService;
 
         public PostsController(
             ApplicationDbContext context,
             FileService fileService,
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager,
+            NotificationService notificationService)
         {
             _context = context;
             _fileService = fileService;
             _userManager = userManager;
+            _notificationService = notificationService;
         }
 
         #region Post Endpoints
@@ -108,11 +112,50 @@ namespace FitCheck_Server.Controllers
                     UserName = p.User.UserName,
                     UserProfilePictureUrl = p.User.ProfilePictureUrl,
                     CreatedAt = p.CreatedAt,
-                    IsFromFollowedUser = followingUserIds.Contains(p.UserId)
+                    IsFromFollowedUser = followingUserIds.Contains(p.UserId),
+                    IsLikedByCurrentUser = p.Likes.Any(l => l.UserId == currentUserId),
                 })
                 .ToListAsync();
 
             return Ok(posts);
+        }
+
+        [HttpGet("user/{username}")]
+        public async Task<IActionResult> GetUserPosts(string username, [FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+        {
+            // Find the user by username
+            var user = await _userManager.FindByNameAsync(username);
+            if (user == null) return NotFound("User not found");
+
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Get user's posts with pagination
+            var posts = await _context.Posts
+                .Include(p => p.User)
+                .Include(p => p.MediaFiles)
+                .Include(p => p.Likes)
+                .Where(p => p.UserId == user.Id)
+                .OrderByDescending(p => p.CreatedAt)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .Select(p => new PostDto
+                {
+                    Id = p.Id,
+                    Caption = p.Caption,
+                    MediaUrls = p.MediaFiles.Select(m => m.FilePath).ToList(),
+                    LikeCount = p.Likes.Count,
+                    UserName = p.User.UserName,
+                    UserProfilePictureUrl = p.User.ProfilePictureUrl,
+                    CreatedAt = p.CreatedAt,
+                    IsLikedByCurrentUser = p.Likes.Any(l => l.UserId == currentUserId),
+                })
+                .ToListAsync();
+
+            return Ok(new
+            {
+                Posts = posts,
+                TotalCount = await _context.Posts.CountAsync(p => p.UserId == user.Id)
+            });
         }
 
         [HttpGet("{postId}")]
@@ -128,18 +171,23 @@ namespace FitCheck_Server.Controllers
 
             if (post == null) return NotFound();
 
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var followingUserIds = await _context.UserFollowers
+                .Where(uf => uf.FollowerId == currentUserId)
+                .Select(uf => uf.FollowedId)
+                .ToListAsync();
+
             var postDto = new PostDto
             {
                 Id = post.Id,
                 Caption = post.Caption,
                 MediaUrls = post.MediaFiles.Select(m => m.FilePath).ToList(),
                 LikeCount = post.Likes.Count,
-                Comments = post.Comments.Select(c => new CommentDto
-                {
-                    Text = c.Text,
-                    AuthorUsername = c.User.UserName,
-                    CreatedAt = c.CreatedAt
-                }).ToList()
+                UserName = post.User.UserName,
+                UserProfilePictureUrl = post.User.ProfilePictureUrl,
+                CreatedAt = post.CreatedAt,
+                IsFromFollowedUser = followingUserIds.Contains(post.UserId),
+                IsLikedByCurrentUser = post.Likes.Any(l => l.UserId == currentUserId),
             };
 
             return Ok(postDto);
@@ -155,12 +203,13 @@ namespace FitCheck_Server.Controllers
             var existingLike = await _context.Likes
                 .FirstOrDefaultAsync(l => l.PostId == postId && l.UserId == userId);
 
-            if (existingLike != null) return BadRequest("Post already liked.");
+            if (existingLike != null) return BadRequest(new { Message = "Post already liked." });
 
             var like = new Like { PostId = postId, UserId = userId };
             _context.Likes.Add(like);
             await _context.SaveChangesAsync();
 
+            await _notificationService.CreateLikeNotificationAsync(userId, postId);
             return Ok();
         }
 
@@ -208,9 +257,11 @@ namespace FitCheck_Server.Controllers
             {
                 Text = savedComment.Text,
                 AuthorUsername = savedComment.User.UserName,
+                AuthorProfilePictureUrl = savedComment.User.ProfilePictureUrl,
                 CreatedAt = savedComment.CreatedAt
             };
 
+            await _notificationService.CreateCommentNotificationAsync(userId, postId);
             return Ok(commentDto);
         }
 
@@ -225,6 +276,7 @@ namespace FitCheck_Server.Controllers
                 {
                     Text = c.Text,
                     AuthorUsername = c.User.UserName,
+                    AuthorProfilePictureUrl = c.User.ProfilePictureUrl,
                     CreatedAt = c.CreatedAt
                 })
                 .ToListAsync();

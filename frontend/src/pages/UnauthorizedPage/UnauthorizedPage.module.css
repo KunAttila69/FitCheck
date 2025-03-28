@@ -1,0 +1,51 @@
+.unathorized {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-color: var(--main-color);
+    color: var(--white);
+    font-family: "Sigmar One", sans-serif;
+}
+
+.unathorized h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    letter-spacing: 2px;
+    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.unathorized p {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    opacity: 0.9;
+}
+
+.unathorized a {
+    text-decoration: none;
+}
+
+.unathorized button {
+    padding: 12px 24px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--white);
+    background: var(--highlight);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    text-transform: uppercase;
+    outline: 2px solid var(--white);
+}
+
+.unathorized button:hover {
+    background: var(--contrast);
+    transform: scale(1.05);
+    outline: 2px solid var(--highlight);
+    box-shadow: 0 0 10px 4px var(--highlight);
+}
