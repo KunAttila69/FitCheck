@@ -7,7 +7,6 @@
     min-width: 275px;
     max-width: 80%;
     padding: 20px;
-    animation: show-error .5s forwards;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -34,11 +33,13 @@
 
 .error{
     background-color: rgba(255, 0, 0, 0.8); 
+    animation: show-error .5s forwards;
 }
 
 .success{
     background-color: rgba(0, 255, 0, 0.8);
     color: var(--main-color);
+    animation: show-success .5s forwards;
 }
 
 @keyframes show-error {
@@ -63,5 +64,21 @@
     100% {
         top: 50px;
         transform: translateX(-50%) rotate(0);
+    }
+}
+
+
+@keyframes show-success {
+    0% {
+        top: -100px;
+        opacity: 0;
+    }
+    20% {
+        top: 50px;
+        opacity: 1; 
+    } 
+    100% {
+        top: 50px;
+        transform: translateX(-50%) ;
     }
 }

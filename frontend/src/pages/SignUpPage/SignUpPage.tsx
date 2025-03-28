@@ -21,6 +21,11 @@ const SignUpPage = () => {
       return;
     }
 
+    if (username.length > 15) {
+      setError("Your username is too long!");
+      return;
+    }
+
     if (password.length < 6) {
       setError("Password must be at least 6 characters long.");
       return;
