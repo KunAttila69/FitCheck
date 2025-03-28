@@ -2,6 +2,8 @@
 using FitCheck_WPFApp.Services;
 using System;
 using System.Collections.ObjectModel;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -19,6 +21,8 @@ namespace FitCheck_WPFApp.ViewModels
             get => _logs;
             set => SetProperty(ref _logs, value);
         }
+
+        public bool HasLogs => Logs != null && Logs.Count > 0;
 
         private bool _isLoading;
         public bool IsLoading
@@ -67,6 +71,7 @@ namespace FitCheck_WPFApp.ViewModels
         }
 
         public ICommand RefreshCommand { get; }
+        public ICommand ExportLogsCommand { get; }
 
         public LogsViewModel(LogService logService, AuthService authService)
         {
@@ -75,6 +80,7 @@ namespace FitCheck_WPFApp.ViewModels
             _logs = new ObservableCollection<AdminLog>();
 
             RefreshCommand = new RelayCommand(async param => await LoadLogsAsync());
+            ExportLogsCommand = new RelayCommand(async param => await ExportLogsAsync());
 
             Task.Run(LoadLogsAsync);
         }
@@ -92,10 +98,11 @@ namespace FitCheck_WPFApp.ViewModels
             {
                 var logs = await _logService.GetLogsAsync(StartDate, EndDate);
                 Logs = new ObservableCollection<AdminLog>(logs);
+                OnPropertyChanged(nameof(HasLogs)); 
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Error loading logs: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             finally
             {
@@ -107,26 +114,62 @@ namespace FitCheck_WPFApp.ViewModels
         {
             if (string.IsNullOrWhiteSpace(SearchQuery))
             {
-                // If search query is empty, reload logs
                 Task.Run(LoadLogsAsync);
                 return;
             }
 
-            // Filter in-memory
             var searchLower = SearchQuery.ToLower();
-            var filteredLogs = new ObservableCollection<AdminLog>();
+            var allLogs = _logService.GetLogs(); 
 
-            foreach (var log in Logs)
-            {
-                if ((log.AdminUsername != null && log.AdminUsername.ToLower().Contains(searchLower)) ||
+            var dateFilteredLogs = allLogs
+                .Where(l => l.Timestamp >= StartDate && l.Timestamp <= EndDate.AddDays(1));
+
+            var filteredLogs = new ObservableCollection<AdminLog>(
+                dateFilteredLogs.Where(log =>
+                    (log.AdminUsername != null && log.AdminUsername.ToLower().Contains(searchLower)) ||
                     (log.Description != null && log.Description.ToLower().Contains(searchLower)) ||
-                    (log.TargetId != null && log.TargetId.ToLower().Contains(searchLower)))
-                {
-                    filteredLogs.Add(log);
-                }
-            }
+                    (log.TargetId != null && log.TargetId.ToLower().Contains(searchLower)) ||
+                    log.ActionType.ToString().ToLower().Contains(searchLower)
+                ).OrderByDescending(l => l.Timestamp)
+            );
 
             Logs = filteredLogs;
+            OnPropertyChanged(nameof(HasLogs)); 
+        }
+
+        private async Task ExportLogsAsync()
+        {
+            try
+            {
+                var saveFileDialog = new Microsoft.Win32.SaveFileDialog
+                {
+                    Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*",
+                    DefaultExt = "csv",
+                    FileName = $"FitCheck_AdminLogs_{DateTime.Now:yyyy-MM-dd}"
+                };
+
+                if (saveFileDialog.ShowDialog() == true)
+                {
+                    await Task.Run(() =>
+                    {
+                        using (var writer = new StreamWriter(saveFileDialog.FileName))
+                        {
+                            writer.WriteLine("ID;Timestamp;AdminUsername;ActionType;TargetId;Description");
+
+                            foreach (var log in Logs)
+                            {
+                                writer.WriteLine($"{log.Id};{log.Timestamp:yyyy-MM-dd HH:mm:ss};\"{log.AdminUsername}\";{log.ActionType};\"{log.TargetId}\";\"{log.Description.Replace("\"", "\"\"")}\"");
+                            }
+                        }
+                    });
+
+                    MessageBox.Show($"Logs successfully exported to {saveFileDialog.FileName}", "Export Complete", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error exporting logs: {ex.Message}", "Export Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }

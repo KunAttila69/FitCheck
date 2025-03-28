@@ -65,7 +65,7 @@
                             <GridViewColumn Header="Caption" Width="Auto">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Caption}" TextTrimming="CharacterEllipsis"/>
+                                        <TextBlock Text="{Binding Caption}" TextTrimming="CharacterEllipsis" MaxWidth="200"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>

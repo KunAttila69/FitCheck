@@ -116,13 +116,12 @@ namespace FitCheck_WPFApp.ViewModels
                 await _apiService.RemoveCommentAsync(SelectedComment.Id, RemovalReason);
                 await _logService.LogActionAsync(
                     AdminActionType.RemoveComment,
-                    _authService.GetCurrentUsername(),
+                    _authService.GetCurrentUserId(),
                     _authService.GetCurrentUsername(),
                     SelectedComment.Id.ToString(),
-                    $"Comment removed. Reason: {RemovalReason}"
+                    $"Comment by {SelectedComment.AuthorUsername} removed. Reason: {RemovalReason}"
                 );
 
-                // Remove the comment from the list
                 Comments.Remove(SelectedComment);
                 SelectedComment = null;
                 RemovalReason = string.Empty;
@@ -135,15 +134,12 @@ namespace FitCheck_WPFApp.ViewModels
 
         private void FilterComments()
         {
-            // Implement comment filtering based on search query
             if (string.IsNullOrWhiteSpace(SearchQuery))
             {
-                // If search query is empty, reload all comments
                 Task.Run(LoadCommentsAsync);
                 return;
             }
 
-            // Filter the in-memory collection (could be enhanced with API filtering)
             string searchLower = SearchQuery.ToLower();
             ObservableCollection<Comment> filteredComments = new ObservableCollection<Comment>();
 

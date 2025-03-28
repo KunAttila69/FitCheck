@@ -2,11 +2,16 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:FitCheck_WPFApp.Views"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:converters="clr-namespace:FitCheck_WPFApp.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="900">
+
+    <UserControl.Resources>
+        <converters:RolesToStringConverter x:Key="RolesToStringConverter"/>
+    </UserControl.Resources>
 
     <Grid Margin="20">
         <Grid.RowDefinitions>
@@ -87,6 +92,13 @@
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
+                            <GridViewColumn Header="Roles" Width="Auto">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Roles, Converter={StaticResource RolesToStringConverter}}" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
                             <GridViewColumn Header="Joined Date" Width="Auto" DisplayMemberBinding="{Binding CreatedAt, StringFormat='{}{0:yyyy-MM-dd}'}"/>
                         </GridView>
                     </ListView.View>
@@ -116,7 +128,39 @@
                             <TextBlock Text="{Binding SelectedUser.Bio}" TextWrapping="Wrap" Margin="0,0,0,10"/>
 
                             <TextBlock Text="Join Date" FontWeight="Bold"/>
-                            <TextBlock Text="{Binding SelectedUser.CreatedAt, StringFormat='{}{0:yyyy-MM-dd HH:mm}'}" Margin="0,0,0,20"/>
+                            <TextBlock Text="{Binding SelectedUser.CreatedAt, StringFormat='{}{0:yyyy-MM-dd HH:mm}'}" Margin="0,0,0,10"/>
+
+                            <!-- User Roles Section -->
+                            <TextBlock Text="Roles" FontWeight="Bold" Margin="0,10,0,0"/>
+                            <ItemsControl ItemsSource="{Binding SelectedUser.Roles}" Margin="0,0,0,10">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding}" Margin="0,0,0,2"/>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+
+                            <!-- Role Management Section -->
+                            <GroupBox Header="Role Management" Margin="0,10,0,15">
+                                <StackPanel>
+                                    <ComboBox materialDesign:HintAssist.Hint="Select role" Margin="0,5,0,10"
+                                              ItemsSource="{Binding AvailableRoles}"
+                                              SelectedItem="{Binding SelectedRole}"/>
+
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                        <Button Content="Promote" Command="{Binding PromoteUserCommand}" 
+                                                Style="{StaticResource MaterialDesignRaisedButton}" 
+                                                Background="DarkGreen" Foreground="White"
+                                                Margin="0,0,10,0"
+                                                ToolTip="Assign selected role to user"/>
+
+                                        <Button Content="Demote" Command="{Binding DemoteUserCommand}" 
+                                                Style="{StaticResource MaterialDesignRaisedButton}" 
+                                                Background="#FF5252" Foreground="White"
+                                                ToolTip="Remove selected role from user"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </GroupBox>
 
                             <!-- Action Buttons -->
                             <Button Content="Ban User" Command="{Binding BanUserCommand}" 

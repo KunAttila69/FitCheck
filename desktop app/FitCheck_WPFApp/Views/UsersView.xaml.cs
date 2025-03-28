@@ -9,7 +9,7 @@ namespace FitCheck_WPFApp.Views
         public UsersView(ApiService apiService, LogService logService, AuthService authService)
         {
             InitializeComponent();
-            DataContext = new UsersViewModel(apiService, logService);
+            DataContext = new UsersViewModel(apiService, logService, authService);
         }
     }
 }

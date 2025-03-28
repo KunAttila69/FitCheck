@@ -11,38 +11,135 @@
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <!-- Header -->
-        <StackPanel Grid.Row="0" Margin="0,0,0,20">
-            <TextBlock Text="Admin Action Logs" FontSize="24" FontWeight="Bold"/>
-            <TextBlock Text="View all admin activities" Foreground="{DynamicResource MaterialDesignBodyLight}"/>
-        </StackPanel>
+        <Grid Grid.Row="0" Margin="0,0,0,20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0">
+                <TextBlock Text="Admin Action Logs" FontSize="24" FontWeight="Bold"/>
+                <TextBlock Text="View all admin activities" Foreground="{DynamicResource MaterialDesignBodyLight}"/>
+            </StackPanel>
+
+            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                <Button Command="{Binding RefreshCommand}" 
+                        Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
+                        ToolTip="Refresh logs"
+                        Margin="0,0,8,0">
+                    <materialDesign:PackIcon Kind="Refresh" Height="20" Width="20"/>
+                </Button>
+                <Button Command="{Binding ExportLogsCommand}" 
+                        Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
+                        ToolTip="Export logs to CSV">
+                    <materialDesign:PackIcon Kind="FileExport" Height="20" Width="20"/>
+                </Button>
+            </StackPanel>
+        </Grid>
+
+        <!-- Filtering Controls -->
+        <Grid Grid.Row="1" Margin="0,0,0,15">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Search Box -->
+            <TextBox Grid.Column="0" 
+                     materialDesign:HintAssist.Hint="Search logs..." 
+                     Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}" 
+                     Margin="0,0,10,0">
+                <TextBox.InputBindings>
+                    <KeyBinding Key="Return" Command="{Binding RefreshCommand}"/>
+                </TextBox.InputBindings>
+            </TextBox>
+
+            <!-- Date Range Picker -->
+            <TextBlock Grid.Column="1" 
+                       Text="From:" 
+                       VerticalAlignment="Center" 
+                       Margin="0,0,8,0"/>
+
+            <DatePicker Grid.Column="2" 
+                        SelectedDate="{Binding StartDate}" 
+                        Width="120"
+                        materialDesign:HintAssist.Hint="Start date"
+                        Margin="0,0,15,0"/>
+
+            <TextBlock Grid.Column="3" 
+                       Text="To:" 
+                       VerticalAlignment="Center" 
+                       Margin="0,0,8,0"/>
+
+            <DatePicker Grid.Column="4" 
+                        SelectedDate="{Binding EndDate}" 
+                        Width="120"
+                        materialDesign:HintAssist.Hint="End date"/>
+        </Grid>
 
         <!-- Logs Table -->
-        <materialDesign:Card Grid.Row="1">
+        <materialDesign:Card Grid.Row="2">
             <Grid>
-                <DataGrid ItemsSource="{Binding Logs}" 
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <DataGrid Grid.Row="0" 
+                          ItemsSource="{Binding Logs}" 
                           AutoGenerateColumns="False" 
                           IsReadOnly="True"
                           CanUserAddRows="False"
                           CanUserDeleteRows="False"
-                          CanUserReorderColumns="False">
+                          CanUserReorderColumns="False"
+                          CanUserResizeRows="False"
+                          AlternatingRowBackground="#F5F5F5"
+                          BorderThickness="0"
+                          GridLinesVisibility="Horizontal"
+                          HeadersVisibility="Column"
+                          RowHeaderWidth="0">
+                    <DataGrid.Resources>
+                        <Style TargetType="{x:Type DataGridColumnHeader}">
+                            <Setter Property="Background" Value="{DynamicResource PrimaryHueMidBrush}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource PrimaryHueMidForegroundBrush}"/>
+                            <Setter Property="Padding" Value="10,8"/>
+                            <Setter Property="FontWeight" Value="SemiBold"/>
+                        </Style>
+                    </DataGrid.Resources>
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Date" Binding="{Binding Timestamp, StringFormat='{}{0:yyyy-MM-dd HH:mm:ss}'}" Width="150"/>
-                        <DataGridTextColumn Header="Admin" Binding="{Binding AdminUsername}" Width="120"/>
-                        <DataGridTextColumn Header="Action" Binding="{Binding ActionType}" Width="120"/>
-                        <DataGridTextColumn Header="Target ID" Binding="{Binding TargetId}" Width="100"/>
-                        <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="*"/>
+                        <DataGridTextColumn Header="Date" Binding="{Binding Timestamp, StringFormat='{}{0:yyyy-MM-dd HH:mm:ss}'}" Width="Auto"/>
+                        <DataGridTextColumn Header="Admin" Binding="{Binding AdminUsername}" Width="Auto"/>
+                        <DataGridTextColumn Header="Action" Binding="{Binding ActionType}" Width="Auto"/>
+                        <DataGridTextColumn Header="Target ID" Binding="{Binding TargetId}" Width="Auto" MaxWidth="200"/>
+                        <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="Auto" MaxWidth="300"/>
                     </DataGrid.Columns>
                 </DataGrid>
 
                 <!-- No Logs Message -->
-                <TextBlock Text="No logs to display" 
+                <TextBlock Grid.Row="0"
+                           Text="No logs to display" 
                            HorizontalAlignment="Center" 
                            VerticalAlignment="Center"
+                           Foreground="{DynamicResource MaterialDesignBodyLight}"
                            Visibility="{Binding HasLogs, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=inverse}"/>
+
+                <!-- Loading Indicator -->
+                <Grid Grid.Row="0" 
+                      Background="#80000000" 
+                      Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}" 
+                                 IsIndeterminate="True" 
+                                 Width="50" 
+                                 Height="50"/>
+                </Grid>
             </Grid>
         </materialDesign:Card>
     </Grid>
