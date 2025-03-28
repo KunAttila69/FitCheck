@@ -133,7 +133,7 @@ const Post = ({ id, userName, userProfilePictureUrl, caption, likeCount, mediaUr
 
       {postComments.length > 0 && (
         <div className={styles.commentContainer}>
-          {postComments.slice(0, 3).map((comment, index) => (
+          {postComments.map((comment, index) => (
             <div key={index} className={styles.comment}>
               <img src="images/FitCheck-logo.png" alt="Commenter" onClick={() => navigate(`/profile/${comment.authorUsername}`)}/>
               <h4>{comment.authorUsername !== yourName ? comment.authorUsername : "You"}: </h4>

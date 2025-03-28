@@ -1,8 +1,11 @@
 .postContainer{      
-    border-radius: 2.5px;
-    background-color: #FFF;
-    box-shadow: 0 0 3px 2px var(--main-color); 
+    border-radius: 10px;
+    background-color: var(--main-color);
+    box-shadow: 0 0 3px 2px var(--highlight); 
     margin-bottom: 20px; 
+    padding: 15px;
+    color: var(--white);
+    font-family: "Sigmar One", sans-serif;
     & .postHeader{
         display: flex;
         padding: 10px;
@@ -12,14 +15,28 @@
     }
 }
 
-.caption {
-    width: 250px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    cursor: pointer;
+.posterProfile {
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  border: 2px solid var(--white);
+  cursor: pointer;
+  transition: all 0.3s;
+  &:hover {
+  box-shadow: 0 0 10px var(--highlight);
+  transform: scale(1.05);
+  }
 }
 
+.caption {
+  width: 100%;
+  max-width: 225px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  transition: color 0.3s; 
+}
 .caption.expanded {
     white-space: normal;
     overflow: visible;
@@ -35,8 +52,11 @@
     box-shadow: 0 0 1px 2px var(--main-color); 
 }
 
-.postFooter{
-    padding: 2.5px 10px;
+.postFooter {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  justify-content: space-between;
 }
 
 .post{
@@ -44,8 +64,7 @@
         width: 100%;
     }
 }
-.commentContainer{
-
+.commentContainer{ 
     padding: 5px 10px;
 }
 .comment{
@@ -100,7 +119,6 @@
 .prevBtn,
 .nextBtn {
   position: absolute;
-  top: 50%;
   transform: translateY(-50%);
   background-color: rgba(0, 0, 0, 0.5);
   color: white;
@@ -111,11 +129,11 @@
 }
 
 .prevBtn {
-  left: 10px;
+  left: 35px;
 }
 
 .nextBtn {
-  right: 10px;
+  right: 35px;
 }
 
 .sliderContainer {
@@ -146,36 +164,95 @@
     object-fit: contain; 
     background-color: black;
   }
+   
   
-  .prevBtn,
-  .nextBtn {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: rgba(0, 0, 0, 0.5);
-    color: white;
-    border: none;
-    padding: 10px;
-    cursor: pointer;
-    font-size: 24px;
-  }
-  
-  .prevBtn {
-    left: 10px;
-  }
-  
-  .nextBtn {
-    right: 10px;
-  }
   
   .likeBtn {
     font-size: 24px;
     cursor: pointer;
     color: #ccc;
-    background-color: #FFF;
-    transition: color 0.3s;
-  }
+    background-color: transparent;
+    border: none;
+    transform: scale(1.5);
+    transition: all 0.3s, transform 0.3s;
+}
   
   .likeBtn.liked {
     color: red;
-  }
+    transform: scale(1.6);
+}
+
+.commentBtn {
+  height: 30px;
+  width: 30px;
+  background: url("../../images/comment.png") no-repeat center;
+  background-size: cover;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.commentBtn:hover {
+  transform: scale(1.1);
+}
+
+.commentContainer {
+  padding: 5px 10px;
+  overflow: auto;
+  max-height: 90px;
+}
+
+.comment {
+  display: flex; 
+  margin: 5px 0;
+  width: 100%;
+}
+
+.comment img {
+  border-radius: 50%;
+  height: 25px;
+  width: 25px;
+  margin-right: 5px;
+  border: 2px solid var(--white);
+}
+
+.commentInputContainer {
+  display: flex; 
+  border: 2px solid var(--white);
+  border-radius: 10px;
+  padding: 5px;
+  background: var(--white);
+}
+
+.comment p {
+  margin-left: 7.5px;
+  max-width: 75%;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+} 
+
+.commentInput {
+  height: 40px;
+  border: none;
+  background: transparent;
+  font-size: 1rem;
+  color: black;
+  padding: 5px;
+  outline: none;
+  width: 100%;
+}
+
+.commentSubmitBtn {
+  height: 40px;
+  width: 60px;
+  background: var(--highlight);
+  border: none;
+  color: var(--white);
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.commentSubmitBtn:hover {
+  transform: scale(1.1);
+}
