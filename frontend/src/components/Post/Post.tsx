@@ -18,6 +18,7 @@ interface PostProps {
 interface Comment {
   authorUsername: string;
   text: string;
+  authorProfilePictureUrl: string;
 }
 
 const Post = ({ id, userName, userProfilePictureUrl, caption, likeCount, mediaUrls, isLikedByCurrentUser, yourName }: PostProps) => {
@@ -78,8 +79,9 @@ const Post = ({ id, userName, userProfilePictureUrl, caption, likeCount, mediaUr
       if (result) {
         setPostComments((prevComments) => [
           ...prevComments,
-          { authorUsername: "You", text: commentText },
+          { authorUsername: "You", text: commentText, authorProfilePictureUrl: "" },
         ]);
+        console.log(postComments)
         setCommentText("");
       } else {
         console.error("Failed to add comment");
@@ -123,7 +125,6 @@ const Post = ({ id, userName, userProfilePictureUrl, caption, likeCount, mediaUr
       <div className={styles.postFooter}>
         <div className={styles.postStats}>
           <button className={`${styles.likeBtn} ${isLiked ? styles.liked : ""}`} onClick={isLiked ? handleUnlikeClick : handleLikeClick}>
-            ♥
           </button>
           <h4>{likes}</h4>
           <button className={styles.commentBtn}></button>
@@ -135,7 +136,7 @@ const Post = ({ id, userName, userProfilePictureUrl, caption, likeCount, mediaUr
         <div className={styles.commentContainer}>
           {postComments.map((comment, index) => (
             <div key={index} className={styles.comment}>
-              <img src="images/FitCheck-logo.png" alt="Commenter" onClick={() => navigate(`/profile/${comment.authorUsername}`)}/>
+              <img src={comment?.authorProfilePictureUrl !== null ? BASE_URL + comment.authorProfilePictureUrl : "images/FitCheck-logo.png"} alt="Commenter" onClick={() => navigate(`/profile/${comment.authorUsername}`)}/>
               <h4>{comment.authorUsername !== yourName ? comment.authorUsername : "You"}: </h4>
               <p> {comment.text}</p>
             </div>
