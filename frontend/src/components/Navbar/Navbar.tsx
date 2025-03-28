@@ -24,8 +24,7 @@ const Navbar = ({ selectedPage, profilePic }: NavbarProps) => {
       useEffect(() => {
         const fetchNotifications = async () => {
           try {
-            const data = await getNotifications(); 
-            console.log(data)
+            const data = await getNotifications();  
             setNotificationCount(data.unreadCount);
           } catch (err) {
             console.error("Error fetching notifications:", err);
