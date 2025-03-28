@@ -1,106 +1,137 @@
-nav{
+.navbar {
     position: sticky;
     top: 0;
-    background-color: #FFF; 
+    width: 100vw;
+    background-color: var(--main-color);
     display: flex;
     flex-direction: column;
-    padding: 20px 10px; 
-    box-shadow: 0 0 3px 2px var(--main-color); 
-    justify-content: space-evenly; 
+    padding: 20px;
+    box-shadow: 0 0 10px 2px var(--highlight);
+    justify-content: space-evenly;
     align-items: center;
     z-index: 38;
-    & .searchRow{
-        display: flex;
-        align-items: center;
-        width: 100%;
-        margin-bottom: 10px;
-        justify-content: space-evenly;
-    }
-    & .search{ 
-        outline: 2px solid black;
-        display: flex;
-        align-items: center;
-        border-radius: 5px;
-        padding: 5px;
-        & button{
-            height: 40px;
-            width: 40px;
-            background: url('../../images/search.png');
-            border: none;
-            background-size: cover;  
-        }
-        & input{ 
-            height: 40px;
-            border: none;
-            background-color: #fff; 
-            font-size: large; 
-            &:focus{
-                outline: none;
-            }
-        }
-    }
-    & .profile{
-        height: 60px;
-        width: 60px;
-        border-radius: 50%;
-        background-color: #000;
-    }
+    color: var(--white);
+    font-family: "Sigmar One", sans-serif;
 }
 
-.iconContainer{
+.searchRow {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.search {
+    display: flex;
+    align-items: center;
+    border: 2px solid var(--white);
+    border-radius: 10px;
+    padding: 5px;
+    background: var(--white);
+}
+
+.search input {
+    height: 40px;
+    border: none;
+    background: transparent;
+    font-size: 1rem;
+    color: black;
+    padding: 5px;
+    outline: none;
+    width: 200px;
+}
+
+.search button {
+    height: 40px;
+    width: 40px;
+    background: url("../../images/search.png") no-repeat center;
+    background-size: cover;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out;
+}
+
+.search button:hover {
+    transform: scale(1.1);
+}
+
+.profile {
+    height: 60px;
+    width: 60px;
+    border-radius: 50%;
+    border: 2px solid var(--white);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.profile:hover {
+    box-shadow: 0 0 10px var(--highlight);
+    transform: scale(1.05);
+}
+
+.iconContainer {
     display: flex;
     justify-content: space-evenly;
-    width: 100%; 
-    & .icon {
-        height: 36px;
-        width: 36px; 
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        box-sizing: border-box;
-        padding-bottom: 4px;
-        display: flex;
-        align-items: flex-end; 
-        cursor: pointer;
-        position: relative;
-        & .selected {
-            position: relative;
-            bottom: -10px;
-            width: 35px;
-            border-bottom: 2.5px solid black;
-        }
-        & .notificationCount{
-            position: absolute;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 20px;
-            height: 20px;
-            background-color: red;
-            padding: 2px;
-            color: #fff;
-            font-size: .75rem;
-            border-radius: 50%;
-            top: 0;
-            right: 0;
-        }
-    }
-    
-    & .notifications{
-        background-image: url("../../images/notification.png");
-    }
-    
-    & .friends{
-        background-image: url("../../images/friends.png");
-    } 
-    & .home{
-        background-image: url("../../images/home.png");
-    }
-    & .addPhoto{
-        background-image: url("../../images/camera.png");
-    }
-    & .leaderboard{
-        background-image: url("../../images/leaderboard.png");
-    }  
-} 
+    width: 100%;
+    margin-top: 10px;
+}
 
+.icon {
+    height: 40px;
+    width: 40px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    box-sizing: border-box;
+    display: flex;
+    align-items: flex-end;
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.3s;
+}
+
+.icon:hover {
+    transform: scale(1.1);
+}
+
+.selected {
+    position: absolute;
+    bottom: -5px;
+    width: 40px;
+    border-bottom: 3px solid var(--white);
+}
+
+.notificationCount {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 20px;
+    height: 20px;
+    background-color: red;
+    color: white;
+    font-size: 0.75rem;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.notifications {
+    background-image: url("../../images/notification.png");
+}
+
+.friends {
+    background-image: url("../../images/friends.png");
+}
+
+.home {
+    background-image: url("../../images/home.png");
+}
+
+.addPhoto {
+    background-image: url("../../images/camera.png");
+}
+
+.leaderboard {
+    background-image: url("../../images/leaderboard.png");
+}
