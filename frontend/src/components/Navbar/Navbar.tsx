@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./Navbar.module.css";
 import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../../services/interceptor";
+import { getNotifications } from "../../services/authServices";
 
 interface NavbarProps {
     selectedPage: string;
@@ -9,15 +10,30 @@ interface NavbarProps {
 }
 
 const Navbar = ({ selectedPage, profilePic }: NavbarProps) => {
-    const [notificationCount, setNotificationCount] = useState(2);
+    const [notificationCount, setNotificationCount] = useState(0);
     const [searchText, setSearchText] = useState("");
-    const navigate = useNavigate();
+    const navigate = useNavigate(); 
 
     const handleSearch = () => {
         if (searchText.trim() !== "") {
             navigate("/profile/" + searchText);
         }
     };
+
+    
+      useEffect(() => {
+        const fetchNotifications = async () => {
+          try {
+            const data = await getNotifications(); 
+            console.log(data)
+            setNotificationCount(data.unreadCount);
+          } catch (err) {
+            console.error("Error fetching notifications:", err);
+          }
+        };
+    
+        fetchNotifications();
+      }, []);
 
     return (
         <nav className={styles.navbar}>

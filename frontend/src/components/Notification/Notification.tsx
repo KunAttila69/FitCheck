@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import styles from "./Notification.module.css";
 import { BASE_URL } from "../../services/interceptor";
+import { useEffect, useState } from "react";
 
 interface NotificationProps {
   notif: {
@@ -14,27 +15,42 @@ interface NotificationProps {
 
 const Notification = ({ notif }: NotificationProps) => {
   const navigate = useNavigate();
+  const [notifMessage, setNotifMessage] = useState("");
+
+  useEffect(() => {
+    switch (notif.type) {
+      case 0:
+        setNotifMessage("Liked your post");
+        break;
+      case 1:
+        setNotifMessage("Followed you");
+        break;
+      case 2:
+        setNotifMessage("Commented under your post");
+        break;
+      default:
+        setNotifMessage("");
+    }
+  }, [notif]);
 
   return (
-    <div className={styles.notification}>
+    <div className={styles.notification} onClick={() => navigate(`/post/${notif.id}`)}>
       <img
-        src={notif.actorProfilePictureUrl == null ? "/images/FitCheck-logo.png" : BASE_URL + notif.actorProfilePictureUrl}
+        src={notif.actorProfilePictureUrl ? BASE_URL + notif.actorProfilePictureUrl : "/images/FitCheck-logo.png"}
         alt="User Profile"
         className={styles.actorProfilePic}
-        onClick={() => navigate(`/profile/${notif.actorUsername}`)}
       />
       <div className={styles.textContainer}>
         <h4>{notif.actorUsername}</h4>
-        <p>{notif.type === 0 ? "Liked your post" : "Sent you a friend request"}</p>
+        <p>{notifMessage}</p>
       </div>
       {notif.postThumbnailUrl && (
         <img
           src={BASE_URL + notif.postThumbnailUrl}
           alt="Post Thumbnail"
           className={styles.postThumbnail}
-          onClick={() => navigate(`/post/${notif.id}`)}
         />
-      )} 
+      )}
     </div>
   );
 };

@@ -24,7 +24,7 @@ const HomePage = ({ profile }: PageProps) => {
       <Navbar selectedPage="home" profilePic={profile.profilePictureUrl}/>
       <main>
         {feed.length > 0 ? (
-          feed.map((post, index) => <Post key={index} {...post} yourName={profile.username}/>)
+          feed.map((post, index) => <Post key={index} {...post} yourName={profile.username} yourPicture={profile.profilePictureUrl}/>)
         ) : (
           <p>No posts available.</p>
         )}

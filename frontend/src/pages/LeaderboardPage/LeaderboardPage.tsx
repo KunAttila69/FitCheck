@@ -8,26 +8,42 @@ interface PageProps {
     profile: any;
 }
 
-interface UserType{
-    profilePictureUrl: string,
-    username: string,
-    rank: number,
-    likeCount: number,
+interface UserType {
+    profilePictureUrl: string;
+    username: string;
+    rank: number;
+    likeCount: number;
 }
+
+const LeaderboardRow = ({ user }: { user: UserType }) => {
+    return (
+        <tr>
+            <td>{user.rank}</td>
+            <td className={styles.nameContainer}>
+                <img 
+                    src={user.profilePictureUrl ? BASE_URL + user.profilePictureUrl : "/images/FitCheck-logo.png"} 
+                    alt={user.username} 
+                />
+                {user.username}
+            </td>
+            <td>{user.likeCount}</td>
+        </tr>
+    );
+};
 
 const LeaderboardPage = ({ profile }: PageProps) => {
     const [topList, setTopList] = useState<UserType[] | null>(null);
-
-
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchLeaderboard = async () => {
             try {
                 const response = await getLeaderBoard();
-                console.log(response);
-                setTopList(response?.topUsers || []); // Ensure topUsers exists
+                setTopList(response?.topUsers || []);
             } catch (error) {
                 console.error("Failed to fetch leaderboard:", error);
+            } finally {
+                setLoading(false);
             }
         };
 
@@ -37,31 +53,23 @@ const LeaderboardPage = ({ profile }: PageProps) => {
     return (
         <>
             <Navbar selectedPage="leaderboard" profilePic={profile.profilePictureUrl} />
-            <main>
-                {topList != null && <table className={styles.leaderboard}>
-                    <thead>
-                        <tr>
-                            <td>Rank</td>
-                            <td>Name</td>
-                            <td>Likes</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {topList.map((user: UserType) => (
-                            <tr key={user.rank}>
-                                <td>{user.rank}</td>
-                                <td className={styles.nameContainer}>
-                                    <img 
-                                        src={user.profilePictureUrl !== null ? BASE_URL + user.profilePictureUrl : "/images/FitCheck-logo.png"} 
-                                        alt={user.username} 
-                                    />
-                                    {user.username}
-                                </td>
-                                <td>{user.likeCount}</td>
+            <main className={styles.container}>
+                {loading ? (
+                    <p className={styles.loading}>Loading leaderboard...</p>
+                ) : (
+                    <table className={styles.leaderboard}>
+                        <thead>
+                            <tr>
+                                <td>Rank</td>
+                                <td>Name</td>
+                                <td>Likes</td>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>}
+                        </thead>
+                        <tbody>
+                            {topList && topList.map((user) => <LeaderboardRow key={user.rank} user={user} />)}
+                        </tbody>
+                    </table>
+                )}
             </main>
         </>
     );

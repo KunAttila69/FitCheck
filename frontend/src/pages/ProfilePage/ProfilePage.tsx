@@ -7,7 +7,7 @@ import { BASE_URL } from "../../services/interceptor";
 
 interface PostData {
     id: number;
-    content: string;
+    caption: string;
     userProfilePictureUrl?: string;
     likeCount?: number; 
     mediaUrls?: string[];
@@ -25,14 +25,15 @@ interface Profile {
 }
 
 interface ProfilePageProps {
-    yourName: string | undefined;
+    yourProfile: any
 }
 
-const ProfilePage = ({yourName} : ProfilePageProps) => { 
+const ProfilePage = ({yourProfile} : ProfilePageProps) => { 
     const { username } = useParams<{ username: string }>();
     const [profile, setProfile] = useState<Profile | null>(null);
     const [loading, setLoading] = useState(true);
     const [posts, setPosts] = useState<PostData[]>([]);
+    const [postCount, setPostCount] = useState(0)
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
 
@@ -62,7 +63,8 @@ const ProfilePage = ({yourName} : ProfilePageProps) => {
             try {
                 const userPosts = await getUserPosts(username || "");
                 console.log(userPosts)
-                setPosts(userPosts);
+                setPosts(userPosts.posts);
+                setPostCount(userPosts.totalCount)
             } catch (err) {
                 console.error("Error fetching posts:", err);
             }
@@ -87,7 +89,7 @@ const ProfilePage = ({yourName} : ProfilePageProps) => {
 
     return (
         <> 
-            <nav>
+            <nav className={styles.profileNav}>
                 <div className={styles.profileHeader}>
                     <img 
                         src={profile?.profilePictureUrl ? BASE_URL + profile.profilePictureUrl : "/images/FitCheck-logo.png"} 
@@ -100,24 +102,24 @@ const ProfilePage = ({yourName} : ProfilePageProps) => {
                     </div> 
                     <div className={`${styles.home} ${styles.icon}`} onClick={() => navigate("/")}></div>
                 </div>
-
+    
                 <div className={styles.profileStats}>
-                    <div className={styles.friendsContainer}>
+                    <div>
                         <h5>Friends</h5>
                         <h2>{profile?.friendsCount ?? 0}</h2>
                     </div>
-                    <div className={styles.likesContainer}>
+                    <div>
                         <h5>Likes</h5>
                         <h2>{profile?.likesCount ?? 0}</h2>
                     </div>
-                    <div className={styles.postCountContainer}>
+                    <div>
                         <h5>Posts</h5>
-                        <h2>{posts.length}</h2>
+                        <h2>{postCount}</h2>
                     </div>
                 </div>
                 <button className={styles.addFriend} onClick={handleFollow}>Follow</button>
             </nav>
-
+    
             <main>
                 {posts.length > 0 ? (
                     posts.map((post) => (
@@ -126,11 +128,12 @@ const ProfilePage = ({yourName} : ProfilePageProps) => {
                             id={post.id}
                             userName={profile?.username || ""}
                             userProfilePictureUrl={post.userProfilePictureUrl || ""}
-                            caption={post.content}
+                            caption={post.caption}
                             likeCount={post.likeCount ?? 0}  
                             mediaUrls={post.mediaUrls ?? []}
                             isLikedByCurrentUser={post.isLikedByCurrentUser}
-                            yourName={yourName || ""}
+                            yourName={yourProfile.username}
+                            yourPicture={yourProfile.profilePictureUrl}
                         />
                     ))
                 ) : (

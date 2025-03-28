@@ -13,6 +13,7 @@ interface PostProps {
   mediaUrls: string[];
   isLikedByCurrentUser: boolean;
   yourName: string;
+  yourPicture: string;
 }
 
 interface Comment {
@@ -21,7 +22,7 @@ interface Comment {
   authorProfilePictureUrl: string;
 }
 
-const Post = ({ id, userName, userProfilePictureUrl, caption, likeCount, mediaUrls, isLikedByCurrentUser, yourName }: PostProps) => {
+const Post = ({ id, userName, userProfilePictureUrl, caption, likeCount, mediaUrls, isLikedByCurrentUser, yourName, yourPicture }: PostProps) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isExpanded, setIsExpanded] = useState(false);
   const [likes, setLikes] = useState(likeCount);
@@ -79,7 +80,7 @@ const Post = ({ id, userName, userProfilePictureUrl, caption, likeCount, mediaUr
       if (result) {
         setPostComments((prevComments) => [
           ...prevComments,
-          { authorUsername: "You", text: commentText, authorProfilePictureUrl: "" },
+          { authorUsername: "You", text: commentText, authorProfilePictureUrl: yourPicture },
         ]);
         console.log(postComments)
         setCommentText("");

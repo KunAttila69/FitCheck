@@ -1,43 +1,68 @@
-.leaderboard{
-    border-spacing: 0 5px;
-    border-radius: 5px;
-    & thead{
-        & tr{
-            background-color: var(--highlight);
-            text-align: center;
-            font-size: 1.5rem;
-            color: #fff;
-            & td{
-                font-family: "Sigmar One";
-                letter-spacing: 1px;
-                border-radius: 5px;
-                outline: 2px solid black;
-                
-            }
-        }
-    }
-    & tbody{
-        gap: 2px;
-        & tr{
-            text-align: center;
-            font-size: 1.25rem;
-            box-shadow: inset 0 0 2px 2px black;
-            border-radius: 5px;
-            background-color: #fff;
-            & td{
-                padding: 10px; 
-                border: 1px solid black; 
-                 
-                & img{
-                    border-radius: 50%;
-                    width: 30px;
-                }
-            }
-        }
-    }
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    width: 100%;
 }
-.nameContainer{
+
+.loading {
+    font-size: 1.5rem;
+    color: var(--highlight);
+    font-weight: bold;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.leaderboard {
+    width: 100%;
+    max-width: 800px;
+    border-spacing: 0;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    background-color: var(--white);
+}
+
+.leaderboard thead {
+    background-color: var(--highlight);
+    text-align: center;
+    font-size: 1.5rem;
+    color: #fff;
+    font-family: "Sigmar One", sans-serif;
+}
+
+.leaderboard thead td {
+    padding: 15px;
+    letter-spacing: 1px;
+    border-bottom: 3px solid black;
+}
+
+.leaderboard tbody tr {
+    text-align: center;
+    font-size: 1.25rem;
+    transition: background 0.3s ease;
+}
+
+.leaderboard tbody tr:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.leaderboard tbody td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+}
+
+.nameContainer {
     display: flex;
     align-items: center;
-    justify-content: space-evenly;
+    gap: 10px;
+    justify-content: start;
+}
+
+.nameContainer img {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    border: 2px solid var(--highlight);
 }

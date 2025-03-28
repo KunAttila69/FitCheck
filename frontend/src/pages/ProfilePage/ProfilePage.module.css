@@ -1,66 +1,118 @@
-.profilePic{
-    height: 50px;
-    width: 50px;
-    border-radius: 50%;
-    margin-right: 10px;
-}
-nav{
-    padding-top: 11px;
+.profileNav{
+    background-color: var(--white);
+    padding-bottom: 5px;
+    box-shadow: 0 0 4px 3px var(--highlight);
+    position: sticky;
+    top: 0;
 }
 
-.profileHeader{
-    display: flex; 
-    width: 100%;
-    p{
-        font-size: .9rem;
-        margin: 10px 0;
-        width: 100%;
-    }
-
-    
-}
-
-.addFriend{ 
-    align-self: flex-end; 
-    height: fit-content;
-    width: 100%;
-    padding: 5px;
-    font-size: 1.25rem;
-    border-radius: 5px;
-    background-color: var(--contrast);
-    color: #fff;
-    font-family: "Sigmar One";
-    letter-spacing: 1px;
-
-}
-
-.profileStats{
-    margin: 10px 0;
+.profileHeader {
     display: flex;
+    align-items: center;
     width: 100%;
-    justify-content: space-evenly;
+    background-color: var(--main-color);
+    padding: 15px 20px;
+    box-shadow: 0 0 3px 2px var(--highlight);
+    color: var(--white);
+    font-family: "Sigmar One", sans-serif;
+    border-radius: 0 0 10px 10px;
+}
+
+.profilePic {
+    height: 60px;
+    width: 60px;
+    border-radius: 50%;
+    border: 2px solid var(--white);
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-right: 15px;
+}
+
+.profilePic:hover {
+    box-shadow: 0 0 10px var(--highlight);
+    transform: scale(1.05);
+} 
+
+.profileHeader h3 {
+    font-size: 1.4rem;
+    margin: 5px 0;
+}
+
+.profileHeader p {
+    font-size: 1rem;
+    opacity: 0.8;
+}
+
+.profileStats {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px 0;
     text-align: center;
-    & div{
-        width: 30%;
-        outline: 2px solid black; 
-        padding: 10px 0;
-        & h2{
-            color: var(--highlight);
-        }
-    }
+}
+
+.profileStats div {
+    width: 30%;
+    padding: 15px 0;
+    background-color: var(--white);
+    border-radius: 10px;
+    box-shadow: 0 0 3px 2px var(--highlight);
+    transition: transform 0.3s;
+}
+
+.profileStats div:hover {
+    transform: scale(1.05);
+}
+
+.profileStats h2 {
+    color: var(--highlight);
+    font-size: 1.5rem;
+}
+
+.profileStats h5 {
+    font-size: 1rem;
+    color: var(--main-color);
+}
+
+.addFriend {
+    display: block;
+    width: 90%;
+    margin: 10px auto;
+    padding: 10px;
+    font-size: 1.2rem;
+    border-radius: 10px;
+    background-color: var(--contrast);
+    color: var(--white);
+    font-family: "Sigmar One", sans-serif;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.addFriend:hover {
+    background-color: var(--highlight);
+    transform: scale(1.05);
+}
+
+.iconContainer {
+    display: flex;
+    justify-content: space-evenly;
+    width: 100%;
+    margin-top: 10px;
 }
 
 .icon {
     height: 35px;
-    width: 35px; 
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    box-sizing: border-box;  
-    cursor: pointer; 
-    margin-bottom: 10px;
+    width: 35px;
+    cursor: pointer;
+    transition: transform 0.3s;
 }
-.home {
+
+.icon:hover {
+    transform: scale(1.1);
+}
+
+.home { 
     margin-left: auto;
-    background-image: url("../../images/home.png");
+    background: url("../../images/home.svg") no-repeat center;
+    background-size: contain;
 }

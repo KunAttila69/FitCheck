@@ -2,88 +2,83 @@
     width: 100%;
     display: flex;
     align-items: center;
-    border-radius: 8px;
-    padding: 12px;
-    background-color: #ffffff; /* White */
-    margin: 10px 0;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    border-radius: 10px;
+    padding: 14px;
+    margin: 12px 0;
+    background-color: var(--main-color);
+    box-shadow: 0 0 10px 2px var(--main-color);
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
 }
 
 .notification:hover {
     transform: translateY(-3px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 15px 4px var(--main-color);
 }
 
-.notification img {
-    width: 50px;
-    height: 50px; 
+.actorProfilePic {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
     object-fit: cover;
-    cursor: pointer;
-    transition: opacity 0.2s ease-in-out;
+    box-shadow: 0px 0px 3px 1px var(--contrast);
+    transition: transform 0.2s ease-in-out;
 }
 
-.notification img:hover {
-    opacity: 0.8;
+.actorProfilePic:hover {
+    transform: scale(1.1);
 }
 
 .textContainer {
     flex: 1;
-    margin-left: 10px;
+    margin-left: 15px;
+    text-align: left;
 }
 
 .textContainer h4 {
     font-size: 1rem;
     font-weight: bold;
+    color: var(--white);
     margin: 0;
-    color: #222222; /* Dark gray */
+    letter-spacing: 0.5px;
 }
 
 .textContainer p {
-    font-size: 0.85rem;
-    color: #666666; /* Medium gray */
-    margin: 3px 0 0;
+    font-size: 0.8rem;
+    color: #ccc;
+    margin-top: 5px;
 }
 
 .reactionContainer {
     display: flex;
     align-items: center;
-    justify-content: flex-end;
     gap: 10px;
     margin-left: auto;
 }
 
-.reactionContainer .postThumbnail {
-    width: 60px;
-    height: 60px;
+.postThumbnail {
+    width: 65px;
+    height: 65px;
     object-fit: cover;
-    cursor: pointer;
-    border: 2px solid #007bff; /* Blue */
-    transition: transform 0.2s ease-in-out;
+    border-radius: 5px;
+    box-shadow: 0px 0px 2px 1px var(--contrast);
+    transition: transform 0.3s ease-in-out;
 }
 
-.reactionContainer .postThumbnail:hover {
-    transform: scale(1.05);
+.postThumbnail:hover {
+    transform: scale(1.1);
 }
 
-.reactionContainer .declineBtn {
+.declineBtn {
     background: none;
     border: none;
     font-weight: bold;
-    color: #555555; /* Gray */
+    color: #666;
     cursor: pointer;
     font-size: 1.5rem;
-    transition: color 0.2s ease-in-out;
+    transition: color 0.3s ease-in-out;
 }
 
-.reactionContainer .declineBtn:hover {
-    color: #ff3b3b; /* Red */
-}
-
-.actorProfilePic{
-    border-radius: 50%;
-}
-
-.postThumbnail{
-    border-radius: 2.5px;
+.declineBtn:hover {
+    color: #ff3b3b;
 }

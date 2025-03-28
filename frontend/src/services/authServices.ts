@@ -66,6 +66,7 @@ export async function getUserProfile() {
     try{
         const response = await authFetch(BASE_URL + "/api/profile")
         const data = await response.json()
+        console.log(data)
         return data
     } catch(err){
         console.error("Error during fetch", err);
