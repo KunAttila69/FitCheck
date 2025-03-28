@@ -21,7 +21,7 @@ const SignUpPage = () => {
       return;
     }
 
-    if (username.length > 15) {
+    if (username.length > 11) {
       setError("Your username is too long!");
       return;
     }

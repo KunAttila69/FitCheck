@@ -48,8 +48,7 @@ const LeaderboardPage = ({profile} : PageProps) => {
         const fetchLeaderboard = async () => {
             try {
                 const response: LeaderboardResponse = await getLeaderBoard(); 
-                console.log(response)
-                const fetchedTopUsers = response?.topUsers || [];
+                const fetchedTopUsers = response?.topUsers || []; 
                 const yourProfileData = response?.currentUserRank;
 
                 setYourProfile(yourProfileData);

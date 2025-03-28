@@ -78,7 +78,7 @@
 
 .icon {
     height: 30px;
-    width: 30px; 
+    width: 30px;
     box-sizing: border-box;
     display: flex;
     align-items: flex-end;
@@ -146,4 +146,53 @@
     background-size: contain;
     background-repeat: no-repeat;
     background-position: 50%;
+}
+
+/* Tablet Breakpoint */
+@media (min-width: 768px) {
+    .navbar {
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 15px 40px;
+    }
+
+    .searchRow {
+        flex-direction: row-reverse;
+        width: 85%;
+        justify-content: space-between;
+    }
+
+    .iconContainer {
+        width: 40%;
+        gap: 10px;
+    }
+
+    .leaderboard{
+        display: none;
+    }
+}
+@media (min-width: 1024px) {
+    .navbar {
+        padding: 15px 80px;
+    }
+
+    .search input {
+        width: 550px;
+        font-size: 1.5rem;
+    }
+
+    .icon {
+        height: 40px;
+        width: 40px;
+    }
+
+    .selected {
+        position: absolute;
+        bottom: -5px;
+        width: 40px;
+        border-bottom: 3px solid var(--white);
+    }
+    .friends{
+        display: none;
+    }
 }

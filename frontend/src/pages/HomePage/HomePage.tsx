@@ -3,6 +3,7 @@ import "./HomePageStyle.module.css";
 import { fetchFeed } from "../../services/authServices";
 import Post from "../../components/Post/Post";
 import Navbar from "../../components/Navbar/Navbar"; 
+import LeaderboardPage from "../LeaderboardPage/LeaderboardPage";
 
 interface PageProps {
   profile: any
@@ -21,8 +22,8 @@ const HomePage = ({ profile }: PageProps) => {
 
   return (
     <>
-      <Navbar selectedPage="home" profilePic={profile.profilePictureUrl}/>
-      <main>
+      <Navbar selectedPage="home" profilePic={profile.profilePictureUrl}/> 
+      <main> 
         {feed.length > 0 ? (
           feed.map((post, index) => <Post key={index} {...post} yourName={profile.username} yourPicture={profile.profilePictureUrl}/>)
         ) : (
