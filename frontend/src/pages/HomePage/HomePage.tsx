@@ -4,12 +4,8 @@ import Post from "../../components/Post/Post";
 import Navbar from "../../components/Navbar/Navbar";  
 import LeaderboardComponent from "../../components/LeaderboardComponent/LeaderboardComponent";
 import styles from "./HomePageStyle.module.css"
-import FollowingComponent from "../../components/FollowingComponent/FollowingComponent";
-
-interface PageProps {
-  profile: any
-}
-
+import FollowingComponent from "../../components/FollowingComponent/FollowingComponent"; 
+ 
 interface PostType {
   id: number;
   userName: string;
@@ -20,8 +16,8 @@ interface PostType {
   isLikedByCurrentUser: boolean;
 }
 
-const HomePage = ({ profile }: PageProps) => {
-  const [feed, setFeed] = useState<PostType[]>([]); 
+const HomePage = () => {
+  const [feed, setFeed] = useState<PostType[]>([]);  
 
   useEffect(() => {
     const loadFeed = async () => { 
@@ -33,14 +29,19 @@ const HomePage = ({ profile }: PageProps) => {
 
   return (
     <>
-      <Navbar selectedPage="home" profilePic={profile.profilePictureUrl}/> 
+      <Navbar selectedPage="home"/>
       <main className={styles.homePageMain}> 
         <div className={styles.leaderBoardContainer}>
           <LeaderboardComponent/>
         </div>
         <div className={styles.feedContainer}>
           {feed.length > 0 ? (
-            feed.map((post, index) => <Post key={index} {...post} yourName={profile.username} yourPicture={profile.profilePictureUrl}/>)
+            feed.map((post) => (
+              <Post 
+                key={post.id} 
+                {...post}  
+              />
+            ))
           ) : (
             <p>No posts available.</p>
           )}

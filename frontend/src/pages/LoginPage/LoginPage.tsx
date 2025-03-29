@@ -1,18 +1,16 @@
 import { useState } from "react";
-import styles from "./LoginStyle.module.css";
-import { loginUser } from "../../services/authServices";
+import styles from "./LoginStyle.module.css"; 
 import Popup from "../../components/Popup/Popup";
+import { useProfile } from "../../contexts/ProfileContext";
+import { loginUser } from "../../services/authServices";
 
-interface LoginProps {
-  fetchProfile: () => Promise<void>;
-}
-
-const LoginPage = ({ fetchProfile }: LoginProps) => {
+const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-
+  const { profile } = useProfile()
+ 
   const submitLoginForm = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
@@ -27,7 +25,7 @@ const LoginPage = ({ fetchProfile }: LoginProps) => {
       const res = await loginUser(username, password);
       if (res && res.status === 200) {
         console.log("Login successful!", res);
-        fetchProfile();
+        profile?.fetchProfile();
         window.location.href = "/";
       } else {
         setError("Invalid username or password!");

@@ -1,25 +1,12 @@
 import Navbar from "../../components/Navbar/Navbar";
 import LeaderboardComponent from "../../components/LeaderboardComponent/LeaderboardComponent";
 import styles from "./FollowingPage.module.css"
-import FollowingComponent from "../../components/FollowingComponent/FollowingComponent";
-
-
-interface PageProps {
-  profile: any;
-}
-
-
-
-
-
-const FollowingPage = ({ profile }: PageProps) => {
-
-
-
-
+import FollowingComponent from "../../components/FollowingComponent/FollowingComponent"; 
+  
+const FollowingPage = () => { 
   return (
     <>
-      <Navbar selectedPage="following" profilePic={profile.profilePictureUrl} />
+      <Navbar selectedPage="following" />
       <main className={styles.followingPageMain}>
         <div className={styles.leaderBoardContainer}>
           <LeaderboardComponent/>

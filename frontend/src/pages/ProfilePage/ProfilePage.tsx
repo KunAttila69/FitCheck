@@ -6,7 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { BASE_URL } from "../../services/interceptor";
 import LeaderboardComponent from "../../components/LeaderboardComponent/LeaderboardComponent";
 import Popup from "../../components/Popup/Popup";
-import FollowingComponent from "../../components/FollowingComponent/FollowingComponent";
+import FollowingComponent from "../../components/FollowingComponent/FollowingComponent"; 
 
 interface PostData {
     id: number;
@@ -34,11 +34,7 @@ interface MessageType {
     type: number;
 }
 
-interface ProfilePageProps {
-    yourProfile: any;
-}
-
-const ProfilePage = ({ yourProfile }: ProfilePageProps) => { 
+const ProfilePage = () => { 
     const { username } = useParams<{ username: string }>();
     const [profile, setProfile] = useState<Profile | null>(null); 
     const [isFollowing, setFollowing] = useState<boolean>(false);
@@ -178,9 +174,7 @@ const ProfilePage = ({ yourProfile }: ProfilePageProps) => {
                                 caption={post.caption}
                                 likeCount={post.likeCount ?? 0}  
                                 mediaUrls={post.mediaUrls ?? []}
-                                isLikedByCurrentUser={post.isLikedByCurrentUser}
-                                yourName={yourProfile.username}
-                                yourPicture={yourProfile.profilePictureUrl}
+                                isLikedByCurrentUser={post.isLikedByCurrentUser} 
                                 likeFunction={fetchProfile}
                             />
                         ))

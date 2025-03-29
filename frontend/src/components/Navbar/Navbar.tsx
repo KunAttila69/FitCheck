@@ -3,15 +3,16 @@ import styles from "./Navbar.module.css";
 import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../../services/interceptor";
 import { getNotifications } from "../../services/authServices";
+import { useProfile } from "../../contexts/ProfileContext";
 
 interface NavbarProps {
     selectedPage: string;
-    profilePic: null | string;
 }
 
-const Navbar = ({ selectedPage, profilePic }: NavbarProps) => {
+const Navbar = ({ selectedPage }: NavbarProps) => {
     const [notificationCount, setNotificationCount] = useState(0);
     const [searchText, setSearchText] = useState("");
+    const { profile } = useProfile()
     const navigate = useNavigate(); 
 
     const handleSearch = () => {
@@ -48,7 +49,7 @@ const Navbar = ({ selectedPage, profilePic }: NavbarProps) => {
                 </div> 
                 <img
                     className={styles.profile}
-                    src={profilePic ? BASE_URL + profilePic : "images/FitCheck-logo.png"}
+                    src={profile?.profilePictureUrl ? BASE_URL + profile.profilePictureUrl : "images/FitCheck-logo.png"}
                     alt="Profile"
                     onClick={() => navigate("/edit")}
                 />

@@ -4,22 +4,18 @@ import Navbar from "../../components/Navbar/Navbar";
 import { uploadPost } from "../../services/authServices";
 import Popup from "../../components/Popup/Popup";
 import LeaderboardComponent from "../../components/LeaderboardComponent/LeaderboardComponent";
-import FollowingComponent from "../../components/FollowingComponent/FollowingComponent";
-
-interface PageProps{
-    profile: any
-}
+import FollowingComponent from "../../components/FollowingComponent/FollowingComponent"; 
 
 interface MessageType{
     text: string,
     type: number
 }
 
-const UploadPage = ({profile}: PageProps) => {  
+const UploadPage = () => {  
     const [mediaFiles, setMediaFiles] = useState<File[]>([]);
     const [previewFiles, setPreviewFiles] = useState<string[]>([]);
     const [caption, setCaption] = useState("");
-    const [message, setMessage] = useState<MessageType | null>(null)
+    const [message, setMessage] = useState<MessageType | null>(null) 
 
     const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
         const files = event.target.files;
@@ -60,7 +56,7 @@ const UploadPage = ({profile}: PageProps) => {
     return ( 
         <>
             {message && (<Popup message={message.text} type={message.type} reset={() => {setMessage(null)}}/>)}
-            <Navbar selectedPage="post" profilePic={profile.profilePictureUrl}/>
+            <Navbar selectedPage="post"/>
             <main className={styles.uploadPageMain}>
                 <div className={styles.leaderBoardContainer}>
                     <LeaderboardComponent/>

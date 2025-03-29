@@ -3,6 +3,7 @@ import styles from "./Post.module.css";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { likePost, unlikePost, addComment, getComments } from "../../services/authServices";
+import { useProfile } from "../../contexts/ProfileContext";
 
 interface PostProps {
   id: number;
@@ -11,9 +12,7 @@ interface PostProps {
   caption: string;
   likeCount: number;
   mediaUrls: string[];
-  isLikedByCurrentUser: boolean;
-  yourName: string;
-  yourPicture: string;
+  isLikedByCurrentUser: boolean; 
   likeFunction?: () => void;
 }
 
@@ -23,7 +22,7 @@ interface Comment {
   authorProfilePictureUrl: string;
 }
 
-const Post = ({ id, userName, userProfilePictureUrl, caption, likeCount, mediaUrls, isLikedByCurrentUser, yourName, yourPicture,likeFunction }: PostProps) => {
+const Post = ({ id, userName, userProfilePictureUrl, caption, likeCount, mediaUrls, isLikedByCurrentUser, likeFunction }: PostProps) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isExpanded, setIsExpanded] = useState(false);
   const [likes, setLikes] = useState(likeCount);
@@ -31,7 +30,7 @@ const Post = ({ id, userName, userProfilePictureUrl, caption, likeCount, mediaUr
   const [commentText, setCommentText] = useState("");
   const [postComments, setPostComments] = useState<Comment[]>([]);
   const navigate = useNavigate();
- 
+  const { profile } = useProfile()
   useEffect(() => {
     const fetchComments = async () => {
       try {
@@ -75,7 +74,7 @@ const Post = ({ id, userName, userProfilePictureUrl, caption, likeCount, mediaUr
       if (result) {
         setPostComments((prevComments) => [
           ...prevComments,
-          { authorUsername: "You", text: commentText, authorProfilePictureUrl: yourPicture },
+          { authorUsername: "You", text: commentText, authorProfilePictureUrl: profile?.profilePictureUrl || ""  },
         ]);
         console.log(postComments)
         setCommentText("");
@@ -132,7 +131,7 @@ const Post = ({ id, userName, userProfilePictureUrl, caption, likeCount, mediaUr
           {postComments.map((comment, index) => (
             <div key={index} className={styles.comment}>
               <img src={comment?.authorProfilePictureUrl !== null ? BASE_URL + comment.authorProfilePictureUrl : "images/FitCheck-logo.png"} alt="Commenter" onClick={() => navigate(`/profile/${comment.authorUsername}`)}/>
-              <h4>{comment.authorUsername !== yourName ? comment.authorUsername : "You"}: </h4>
+              <h4>{comment.authorUsername !== profile?.username ? comment.authorUsername : "You"}: </h4>
               <p> {comment.text}</p>
             </div>
           ))}

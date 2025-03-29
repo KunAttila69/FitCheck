@@ -5,14 +5,8 @@ import { getNotifications, markNotifications } from "../../services/authServices
 import LeaderboardComponent from "../../components/LeaderboardComponent/LeaderboardComponent";
 import styles from "./NotificationsPage.module.css"
 import FollowingComponent from "../../components/FollowingComponent/FollowingComponent";
-  
 
-interface PageProps {
-  profile: any;
-}
- 
-
-const NotificationsPage = ({ profile }: PageProps) => { 
+const NotificationsPage = () => { 
   const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
@@ -36,7 +30,7 @@ const NotificationsPage = ({ profile }: PageProps) => {
 
   return (
     <>
-      <Navbar selectedPage="notifications" profilePic={profile.profilePictureUrl} />
+      <Navbar selectedPage="notifications"/>
       <main className={styles.notificationPageMain}>
         <div className={styles.leaderBoardContainer}>
           <LeaderboardComponent/>

@@ -3,16 +3,13 @@ import styles from "./EditPage.module.css";
 import { updateProfile, changePassword, uploadAvatar, handleLogout } from "../../services/authServices";
 import { BASE_URL } from "../../services/interceptor";
 import Popup from "../../components/Popup/Popup";
+import { useProfile } from "../../contexts/ProfileContext";
 
-interface PageProps {
-  profile: any;
-}
-
-const EditPage = ({ profile }: PageProps) => { 
-
+const EditPage = () => { 
+  const { profile } = useProfile()
   const [changingPassword, setChangingPassword] = useState(false);
-  const [name, setName] = useState(profile.username);
-  const [aboutMe, setAboutMe] = useState(profile.bio);
+  const [name, setName] = useState(profile?.username);
+  const [aboutMe, setAboutMe] = useState(profile?.bio);
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -55,9 +52,12 @@ const EditPage = ({ profile }: PageProps) => {
   };
 
   const handleSaveChanges = async () => { 
-    if (name !== profile.username || aboutMe !== profile.bio) {
+    if (name !== profile?.username || aboutMe !== profile?.bio) {
       try {
-        const response = await updateProfile(name, profile.email, aboutMe) 
+        const updatedName = name === profile?.username ? profile?.username || "" : name || "";
+        const updatedEmail = profile?.email || "";
+        const updatedAboutMe = aboutMe || "";
+        const response = await updateProfile(updatedName, updatedEmail, updatedAboutMe);
         console.log(response);
         setMessage({ text: "Profile updated successfully!", type: 2 }); 
       } catch (error) {
@@ -108,7 +108,7 @@ const EditPage = ({ profile }: PageProps) => {
 
             {previewFile ? (
               <img src={previewFile} alt="Profile" />
-            ) : profile.profilePictureUrl ? (
+            ) : profile?.profilePictureUrl ? (
               <img src={BASE_URL + profile.profilePictureUrl} alt="Profile" />
             ) : (
               <img src="images/FitCheck-logo.png" alt="Profile" />
@@ -118,7 +118,7 @@ const EditPage = ({ profile }: PageProps) => {
           <input
             type="text"
             className={styles.nameChanger}
-            value={name}
+            value={name ? name : ""}
             onChange={(e) => setName(e.target.value)}
           />
   
