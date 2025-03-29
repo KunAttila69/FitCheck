@@ -3,14 +3,13 @@ import { useNavigate } from "react-router-dom";
 import styles from "./EditPage.module.css";
 import { updateProfile, changePassword, uploadAvatar, handleLogout } from "../../services/authServices";
 import { BASE_URL } from "../../services/interceptor";
-import Popup from "../../components/Popup/Popup"; // Import Popup component
+import Popup from "../../components/Popup/Popup";
 
 interface PageProps {
   profile: any;
 }
 
-const EditPage = ({ profile }: PageProps) => {
-  const navigate = useNavigate();
+const EditPage = ({ profile }: PageProps) => { 
 
   const [changingPassword, setChangingPassword] = useState(false);
   const [name, setName] = useState(profile.username);
