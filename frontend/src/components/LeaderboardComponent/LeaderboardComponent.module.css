@@ -65,33 +65,32 @@
 }
 
 @media screen and (min-width: 768px) {
-    .leaderboard{
-        width: 50%;
+    .leaderboard{ 
         margin: 0 auto; 
     }
 
     .leaderboard thead {  
-        font-size: 1.15rem;
+        font-size: 1.25rem;
         color: #fff;
         font-family: "Sigmar One", sans-serif;
     }
     
     .leaderboard thead td {
-        padding: 7px; 
+        padding: 8px; 
         border-bottom: 3px solid black;
     }
 
     .leaderboard tbody tr { 
-        font-size: .9rem; 
+        font-size: 1rem; 
     }
       
     .leaderboard tbody td {
-        padding: 6px 12px; 
+        padding: 8px 15px; 
     }
 
     .nameContainer img { 
-        width: 30px;
-        height: 30px; 
+        width: 35px;
+        height: 35px; 
     }
     
 }

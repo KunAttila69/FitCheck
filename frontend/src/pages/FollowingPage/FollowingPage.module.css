@@ -1,12 +1,20 @@
-.homePageMain {
+.followingPageMain {
     padding: 15px; 
     display: flex;
     justify-content: space-between;
     flex-direction: row;   
     overflow: hidden;  
+} 
+
+.feedContainer {
+    width: 100%; 
+    height: 100%;
+    overflow-y: auto;
+    scrollbar-width: none; 
 }
 
-.leaderBoardContainer {
+
+.leaderBoardContainer{
     display: none;
     width: 45%;
     flex-grow: 1; 
@@ -19,32 +27,18 @@
     scrollbar-color: var(--highlight) var(--main-color);
 }
 
-.feedContainer {
-    width: 100%; 
-    height: 100%;
-    overflow-y: auto;
-    scrollbar-width: none; 
+.followingContainer{
+    width: 100%;
 }
 
-
-
-.feedContainer::-webkit-scrollbar-thumb {
-    background-color: var(--highlight);
-    border-radius: 10px;
-}
-
-.feedContainer::-webkit-scrollbar-track {
-    background: var(--main-color);
-}
-
-@media screen and (min-width:768px) {
+@media screen and (min-width: 768px) {
     .leaderBoardContainer{
         display: flex;
     }
-    .feedContainer{
-        padding: 5px 20px;
-        width: 65%;
+    .followingContainer{
+        padding: 0 15px;
         max-height: 80vh;
+        width: 55%;
         overflow-y: auto;
         scrollbar-width: thin;
         scrollbar-color: var(--highlight) var(--main-color); 
