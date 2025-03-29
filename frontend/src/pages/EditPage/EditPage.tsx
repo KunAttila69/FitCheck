@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react"; 
 import styles from "./EditPage.module.css";
 import { updateProfile, changePassword, uploadAvatar, handleLogout } from "../../services/authServices";
 import { BASE_URL } from "../../services/interceptor";

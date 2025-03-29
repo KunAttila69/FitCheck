@@ -34,7 +34,7 @@ const Friend = ({ friend, onUnfollow, handleMessage }: FriendProps) => {
   return (
     <div className={styles.friendContainer}>
       <img
-        src={friend.profilePictureUrl ? BASE_URL + friend.profilePictureUrl : "images/FitCheck-logo.png"}
+        src={friend.profilePictureUrl ? BASE_URL + friend.profilePictureUrl : "/images/FitCheck-logo.png"}
         onClick={() => navigate("/profile/" + friend.username)}
         alt={`${friend.username}'s profile`}
         className={styles.actorProfilePic}

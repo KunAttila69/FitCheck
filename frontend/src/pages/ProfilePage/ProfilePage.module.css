@@ -26,9 +26,20 @@
 .leaderBoardContainer {
     display: none;
     width: 45%;
-    flex-grow: 1;  /* Ensure it takes the available space */
+    flex-grow: 1; 
     border-right: 2.5px solid black;
     padding-right: 10px;
+    max-height: 80vh;
+    overflow-y: auto;
+    scrollbar-width: thin; 
+    flex-direction: column;
+    scrollbar-color: var(--highlight) var(--main-color);
+}
+.followingContainer{
+    display: none;
+    width: 45%;
+    flex-grow: 1; 
+    border-left: 2.5px solid black;
     max-height: 80vh;
     overflow-y: auto;
     scrollbar-width: thin; 
@@ -44,27 +55,7 @@
     scrollbar-width: thin;
     scrollbar-color: var(--highlight) var(--main-color); 
 }
-
-@media screen and (min-width: 768px) {
-    .leaderBoardContainer{
-        display: flex;
-    }
-    .postsContainer{
-        padding: 0 15px;
-        max-height: 80vh;
-        width: 55%;
-        overflow-y: auto;
-        scrollbar-width: thin;
-        scrollbar-color: var(--highlight) var(--main-color); 
-    }
-    .postsContainer::-webkit-scrollbar {
-        display: none; 
-    }
-    
-    .postsContainer::-webkit-scrollbar {
-        width: 8px;
-    }
-}
+ 
 
 .profileHeader {
     display: flex;
@@ -187,46 +178,41 @@
     background: url("../../images/home.svg") no-repeat center;
     background-size: contain;
 }
+
+.unfollow{
+    background-color: var(--white);
+    color: var(--contrast);
+    box-shadow: 0 0 3px 2px var(--contrast);
+}
+
+.follow{
+    background-color: var(--contrast);
+    color: var(--white);
+    box-shadow: 0 0 3px 2px var(--white);
+}
  
 @media (min-width: 768px) { 
-    .profilePic {
-        height: 80px;
-        width: 80px;
+    .leaderBoardContainer{
+        display: flex;
+    }
+    .postsContainer{
+        padding: 0 15px;
+        max-height: 80vh;
+        width: 55%;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: var(--highlight) var(--main-color); 
+    }
+    .postsContainer::-webkit-scrollbar {
+        display: none; 
     }
     
-    .profileHeader h3 {
-        font-size: 1.6rem;
-    }
-    
-    .profileHeader p {
-        font-size: 1.1rem;
-    }
-
-
-    .profileStats div {
-        width: 20%;
-    }
-
-    .addFriend {
-        width: 80%;
-        font-size: 1.4rem;
-    }
-
-    .iconContainer {
-        justify-content: space-between;
-    }
-
-    .icon {
-        height: 40px;
-        width: 40px;
+    .postsContainer::-webkit-scrollbar {
+        width: 8px;
     }
 }
  
-@media (min-width: 1024px) { 
-    .profileHeader{
-        justify-content: space-around;
-    }
-
+@media (min-width: 1024px) {   
     .profileStats {
         display: none;
         justify-content: space-evenly;
@@ -238,6 +224,10 @@
         width: 20%; 
     }
     
+    .followingContainer{
+        display: flex;
+    }
+
     .addFriend {
         display: none; 
     }
@@ -247,10 +237,7 @@
         width: 20%;
         justify-self: center;
     }
-
-    .iconContainer {
-        justify-content: space-evenly;
-    }
+ 
 
     .icon {
         height: 45px;

@@ -38,14 +38,14 @@ header {
 }
 
 .home {
-  top: 65px;
-  left: 35px;
+  top: 35px;
+  left: 55px;
   background: url("../../images/home.svg") no-repeat;
 }
 
 .logout {
-  top: 65px;
-  right: 35px;
+  top: 35px;
+  right: 55px;
   background: url("../../images/logout.svg") no-repeat;
 }
 

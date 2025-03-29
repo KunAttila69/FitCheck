@@ -29,7 +29,7 @@
     font-size: 1.5rem;
     font-weight: bold;
     color: var(--white);
-    background: var(--highlight);
+    background: var(--contrast);
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -40,8 +40,8 @@
 }
 
 .userNotFound button:hover {
-    background: var(--contrast);
+    background: var(--highlight);
     transform: scale(1.05);
-    outline: 2px solid var(--highlight);
-    box-shadow: 0 0 10px 4px var(--highlight);
+    outline: 2px solid var(--contrast);
+    box-shadow: 0 0 10px 4px var(--contrast);
 } 

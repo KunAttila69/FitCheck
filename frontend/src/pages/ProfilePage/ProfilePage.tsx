@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import styles from "./ProfilePage.module.css";
-import { addFollow, getProfile, getUserProfile, getUserPosts } from "../../services/authServices";
+import { addFollow, getProfile, getUserProfile, getUserPosts, deleteFollow } from "../../services/authServices";
 import Post from "../../components/Post/Post"; 
 import { useNavigate, useParams } from "react-router-dom";
 import { BASE_URL } from "../../services/interceptor";
 import LeaderboardComponent from "../../components/LeaderboardComponent/LeaderboardComponent";
+import Popup from "../../components/Popup/Popup";
+import FollowingComponent from "../../components/FollowingComponent/FollowingComponent";
 
 interface PostData {
     id: number;
@@ -19,54 +21,62 @@ interface PostData {
 interface Profile {
     userId: string;
     username: string;
+    isFollowing: boolean;
+    followersCount: number
     bio?: string;
     friendsCount: number;
     likesCount: number;
     profilePictureUrl: string | null; 
 }
 
-interface ProfilePageProps {
-    yourProfile: any
+interface MessageType {
+    text: string;
+    type: number;
 }
 
-const ProfilePage = ({yourProfile} : ProfilePageProps) => { 
+interface ProfilePageProps {
+    yourProfile: any;
+}
+
+const ProfilePage = ({ yourProfile }: ProfilePageProps) => { 
     const { username } = useParams<{ username: string }>();
-    const [profile, setProfile] = useState<Profile | null>(null);
+    const [profile, setProfile] = useState<Profile | null>(null); 
+    const [isFollowing, setFollowing] = useState<boolean>(false);
     const [loading, setLoading] = useState(true);
     const [posts, setPosts] = useState<PostData[]>([]);
-    const [postCount, setPostCount] = useState(0)
+    const [postCount, setPostCount] = useState(0);
+    const [message, setMessage] = useState<MessageType | null>(null);
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const fetchProfile = async () => {
-            try {
-                const user = await getUserProfile();
-                if (user?.username === username) {
-                    navigate("/");
-                    return;
-                }
-                const data = await getProfile(username || "");
-                if (!data) {
-                    navigate("/profile/not-found");
-                } else {
-                    setProfile(data);
-                    console.log(data)
-                }
-            } catch (err) {
-                console.error("Error fetching profile:", err);
-                setError("Failed to load profile.");
-            } finally {
-                setLoading(false);
+    const fetchProfile = async () => {
+        try {
+            const user = await getUserProfile();
+            if (user?.username === username) {
+                navigate("/");
+                return;
             }
-        };
+            const data = await getProfile(username || "");
+            if (!data) {
+                navigate("/profile/not-found");
+            } else {
+                setProfile(data); 
+                setFollowing(data.isFollowing);
+            }
+        } catch (err) {
+            console.error("Error fetching profile:", err);
+            setError("Failed to load profile.");
+        } finally {
+            setLoading(false);
+        }
+    };
+    useEffect(() => {
 
         const fetchPosts = async () => {
             try {
                 const userPosts = await getUserPosts(username || "");
-                console.log(userPosts)
                 setPosts(userPosts.posts);
-                setPostCount(userPosts.totalCount)
+                setPostCount(userPosts.totalCount);
             } catch (err) {
                 console.error("Error fetching posts:", err);
             }
@@ -79,10 +89,19 @@ const ProfilePage = ({yourProfile} : ProfilePageProps) => {
     const handleFollow = async () => {
         if (!profile?.userId) return;
         try {
-            await addFollow(profile.userId);
-            console.log("Friend added successfully.");
+            if (!isFollowing) {
+                await addFollow(profile.userId);
+                setFollowing(true);
+                setMessage({ text: `Successfully followed ${profile.username}.`, type: 2 });  
+            } else {
+                await deleteFollow(profile.userId);
+                setFollowing(false);
+                setMessage({ text: `Successfully unfollowed ${profile.username}.`, type: 2 }); 
+            }
+            fetchProfile()
         } catch (error) {
             console.error("Error adding friend:", error);
+            setMessage({ text: "Something went wrong!", type: 3 }); 
         }
     };
 
@@ -91,6 +110,9 @@ const ProfilePage = ({yourProfile} : ProfilePageProps) => {
 
     return (
         <> 
+            {message && (
+                <Popup message={message.text} type={message.type} reset={() => setMessage(null)} />
+            )}
             <nav className={styles.profileNav}>
                 <div className={styles.profileHeader}>
                     <img 
@@ -103,27 +125,29 @@ const ProfilePage = ({yourProfile} : ProfilePageProps) => {
                         <p>{profile?.bio || "No bio available"}</p>
                     </div> 
                     <div className={styles.profileResponsiveStats}>
-                    <div>
-                        <h5>Followers</h5>
-                        <h2>{profile?.friendsCount ?? 0}</h2>
+                        <div>
+                            <h5>Followers</h5>
+                            <h2>{(profile?.followersCount ?? 0) +  (profile?.isFollowing === false && isFollowing ? 1 :   profile?.isFollowing === true && isFollowing === false ? -1 : 0)}</h2>
+                        </div>
+                        <div>
+                            <h5>Likes</h5>
+                            <h2>{profile?.likesCount ?? 0}</h2>
+                        </div>
+                        <div>
+                            <h5>Posts</h5>
+                            <h2>{postCount}</h2>
+                        </div>
                     </div>
-                    <div>
-                        <h5>Likes</h5>
-                        <h2>{profile?.likesCount ?? 0}</h2>
-                    </div>
-                    <div>
-                        <h5>Posts</h5>
-                        <h2>{postCount}</h2>
-                    </div>
-                </div>
-                    <button className={styles.responsiveFollow} onClick={handleFollow}>Follow</button>
+                    <button className={`${styles.responsiveFollow} ${isFollowing ? styles.unfollow : styles.follow}`} onClick={handleFollow}>
+                        {isFollowing ? "Unfollow" : "Follow"}
+                    </button>
                     <div className={`${styles.home} ${styles.icon}`} onClick={() => navigate("/")}></div>
                 </div>
     
                 <div className={styles.profileStats}>
                     <div>
                         <h5>Followers</h5>
-                        <h2>{profile?.friendsCount ?? 0}</h2>
+                        <h2>{profile?.followersCount ?? 0}</h2>
                     </div>
                     <div>
                         <h5>Likes</h5>
@@ -134,12 +158,14 @@ const ProfilePage = ({yourProfile} : ProfilePageProps) => {
                         <h2>{postCount}</h2>
                     </div>
                 </div>
-                <button className={styles.addFriend} onClick={handleFollow}>Follow</button>
+                <button className={`${styles.addFriend} ${isFollowing ? styles.unfollow : styles.follow}`} onClick={handleFollow}>
+                    {isFollowing ? "Unfollow" : "Follow"}
+                </button>
             </nav>
     
             <main className={styles.profilePostsMain}>
                 <div className={styles.leaderBoardContainer}> 
-                    <LeaderboardComponent/>
+                    <LeaderboardComponent />
                 </div>
                 <div className={styles.postsContainer}>
                     {posts.length > 0 ? (
@@ -155,11 +181,15 @@ const ProfilePage = ({yourProfile} : ProfilePageProps) => {
                                 isLikedByCurrentUser={post.isLikedByCurrentUser}
                                 yourName={yourProfile.username}
                                 yourPicture={yourProfile.profilePictureUrl}
+                                likeFunction={fetchProfile}
                             />
                         ))
                     ) : (
                         <p>No posts yet.</p>
                     )}
+                </div>
+                <div className={styles.followingContainer}>
+                    <FollowingComponent/>
                 </div>
             </main>
         </>

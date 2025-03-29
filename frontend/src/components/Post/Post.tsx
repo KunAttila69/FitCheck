@@ -14,6 +14,7 @@ interface PostProps {
   isLikedByCurrentUser: boolean;
   yourName: string;
   yourPicture: string;
+  likeFunction?: () => void;
 }
 
 interface Comment {
@@ -22,7 +23,7 @@ interface Comment {
   authorProfilePictureUrl: string;
 }
 
-const Post = ({ id, userName, userProfilePictureUrl, caption, likeCount, mediaUrls, isLikedByCurrentUser, yourName, yourPicture }: PostProps) => {
+const Post = ({ id, userName, userProfilePictureUrl, caption, likeCount, mediaUrls, isLikedByCurrentUser, yourName, yourPicture,likeFunction }: PostProps) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isExpanded, setIsExpanded] = useState(false);
   const [likes, setLikes] = useState(likeCount);
@@ -44,33 +45,27 @@ const Post = ({ id, userName, userProfilePictureUrl, caption, likeCount, mediaUr
     fetchComments();
   }, [id]);
 
-  const handleLikeClick = async () => {
+  const toggleLike = async () => {
     try {
-      const result = await likePost(id.toString());
-      if (result) {
-        setLikes((prevLikes) => prevLikes + 1);
-        setLiked(true);
+      if (isLiked) {
+        const result = await unlikePost(id.toString());
+        if (result) {
+          setLikes((prev) => prev - 1);
+          setLiked(false);
+        }
       } else {
-        console.error("Failed to like the post");
+        const result = await likePost(id.toString());
+        if (result) {
+          setLikes((prev) => prev + 1);
+          setLiked(true);
+        }
       }
+      if (likeFunction) likeFunction();
     } catch (err) {
-      console.error("Error liking the post:", err);
+      console.error("Error toggling like:", err);
     }
   };
-
-  const handleUnlikeClick = async () => {
-    try {
-      const result = await unlikePost(id.toString());
-      if (result) {
-        setLikes((prevLikes) => prevLikes - 1);
-        setLiked(false);
-      } else {
-        console.error("Failed to unlike the post");
-      }
-    } catch (err) {
-      console.error("Error unliking the post:", err);
-    }
-  };
+  
 
   const handleCommentSubmit = async () => {
     if (!commentText.trim()) return;
@@ -125,8 +120,7 @@ const Post = ({ id, userName, userProfilePictureUrl, caption, likeCount, mediaUr
 
       <div className={styles.postFooter}>
         <div className={styles.postStats}>
-          <button className={`${styles.likeBtn} ${isLiked ? styles.liked : ""}`} onClick={isLiked ? handleUnlikeClick : handleLikeClick}>
-          </button>
+          <button className={`${styles.likeBtn} ${isLiked ? styles.liked : ""}`} onClick={toggleLike}></button>
           <h4>{likes}</h4>
           <button className={styles.commentBtn}></button>
           <h4>{postComments.length}</h4>
