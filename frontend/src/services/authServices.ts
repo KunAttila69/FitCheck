@@ -528,7 +528,34 @@ export const getNotifications = async () => {
     }); 
     return response.json()
   } catch (err) {
-    console.error("Error fetching posts:", err);
+    console.error("Error fetching notifications:", err);
     return null;
   }
 } 
+
+export const markNotifications = async (notifications: any[]) => {
+  try {
+    const token = localStorage.getItem("access");
+    if (!token) {
+      throw new Error("User not authenticated");
+    }
+
+    const response = await fetch(`${BASE_URL}/api/notifications/mark-read`, {
+      method: "POST", 
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        notificationIds: notifications.map(notif => notif.id),
+        markAll: true
+      }),
+    });
+ 
+
+    return await response.json();
+  } catch (err) {
+    console.error("Error marking notifications:", err);
+    return null;
+  }
+};

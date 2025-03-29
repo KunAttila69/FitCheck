@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"; 
 import Navbar from "../../components/Navbar/Navbar"; 
 import Notification from "../../components/Notification/Notification";
-import { getNotifications } from "../../services/authServices";
+import { getNotifications, markNotifications } from "../../services/authServices";
 import LeaderboardComponent from "../../components/LeaderboardComponent/LeaderboardComponent";
 import styles from "./NotificationsPage.module.css"
 import FollowingComponent from "../../components/FollowingComponent/FollowingComponent";
@@ -10,6 +10,7 @@ import FollowingComponent from "../../components/FollowingComponent/FollowingCom
 interface PageProps {
   profile: any;
 }
+ 
 
 const NotificationsPage = ({ profile }: PageProps) => { 
   const [notifications, setNotifications] = useState([]);
@@ -18,12 +19,18 @@ const NotificationsPage = ({ profile }: PageProps) => {
     const fetchNotifications = async () => {
       try {
         const data = await getNotifications();  
-        setNotifications(data.notifications);
+        const unreadNotifications = data.notifications.filter((notif: any) => !notif.isRead);
+        setNotifications(unreadNotifications); 
+    
+        
+        if (unreadNotifications.length > 0) {
+          await markNotifications(unreadNotifications);
+        }
       } catch (err) {
         console.error("Error fetching notifications:", err);
       }
     };
-
+  
     fetchNotifications();
   }, []);
 
