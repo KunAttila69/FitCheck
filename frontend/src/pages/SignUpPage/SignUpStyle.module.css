@@ -1,5 +1,6 @@
 .signupContainer {
     width: 100vw;  
+    min-height: 100vh;
     padding: 20px 20px;
     display: flex;
     flex-direction: column;
@@ -13,6 +14,7 @@
 }
 
 .signupContainer > h1 {
+    max-width: 250px;
     font-size: 2.5rem;
     margin-bottom: 10px;
     letter-spacing: 2px;
