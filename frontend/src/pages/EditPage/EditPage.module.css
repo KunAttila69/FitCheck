@@ -1,155 +1,311 @@
 .editContainer {
-    width: 100vw;
-    min-height: 100vh; 
+  width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background-color: var(--main-color);
+  color: var(--white);
+  font-family: "Sigmar One", sans-serif;
+  padding: 20px;
+}
+
+header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--main-color);
+  width: 100%;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 0 5px 1px var(--highlight);
+  border-radius: 5px;
+}
+
+.icon {
+  position: absolute;
+  height: 37.5px;
+  width: 37.5px;
+  cursor: pointer;
+  background-size: contain;
+  background-repeat: no-repeat;
+  transition: transform 0.3s ease-in-out;
+}
+
+.icon:hover {
+  transform: scale(1.1);
+}
+
+.home {
+  top: 65px;
+  left: 25px;
+  background: url("../../images/home.svg") no-repeat;
+}
+
+.logout {
+  top: 65px;
+  right: 25px;
+  background: url("../../images/logout.svg") no-repeat;
+}
+
+.imageContainer {
+  height: 200px;
+  width: 200px;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 20px;
+  border-radius: 50%;
+  border: 4px solid var(--highlight);
+  transition: transform 0.3s ease-in-out;
+}
+
+.imageContainer button {
+  position: absolute;
+  background: url("../../src/images/upload.png") no-repeat;
+  background-color: #ccc;
+  opacity: 0.5;
+  background-size: cover;
+  height: 102%;
+  width: 102%;
+  left: -1%;
+  top: -1%;
+  z-index: 51;
+}
+
+.imageContainer:hover {
+  transform: scale(1.05);
+}
+
+.imageContainer img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  object-fit: cover;
+}
+
+.nameChanger,
+.aboutMeSection {
+  color: var(--white);
+  background: none;
+  border: none;
+  text-align: center;
+  width: 80%;
+}
+
+.nameChanger {
+  font-size: 1.25rem;
+}
+
+.aboutMeSection {
+  margin-top: 10px;
+  height: 100px;
+  font-size: 1rem;
+}
+
+.passwordChanger {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 500px;
+  margin: 20px auto;
+}
+
+.passwordChangeContainer{
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+}
+
+.passwordChanger label {
+  font-size: 1rem;
+  font-weight: bold;
+  margin: 7.5px 0;
+  color: var(--white);
+  align-self: flex-start;
+  margin-left: 10%;
+}
+
+.passwordChanger input {
+  width: 80%;
+  padding: 12px;
+  margin-top: 5px;
+  font-size: 1.1rem;
+  text-align: center;
+  border: 2px solid var(--highlight);
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--white);
+  transition: all 0.3s ease-in-out;
+}
+
+.passwordChanger input:focus {
+  outline: none;
+  border-color: var(--contrast);
+  box-shadow: 0 0 8px var(--contrast);
+}
+
+.passwordActivationBtn,
+.confirmPasswordButton,
+.confirmButton {
+  padding: 12px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-family: "Sigmar One";
+  letter-spacing: 1.1px;
+  color: var(--black);
+  background-color: var(--contrast);
+  border: none;
+  outline: 2px solid var(--white);
+  border-radius: 5px;
+  width: 80%;
+  max-width: 500px;
+  transition: all 0.3s ease-in-out;
+  text-align: center;
+}
+
+.passwordActivationBtn {
+  margin-top: 15px;
+}
+
+.confirmPasswordButton {
+  margin-top: 20px;
+}
+
+.confirmButton {
+  margin-top: 25px;
+}
+
+.passwordActivationBtn:hover,
+.confirmPasswordButton:hover,
+.confirmButton:hover {
+  transform: scale(1.05);
+  outline: 2px solid var(--contrast);
+  box-shadow: 0 0 12px var(--contrast);
+}
+
+input[type="file"] {
+  display: none;
+}
+
+@media screen and (min-width: 768px) {
+  .editContainer {
+    flex-direction: column; 
+  }  
+  .topSide{
+    margin-top: 50px;
+    height: 50%;
     display: flex;
-    flex-direction: column;  
-    text-align: center;
-    background-color: var(--main-color);
-    color: var(--white);
-    font-family: "Sigmar One", sans-serif;
+    justify-content: space-evenly;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.05);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+    width: 100%;
   }
   
   header {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: var(--main-color);
-    width: 100%;
-    padding: 20px;
-    margin-bottom: 20px;
-    box-shadow: 0 0 5px 1px var(--highlight);
-    border-radius: 5px;
+    width: 50%;
+    max-height: 400px;
+    box-shadow: none;
+    background: transparent;
   }
-  
-  .icon {
-    position: absolute;
-    height: 37.5px;
-    width: 37.5px;
-    background-color: var(--main-color);
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    box-sizing: border-box;
-    cursor: pointer;
-    margin-bottom: 10px;
+  .passwordChangeContainer{
+    width: 50%;
+    max-height: 400px;
+    background: transparent;
+    box-shadow: none;
   }
-  
-  .home {
-    top: 65px;
-    left: 25px;
-    background: url("../../images/home.svg");
-    background-size: contain;
-    background-repeat: no-repeat;
+  .confirmPasswordButton{
+    font-size: .9rem;
   }
-  
-  .logout {
-    background-image: url("../../images/logout.svg");
-    top: 65px;
-    right: 25px;
+  .passwordChanger input {
+    padding: 6px;
   }
-  
-  .imageContainer {
-    height: 225px;
-    width: 225px;
-    overflow: hidden;
-    margin-bottom: 20px;
-    position: relative;
-  }
-  
-  .imageContainer img {
-    height: 100%;
-    width: 100%;
-  }
-  
-  .editBtn {
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: none;
-    cursor: pointer;
-    background-size: cover;
-    padding: 7.5px;
-    opacity: 0.4;
-  }
-  
-  .nameChanger {
-    color: var(--white);
-    font-size: 1.25rem;
-    background: none;
-    border: none;
-    text-align: center;
-    width: 80%;
-  }
-  
-  .aboutMeSection {
-    color: var(--white);
-    margin-top: 10px;
-    width: 80%;
-    height: 100px;
-    border: none;
-    background: none;
-    font-size: 1rem;
+
+  .passwordChanger { 
+    padding: 10px; 
   }
   
   .passwordChanger {
-    display: flex;
-    padding: 20px;
-    flex-direction: column;
-    & input{
-        max-width: 75%;
-        margin: auto;
-    }
+    width: 100%; 
   }
-  
-  .passwordChanger label {
-    margin: 7.5px 0;
-  }
-  
-  .passwordChanger input {
-    border: none;
-    height: 40px;
-    font-size: 30px;
-  }
-  
-  .passwordActivationBtn,
-  .confirmPasswordButton,
-  .confirmButton {
-    padding: 12px; 
-    cursor: pointer;
-    font-size: 1rem;
-    font-family: "Sigmar One";
-    letter-spacing: 1.1px;
-    color: var(--black);
-    background-color: var(--contrast);
-    border: none;
-    outline: 2px solid var(--white);
-    border-radius: 5px;
-    width: 80%;
-    transition: all 0.3s ease-in-out;
-  }
-  .passwordActivationBtn{
-    margin: 10px auto 0 auto;
 
-  }
-  .confirmPasswordButton{
-    margin: 30px auto 0 auto;
-  }
-  .confirmButton{
-    margin: 20px auto 10px auto;
+  .home {
+    top: 15px; 
   }
   
-  .passwordActivationBtn:hover,
-  .confirmButton:hover {
-    background-color: var(--contrast);
-    transform: scale(1.05);
-    outline: 2px solid var(--contrast);
-    box-shadow: 0 0 10px 4px var(--contrast);
+  .logout {
+    top: 15px;
   }
-  
-  input[type="file"] {
-    display: none;
+
+  .nameChanger,
+  .aboutMeSection {
+    width: 70%;
   }
-  
+ 
+}
+
+@media screen and (min-width: 1150px) {
+  .editContainer {
+    flex-direction: column; 
+    justify-content: center;
+    align-items: center;
+    padding: 50px 100px;
+  }
+
+  .topSide {
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    height: 80%;
+    padding: 20px;
+    border-radius: 10px;
+  }
+
+  header {
+    width: 40%;
+    max-height: 500px;
+    height: 100%;
+    padding: 20px;
+  }
+
+  .passwordChangeContainer {
+    width: 40%;
+    max-height: 500px;
+    padding: 20px;
+  }
+
+  .passwordChanger {
+    padding: 15px;
+  }
+
+  .passwordChanger input {
+    padding: 8px;
+    font-size: 1rem;
+  }
+
+  .confirmPasswordButton {
+    font-size: 1rem;
+    padding: 10px 20px;
+  }
+
+  .nameChanger,
+  .aboutMeSection {
+    width: 60%;
+    font-size: 1.25rem;
+  }
+
+  .home {
+    top: 20px;
+    left: 30px;
+  }
+
+  .logout {
+    top: 20px;
+    right: 30px;
+  }
+}

@@ -98,77 +98,79 @@ const EditPage = ({ profile }: PageProps) => {
           reset={() => setMessage(null)}
         />
       )}
+      <div className={styles.topSide}>
+        <header>
+          <div className={`${styles.home} ${styles.icon}`} onClick={() => window.location.href = "/"} />
+          <div className={`${styles.logout} ${styles.icon}`} onClick={Logout} />
 
-      <header>
-        <div className={`${styles.home} ${styles.icon}`} onClick={() => window.location.href = "/"} />
-        <div className={`${styles.logout} ${styles.icon}`} onClick={Logout} />
+          <div className={styles.imageContainer}>
+            <button className={styles.editBtn} onClick={() => document.getElementById("fileInput")?.click()}> 
+            </button>
 
-        <div className={styles.imageContainer}>
-          <button className={styles.editBtn} onClick={() => document.getElementById("fileInput")?.click()}>
-            <img src="../../src/images/upload.png" alt="Edit" />
+            {previewFile ? (
+              <img src={previewFile} alt="Profile" />
+            ) : profile.profilePictureUrl ? (
+              <img src={BASE_URL + profile.profilePictureUrl} alt="Profile" />
+            ) : (
+              <img src="images/FitCheck-logo.png" alt="Profile" />
+            )}
+          </div>
+
+          <input
+            type="text"
+            className={styles.nameChanger}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+  
+          <textarea
+            className={styles.aboutMeSection}
+            value={aboutMe}
+            placeholder={aboutMe !== "" ? "" : "About me..."}
+            onChange={(e) => setAboutMe(e.target.value)}
+          />
+        </header>
+        
+        <div className={styles.passwordChangeContainer}>
+          <button
+            className={styles.passwordActivationBtn}
+            onClick={() => setChangingPassword(!changingPassword)}
+          >
+            {changingPassword ? "Cancel" : "Change password"}
           </button>
 
-          {previewFile ? (
-            <img src={previewFile} alt="Profile" />
-          ) : profile.profilePictureUrl ? (
-            <img src={BASE_URL + profile.profilePictureUrl} alt="Profile" />
-          ) : (
-            <img src="images/FitCheck-logo.png" alt="Profile" />
+          {changingPassword && (
+            <form onSubmit={(e) => e.preventDefault()}>
+              <div className={styles.passwordChanger}>
+                <label>Old Password</label>
+                <input
+                  type="password"
+                  value={oldPassword}
+                  onChange={(e) => setOldPassword(e.target.value)}
+                />
+
+                <label>New Password</label>
+                <input
+                  type="password"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                />
+
+                <label>Confirm Password</label>
+                <input
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                />
+
+                <button type="button" className={styles.confirmPasswordButton} onClick={handlePasswordChange}>
+                  Confirm Password Change
+                </button>
+              </div>
+            </form>
           )}
-        </div>
-
-        <input
-          type="text"
-          className={styles.nameChanger}
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
- 
-        <textarea
-          className={styles.aboutMeSection}
-          value={aboutMe}
-          placeholder={aboutMe !== "" ? "" : "About me..."}
-          onChange={(e) => setAboutMe(e.target.value)}
-        />
-      </header>
-
-      <button
-        className={styles.passwordActivationBtn}
-        onClick={() => setChangingPassword(!changingPassword)}
-      >
-        {changingPassword ? "Cancel" : "Change password"}
-      </button>
-
-      {changingPassword && (
-        <form onSubmit={(e) => e.preventDefault()}>
-          <div className={styles.passwordChanger}>
-            <label>Old Password</label>
-            <input
-              type="password"
-              value={oldPassword}
-              onChange={(e) => setOldPassword(e.target.value)}
-            />
-
-            <label>New Password</label>
-            <input
-              type="password"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-            />
-
-            <label>Confirm Password</label>
-            <input
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-            />
-
-            <button type="button" className={styles.confirmPasswordButton} onClick={handlePasswordChange}>
-              Confirm Password Change
-            </button>
-          </div>
-        </form>
-      )}
+      </div>
+      </div>
 
       <button className={styles.confirmButton} onClick={handleSaveChanges}>
         Confirm Changes
