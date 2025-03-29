@@ -45,7 +45,7 @@ const Navbar = ({ selectedPage, profilePic }: NavbarProps) => {
                         placeholder="Search for user"
                     />
                     <button onClick={handleSearch} />
-                </div>
+                </div> 
                 <img
                     className={styles.profile}
                     src={profilePic ? BASE_URL + profilePic : "images/FitCheck-logo.png"}

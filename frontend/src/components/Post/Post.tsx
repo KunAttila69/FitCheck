@@ -30,7 +30,7 @@ const Post = ({ id, userName, userProfilePictureUrl, caption, likeCount, mediaUr
   const [commentText, setCommentText] = useState("");
   const [postComments, setPostComments] = useState<Comment[]>([]);
   const navigate = useNavigate();
-
+ 
   useEffect(() => {
     const fetchComments = async () => {
       try {
@@ -96,7 +96,7 @@ const Post = ({ id, userName, userProfilePictureUrl, caption, likeCount, mediaUr
     <div className={styles.postContainer}>
       <div className={styles.postHeader}>
         <img
-          src={userProfilePictureUrl ? BASE_URL + userProfilePictureUrl : "images/FitCheck-logo.png"}
+          src={userProfilePictureUrl ? BASE_URL + userProfilePictureUrl : "/images/FitCheck-logo.png"}
           onClick={() => navigate(`/profile/${userName}`)}
           className={styles.posterProfile}
           alt="Profile"

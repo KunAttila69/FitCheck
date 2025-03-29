@@ -1,3 +1,42 @@
+.uploadPageMain {
+    padding: 15px; 
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;   
+    overflow: hidden;  
+}
+
+.leaderBoardContainer{
+    display: none;
+    width: 45%;
+    flex-grow: 1; 
+    border-right: 2.5px solid black;
+    padding-right: 10px;
+    max-height: 80vh;
+    overflow-y: auto;
+    scrollbar-width: thin; 
+    flex-direction: column;
+    scrollbar-color: var(--highlight) var(--main-color);
+}
+
+.uploadContainer{
+    width: 100%;
+}
+
+@media screen and (min-width: 768px) {
+    .leaderBoardContainer{
+        display: flex;
+    }
+    .uploadContainer{
+        padding: 0 15px;
+        max-height: 80vh;
+        width: 55%;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: var(--highlight) var(--main-color); 
+    }
+}
+
 .imageContainer{ 
     background-color: #ddd;
     position: relative;

@@ -1,18 +1,76 @@
-.profileNav{
+.profileNav {
     background-color: var(--white);
     padding-bottom: 5px;
     box-shadow: 0 0 4px 3px var(--highlight);
     position: sticky;
+    max-width: 100%;  /* Change max-width to 100% */
     z-index: 50;
     top: 0;
+    background-color: var(--main-color);
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;  /* Ensure padding and borders are included in element dimensions */
+}
+
+.profilePostsMain {
+    width: 100%;  
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;   
+    overflow-x: auto;  /* Add horizontal scrolling */
+    overflow-y: hidden; 
+}  
+.leaderBoardContainer {
+    display: none;
+    width: 45%;
+    flex-grow: 1;  /* Ensure it takes the available space */
+    border-right: 2.5px solid black;
+    padding-right: 10px;
+    max-height: 80vh;
+    overflow-y: auto;
+    scrollbar-width: thin; 
+    flex-direction: column;
+    scrollbar-color: var(--highlight) var(--main-color);
+}
+
+.postsContainer {
+    width: 100%;  /* Allow the posts container to take full available width */
+    padding: 0 15px;
+    max-height: 80vh;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--highlight) var(--main-color); 
+}
+
+@media screen and (min-width: 768px) {
+    .leaderBoardContainer{
+        display: flex;
+    }
+    .postsContainer{
+        padding: 0 15px;
+        max-height: 80vh;
+        width: 55%;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: var(--highlight) var(--main-color); 
+    }
+    .postsContainer::-webkit-scrollbar {
+        display: none; 
+    }
+    
+    .postsContainer::-webkit-scrollbar {
+        width: 8px;
+    }
 }
 
 .profileHeader {
     display: flex;
-    align-items: center;
+    align-items: center; 
     width: 100%;
     background-color: var(--main-color);
-    padding: 15px 20px;
     box-shadow: 0 0 3px 2px var(--highlight);
     color: var(--white);
     font-family: "Sigmar One", sans-serif;
@@ -32,7 +90,7 @@
 .profilePic:hover {
     box-shadow: 0 0 10px var(--highlight);
     transform: scale(1.05);
-} 
+}
 
 .profileHeader h3 {
     font-size: 1.4rem;
@@ -44,14 +102,17 @@
     opacity: 0.8;
 }
 
-.profileStats {
+.profileStats, .profileResponsiveStats {
     display: flex;
     justify-content: space-around;
     margin: 20px 0;
     text-align: center;
 }
+.profileResponsiveStats{
+    display: none;
+}
 
-.profileStats div {
+.profileStats div, .profileResponsiveStats div {
     width: 30%;
     padding: 15px 0;
     background-color: var(--white);
@@ -60,21 +121,21 @@
     transition: transform 0.3s;
 }
 
-.profileStats div:hover {
+.profileStats div:hover, .profileResponsiveStats div:hover {
     transform: scale(1.05);
 }
 
-.profileStats h2 {
+.profileStats h2, .profileResponsiveStats h2 {
     color: var(--highlight);
     font-size: 1.5rem;
 }
 
-.profileStats h5 {
+.profileStats h5, .profileResponsiveStats h5 {
     font-size: 1rem;
     color: var(--main-color);
 }
 
-.addFriend {
+.addFriend, .responsiveFollow {
     display: block;
     width: 90%;
     margin: 10px auto;
@@ -89,16 +150,17 @@
     transition: all 0.3s;
 }
 
-.addFriend:hover {
+.responsiveFollow{
+    display: none;
+}
+
+.addFriend:hover, .responsiveFollow:hover {
     background-color: var(--highlight);
     transform: scale(1.05);
 }
 
 .iconContainer {
-    display: flex;
-    justify-content: space-evenly;
-    width: 100%;
-    margin-top: 10px;
+    display: flex;  
 }
 
 .icon {
@@ -112,8 +174,78 @@
     transform: scale(1.1);
 }
 
-.home { 
+.home {
     margin-left: auto;
     background: url("../../images/home.svg") no-repeat center;
     background-size: contain;
+}
+ 
+@media (min-width: 768px) { 
+    .profilePic {
+        height: 80px;
+        width: 80px;
+    }
+    
+    .profileHeader h3 {
+        font-size: 1.6rem;
+    }
+    
+    .profileHeader p {
+        font-size: 1.1rem;
+    }
+
+
+    .profileStats div {
+        width: 20%;
+    }
+
+    .addFriend {
+        width: 80%;
+        font-size: 1.4rem;
+    }
+
+    .iconContainer {
+        justify-content: space-between;
+    }
+
+    .icon {
+        height: 40px;
+        width: 40px;
+    }
+}
+ 
+@media (min-width: 1024px) { 
+    .profileHeader{
+        justify-content: space-around;
+    }
+
+    .profileStats {
+        display: none;
+        justify-content: space-evenly;
+    }
+ 
+    .profileResponsiveStats{
+        display: flex;
+        margin-left: auto;
+        width: 20%; 
+    }
+    
+    .addFriend {
+        display: none; 
+    }
+
+    .responsiveFollow{
+        display: block;
+        width: 20%;
+        justify-self: center;
+    }
+
+    .iconContainer {
+        justify-content: space-evenly;
+    }
+
+    .icon {
+        height: 45px;
+        width: 45px;
+    }
 }

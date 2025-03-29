@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar/Navbar"; 
 import Notification from "../../components/Notification/Notification";
 import { getNotifications } from "../../services/authServices";
+import LeaderboardComponent from "../../components/LeaderboardComponent/LeaderboardComponent";
+import styles from "./NotificationsPage.module.css"
   
 
 interface PageProps {
@@ -27,15 +29,20 @@ const NotificationsPage = ({ profile }: PageProps) => {
   return (
     <>
       <Navbar selectedPage="notifications" profilePic={profile.profilePictureUrl} />
-      <main>
-        {notifications.length > 0 ? (notifications.map((notif, i) => (
-          <Notification notif={notif} key={i} />
-        )))
-        :
-        (
-          <p>No new notifications.</p>
-        )
-        }
+      <main className={styles.notificationPageMain}>
+        <div className={styles.leaderBoardContainer}>
+          <LeaderboardComponent/>
+        </div>
+        <div className={styles.notificationsContainer}>
+          {notifications.length > 0 ? (notifications.map((notif, i) => (
+            <Notification notif={notif} key={i} />
+          )))
+          :
+          (
+            <p>No new notifications.</p>
+          )
+          }
+        </div>
       </main>
     </>
   );

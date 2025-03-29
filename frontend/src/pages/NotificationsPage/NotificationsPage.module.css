@@ -1,10 +1,11 @@
-.followingPageMain {
+.notificationPageMain {
     padding: 15px; 
     display: flex;
     justify-content: space-between;
     flex-direction: row;   
     overflow: hidden;  
-}  
+} 
+ 
 .leaderBoardContainer{
     display: none;
     width: 45%;
@@ -18,7 +19,7 @@
     scrollbar-color: var(--highlight) var(--main-color);
 }
 
-.followingContainer{
+.notificationsContainer{
     width: 100%;
 }
 
@@ -26,7 +27,7 @@
     .leaderBoardContainer{
         display: flex;
     }
-    .followingContainer{
+    .notificationsContainer{
         padding: 0 15px;
         max-height: 80vh;
         width: 55%;
@@ -34,11 +35,11 @@
         scrollbar-width: thin;
         scrollbar-color: var(--highlight) var(--main-color); 
     }
-    .followingContainer::-webkit-scrollbar {
+    .notificationsContainer::-webkit-scrollbar {
         display: none; 
     }
     
-    .followingContainer::-webkit-scrollbar {
+    .notificationsContainer::-webkit-scrollbar {
         width: 8px;
     }
 }

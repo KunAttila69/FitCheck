@@ -3,6 +3,7 @@ import styles from "./UploadPage.module.css";
 import Navbar from "../../components/Navbar/Navbar"; 
 import { uploadPost } from "../../services/authServices";
 import Popup from "../../components/Popup/Popup";
+import LeaderboardComponent from "../../components/LeaderboardComponent/LeaderboardComponent";
 
 interface PageProps{
     profile: any
@@ -59,48 +60,53 @@ const UploadPage = ({profile}: PageProps) => {
         <>
             {message && (<Popup message={message.text} type={message.type} reset={() => {setMessage(null)}}/>)}
             <Navbar selectedPage="post" profilePic={profile.profilePictureUrl}/>
-            <main className={styles.editContainer}>
-                <form className={styles.uploadForm} onSubmit={handleUpload}>
-                    <label className={styles.imageContainer}>
-                        <input 
-                            type="file" 
-                            accept="image/*,video/*" 
-                            multiple 
-                            onChange={handleFileSelect} 
-                            style={{ display: "none" }} 
-                        />
-                        <div className={styles.uploadIcon}></div>
-                        <h3>Select images or videos</h3>
-                    </label>
- 
-                    <div className={styles.mediaPreviewContainer}>
-                        {previewFiles.map((file, i) => (
-                            <div key={i} className={styles.mediaPreview}>
-                                <div className={styles.removeUpload}>
-                                    <img 
-                                        src="../../src/images/delete.png" 
-                                        alt="Delete" 
-                                        onClick={() => handleRemoveFile(i)}
-                                    />
+            <main className={styles.uploadPageMain}>
+                <div className={styles.leaderBoardContainer}>
+                    <LeaderboardComponent/>
+                </div>
+                <div className={styles.uploadContainer}>
+                    <form className={styles.uploadForm} onSubmit={handleUpload}>
+                        <label className={styles.imageContainer}>
+                            <input 
+                                type="file" 
+                                accept="image/*,video/*" 
+                                multiple 
+                                onChange={handleFileSelect} 
+                                style={{ display: "none" }} 
+                            />
+                            <div className={styles.uploadIcon}></div>
+                            <h3>Select images or videos</h3>
+                        </label>
+    
+                        <div className={styles.mediaPreviewContainer}>
+                            {previewFiles.map((file, i) => (
+                                <div key={i} className={styles.mediaPreview}>
+                                    <div className={styles.removeUpload}>
+                                        <img 
+                                            src="../../src/images/delete.png" 
+                                            alt="Delete" 
+                                            onClick={() => handleRemoveFile(i)}
+                                        />
+                                    </div>
+                                    {file.includes("video") ? (
+                                        <video src={file} controls className={styles.previewVideo} />
+                                    ) : (
+                                        <img src={file} alt={`Preview ${i}`} className={styles.previewImage} />
+                                    )}
                                 </div>
-                                {file.includes("video") ? (
-                                    <video src={file} controls className={styles.previewVideo} />
-                                ) : (
-                                    <img src={file} alt={`Preview ${i}`} className={styles.previewImage} />
-                                )}
-                            </div>
-                        ))}
-                    </div>
+                            ))}
+                        </div>
 
-                    <textarea 
-                        className={styles.descriptionInput} 
-                        placeholder="Add description"
-                        value={caption}
-                        onChange={(e) => setCaption(e.target.value)}
-                    ></textarea>
+                        <textarea 
+                            className={styles.descriptionInput} 
+                            placeholder="Add description"
+                            value={caption}
+                            onChange={(e) => setCaption(e.target.value)}
+                        ></textarea>
 
-                    <button type="submit" className={styles.uploadButton}>Upload</button>
-                </form>
+                        <button type="submit" className={styles.uploadButton}>Upload</button>
+                    </form>
+                </div>
             </main>
         </>
     );

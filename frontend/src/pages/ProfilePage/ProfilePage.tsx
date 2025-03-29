@@ -4,11 +4,12 @@ import { addFollow, getProfile, getUserProfile, getUserPosts } from "../../servi
 import Post from "../../components/Post/Post"; 
 import { useNavigate, useParams } from "react-router-dom";
 import { BASE_URL } from "../../services/interceptor";
+import LeaderboardComponent from "../../components/LeaderboardComponent/LeaderboardComponent";
 
 interface PostData {
     id: number;
     caption: string;
-    userProfilePictureUrl?: string;
+    profilePictureUrl?: string | null;
     likeCount?: number; 
     mediaUrls?: string[];
     isLikedByCurrentUser: boolean;
@@ -50,6 +51,7 @@ const ProfilePage = ({yourProfile} : ProfilePageProps) => {
                     navigate("/profile/not-found");
                 } else {
                     setProfile(data);
+                    console.log(data)
                 }
             } catch (err) {
                 console.error("Error fetching profile:", err);
@@ -100,6 +102,21 @@ const ProfilePage = ({yourProfile} : ProfilePageProps) => {
                         <h3>{profile?.username || "Loading..."}</h3>
                         <p>{profile?.bio || "No bio available"}</p>
                     </div> 
+                    <div className={styles.profileResponsiveStats}>
+                    <div>
+                        <h5>Followers</h5>
+                        <h2>{profile?.friendsCount ?? 0}</h2>
+                    </div>
+                    <div>
+                        <h5>Likes</h5>
+                        <h2>{profile?.likesCount ?? 0}</h2>
+                    </div>
+                    <div>
+                        <h5>Posts</h5>
+                        <h2>{postCount}</h2>
+                    </div>
+                </div>
+                    <button className={styles.responsiveFollow} onClick={handleFollow}>Follow</button>
                     <div className={`${styles.home} ${styles.icon}`} onClick={() => navigate("/")}></div>
                 </div>
     
@@ -120,25 +137,30 @@ const ProfilePage = ({yourProfile} : ProfilePageProps) => {
                 <button className={styles.addFriend} onClick={handleFollow}>Follow</button>
             </nav>
     
-            <main>
-                {posts.length > 0 ? (
-                    posts.map((post) => (
-                        <Post 
-                            key={post.id}
-                            id={post.id}
-                            userName={profile?.username || ""}
-                            userProfilePictureUrl={post.userProfilePictureUrl || ""}
-                            caption={post.caption}
-                            likeCount={post.likeCount ?? 0}  
-                            mediaUrls={post.mediaUrls ?? []}
-                            isLikedByCurrentUser={post.isLikedByCurrentUser}
-                            yourName={yourProfile.username}
-                            yourPicture={yourProfile.profilePictureUrl}
-                        />
-                    ))
-                ) : (
-                    <p>No posts yet.</p>
-                )}
+            <main className={styles.profilePostsMain}>
+                <div className={styles.leaderBoardContainer}> 
+                    <LeaderboardComponent/>
+                </div>
+                <div className={styles.postsContainer}>
+                    {posts.length > 0 ? (
+                        posts.map((post) => (
+                            <Post 
+                                key={post.id}
+                                id={post.id}
+                                userName={profile?.username || ""}
+                                userProfilePictureUrl={post.profilePictureUrl || null}
+                                caption={post.caption}
+                                likeCount={post.likeCount ?? 0}  
+                                mediaUrls={post.mediaUrls ?? []}
+                                isLikedByCurrentUser={post.isLikedByCurrentUser}
+                                yourName={yourProfile.username}
+                                yourPicture={yourProfile.profilePictureUrl}
+                            />
+                        ))
+                    ) : (
+                        <p>No posts yet.</p>
+                    )}
+                </div>
             </main>
         </>
     );
