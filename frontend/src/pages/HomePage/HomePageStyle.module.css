@@ -45,6 +45,19 @@
     background: var(--main-color);
 }
 
+.endText {
+    text-align: center;
+    font-size: 1rem;
+    font-weight: bold;
+    color: var(--highlight);
+    margin: 20px 0;
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    box-shadow: 0 0 5px var(--highlight);
+    animation: fadeIn 0.5s ease-in-out;
+}
+
 @media screen and (min-width:768px) {
     .leaderBoardContainer{
         display: flex;
@@ -69,11 +82,11 @@
 @media screen and (min-width:1150px) {
     .leaderBoardContainer{
         display: flex;
-        width: 25%;
+        width: 30%;
     }
     .feedContainer{
         padding: 5px 20px;
-        width: 50%;
+        width: 60%;
         max-height: 80vh;
         overflow-y: auto;
         scrollbar-width: thin;
@@ -89,6 +102,6 @@
 
     .followingContainer{
         display: flex;
-        width: 25%;
+        width: 30%;
     }
 }

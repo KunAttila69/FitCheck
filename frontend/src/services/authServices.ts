@@ -108,32 +108,33 @@ export async function uploadPost(caption: string, files: File[]) {
 }
 
 
-export const fetchFeed = async () => {
-    try {
-      const token = localStorage.getItem("access");
-  
-      if (!token) {
-        throw new Error("No auth token found, please log in again.");
-      }
-  
-      const response = await fetch(BASE_URL + "/api/posts/get-feed", {
-        method: "GET",
-        headers: {
-          "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json",
-        }, 
-      });
-  
-      if (!response.ok) {
-        throw new Error(`Failed to fetch feed: ${response.status}`);
-      }
-  
-      const data = await response.json();
-      return (data || []);
-    } catch (error) {
-      console.error("Error fetching feed:", error);
+export const fetchFeed = async (page = 1, pageSize = 10) => {
+  try {
+    const token = localStorage.getItem("access");
+
+    if (!token) {
+      throw new Error("No auth token found, please log in again.");
     }
-  };
+
+    const response = await fetch(`${BASE_URL}/api/posts/get-feed?page=${page}&pageSize=${pageSize}`, {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch feed: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data || [];
+  } catch (error) {
+    console.error("Error fetching feed:", error);
+    return [];
+  }
+};
 
   export async function updateProfile(username: string,email: string , bio: string): Promise<boolean> {
     try {
