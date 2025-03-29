@@ -4,6 +4,7 @@ import Post from "../../components/Post/Post";
 import Navbar from "../../components/Navbar/Navbar";  
 import LeaderboardComponent from "../../components/LeaderboardComponent/LeaderboardComponent";
 import styles from "./HomePageStyle.module.css"
+import FollowingComponent from "../../components/FollowingComponent/FollowingComponent";
 
 interface PageProps {
   profile: any
@@ -43,6 +44,9 @@ const HomePage = ({ profile }: PageProps) => {
           ) : (
             <p>No posts available.</p>
           )}
+        </div>
+        <div className={styles.followingContainer}>
+          <FollowingComponent/>
         </div>
       </main>
     </>

@@ -4,6 +4,7 @@ import Notification from "../../components/Notification/Notification";
 import { getNotifications } from "../../services/authServices";
 import LeaderboardComponent from "../../components/LeaderboardComponent/LeaderboardComponent";
 import styles from "./NotificationsPage.module.css"
+import FollowingComponent from "../../components/FollowingComponent/FollowingComponent";
   
 
 interface PageProps {
@@ -42,6 +43,9 @@ const NotificationsPage = ({ profile }: PageProps) => {
             <p>No new notifications.</p>
           )
           }
+        </div>
+        <div className={styles.followingContainer}>
+          <FollowingComponent/>
         </div>
       </main>
     </>

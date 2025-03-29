@@ -18,6 +18,17 @@
     flex-direction: column;
     scrollbar-color: var(--highlight) var(--main-color);
 }
+.followingContainer{
+    display: none;
+    width: 45%;
+    flex-grow: 1; 
+    border-left: 2.5px solid black;
+    max-height: 80vh;
+    overflow-y: auto;
+    scrollbar-width: thin; 
+    flex-direction: column;
+    scrollbar-color: var(--highlight) var(--main-color);
+}
 
 .uploadContainer{
     width: 100%;
@@ -135,5 +146,35 @@
     }
     &:hover{
         opacity: 1;
+    }
+}
+
+
+@media screen and (min-width:1150px) {
+    .leaderBoardContainer{
+        display: flex;
+        width: 30%;
+    }
+    .uploadContainer{
+        padding: 5px 20px;
+        width: 40%;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: var(--highlight) var(--main-color); 
+    }
+    .uploadContainer::-webkit-scrollbar {
+        display: none; 
+    }
+    .imageContainer{
+        height: 400px;
+    }
+    
+    .uploadContainer::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .followingContainer{
+        display: flex;
+        width: 30%;
     }
 }

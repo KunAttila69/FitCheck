@@ -19,6 +19,20 @@
     scrollbar-color: var(--highlight) var(--main-color);
 }
 
+
+.followingContainer{
+    display: none;
+    width: 45%;
+    flex-grow: 1; 
+    border-left: 2.5px solid black;
+    max-height: 80vh;
+    overflow-y: auto;
+    scrollbar-width: thin; 
+    flex-direction: column;
+    scrollbar-color: var(--highlight) var(--main-color);
+}
+
+
 .notificationsContainer{
     width: 100%;
 }
@@ -41,5 +55,29 @@
     
     .notificationsContainer::-webkit-scrollbar {
         width: 8px;
+    }
+}
+
+@media screen and (min-width:1150px) {
+    .leaderBoardContainer{
+        display: flex;
+        width: 30%;
+    }
+    .notificationsContainer{
+        padding: 5px 20px;
+        width: 40%;
+        max-height: 80vh;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: var(--highlight) var(--main-color); 
+    } 
+    
+    .notificationsContainer::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .followingContainer{
+        display: flex;
+        width: 30%;
     }
 }

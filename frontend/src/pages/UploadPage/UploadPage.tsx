@@ -4,6 +4,7 @@ import Navbar from "../../components/Navbar/Navbar";
 import { uploadPost } from "../../services/authServices";
 import Popup from "../../components/Popup/Popup";
 import LeaderboardComponent from "../../components/LeaderboardComponent/LeaderboardComponent";
+import FollowingComponent from "../../components/FollowingComponent/FollowingComponent";
 
 interface PageProps{
     profile: any
@@ -107,6 +108,10 @@ const UploadPage = ({profile}: PageProps) => {
                         <button type="submit" className={styles.uploadButton}>Upload</button>
                     </form>
                 </div>
+                <div className={styles.followingContainer}>
+                <FollowingComponent/>
+                </div>
+
             </main>
         </>
     );

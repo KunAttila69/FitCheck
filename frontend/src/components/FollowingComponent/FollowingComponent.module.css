@@ -1,0 +1,38 @@
+.followingListContainer{
+    width: 100%;
+}
+
+@media screen and (min-width: 768px) { 
+    .followingListContainer{
+        padding: 0 15px;
+        max-height: 80vh; 
+        max-width: 55%;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: var(--highlight) var(--main-color); 
+    }
+    .followingListContainer::-webkit-scrollbar {
+        display: none; 
+    }
+    
+    .followingListContainer::-webkit-scrollbar {
+        width: 8px;
+    }
+}
+@media screen and (min-width: 1000px) { 
+    .followingListContainer{
+        padding: 0 15px;
+        max-height: 80vh;
+        max-width: 100%; 
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: var(--highlight) var(--main-color); 
+    }
+    .followingListContainer::-webkit-scrollbar {
+        display: none; 
+    }
+    
+    .followingListContainer::-webkit-scrollbar {
+        width: 8px;
+    }
+}

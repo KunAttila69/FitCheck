@@ -73,6 +73,7 @@
     background-color: var(--main-color);
     box-shadow: 0 0 3px 2px var(--highlight);
     color: var(--white);
+    padding: 0 35px;
     font-family: "Sigmar One", sans-serif;
     border-radius: 0 0 10px 10px;
 }
@@ -100,6 +101,13 @@
 .profileHeader p {
     font-size: 1rem;
     opacity: 0.8;
+    max-width: 250px;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
+    word-break: break-word;
+    overflow-wrap: break-word;
+
 }
 
 .profileStats, .profileResponsiveStats {
