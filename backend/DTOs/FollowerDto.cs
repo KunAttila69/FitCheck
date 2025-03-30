@@ -8,6 +8,7 @@ namespace FitCheck_Server.DTOs
         public string Username { get; set; }
         public string ProfilePictureUrl { get; set; }
         public DateTime FollowedSince { get; set; }
+        public int RecentPostsCount { get; set; }
     }
 
     public class FollowStats

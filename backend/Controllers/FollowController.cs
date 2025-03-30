@@ -117,9 +117,11 @@ namespace FitCheck_Server.Controllers
                     UserId = uf.FollowedId,
                     Username = uf.Followed.UserName,
                     ProfilePictureUrl = uf.Followed.ProfilePictureUrl,
-                    FollowedSince = uf.CreatedAt
+                    FollowedSince = uf.CreatedAt,
+                    RecentPostsCount = _context.Posts
+                        .Count(p => p.UserId == uf.FollowedId && p.CreatedAt >= DateTime.UtcNow.AddDays(-7))
                 })
-                .ToListAsync();
+    .ToListAsync();
 
             return Ok(following);
         }
