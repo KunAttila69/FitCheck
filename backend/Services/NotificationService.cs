@@ -18,7 +18,7 @@ namespace FitCheck_Server.Services
         public async Task CreateLikeNotificationAsync(string actorId, int postId)
         {
             var post = await _context.Posts.FindAsync(postId);
-            if (post == null || post.UserId == actorId) return; // Don't notify if post doesn't exist or user likes their own post
+            if (post == null || post.UserId == actorId) return;
 
             var notification = new Notification
             {
@@ -36,7 +36,7 @@ namespace FitCheck_Server.Services
 
         public async Task CreateFollowNotificationAsync(string actorId, string userId)
         {
-            if (actorId == userId) return; // Don't notify if user follows themselves
+            if (actorId == userId) return; 
 
             var notification = new Notification
             {
@@ -54,7 +54,7 @@ namespace FitCheck_Server.Services
         public async Task CreateCommentNotificationAsync(string actorId, int postId)
         {
             var post = await _context.Posts.FindAsync(postId);
-            if (post == null || post.UserId == actorId) return; // Don't notify if post doesn't exist or user comments on their own post
+            if (post == null || post.UserId == actorId) return; 
 
             var notification = new Notification
             {

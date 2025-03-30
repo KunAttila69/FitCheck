@@ -107,7 +107,6 @@ namespace FitCheck_Server.Controllers
                 return BadRequest(new { Message = "You cannot ban yourself" });
             }
 
-            // Check if user exists and is not an administrator
             var userToBan = await _userManager.FindByIdAsync(request.UserId);
             if (userToBan == null)
             {

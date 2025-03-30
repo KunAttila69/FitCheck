@@ -2,7 +2,6 @@
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using FitCheck_Server.Models;
 using Microsoft.AspNetCore.Identity;
@@ -24,7 +23,6 @@ namespace FitCheck_Server.Services
 
         public async Task<(string? token, string? error)> GenerateAccessToken(ApplicationUser user)
         {
-            // Check if user is banned before generating token
             if (user.IsBanned)
             {
                 return (null, $"Account is banned. Reason: {user.BanReason ?? "No reason provided"}");
@@ -32,10 +30,8 @@ namespace FitCheck_Server.Services
 
             var key = Encoding.UTF8.GetBytes(_config["JwtSettings:Key"]!);
 
-            // Get user roles
             var userRoles = await _userManager.GetRolesAsync(user);
 
-            // Create claims
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id),
@@ -43,7 +39,6 @@ namespace FitCheck_Server.Services
                 new Claim(ClaimTypes.Name, user.UserName!)
             };
 
-            // Add role claims
             foreach (var role in userRoles)
             {
                 claims.Add(new Claim(ClaimTypes.Role, role));
@@ -66,12 +61,6 @@ namespace FitCheck_Server.Services
             using var rng = RandomNumberGenerator.Create();
             rng.GetBytes(randomBytes);
             return Convert.ToBase64String(randomBytes);
-        }
-
-        // Helper method to validate if a user can authenticate
-        public bool CanUserAuthenticate(ApplicationUser user)
-        {
-            return !user.IsBanned;
         }
     }
 }

@@ -80,13 +80,13 @@ namespace FitCheck_Server.Services
             return result.Succeeded;
         }
 
-        public async Task<bool> IsUserBannedAsync(string userId)
-        {
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user == null)
-                return false;
+        //public async Task<bool> IsUserBannedAsync(string userId)
+        //{
+        //    var user = await _userManager.FindByIdAsync(userId);
+        //    if (user == null)
+        //        return false;
 
-            return user.IsBanned;
-        }
+        //    return user.IsBanned;
+        //}
     }
 }

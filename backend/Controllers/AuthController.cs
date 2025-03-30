@@ -62,7 +62,6 @@ namespace FitCheck_Server.Controllers
                 return BadRequest(new { Errors = result.Errors });
             }
 
-            // Assign the default User role
             await _userManager.AddToRoleAsync(user, "User");
 
             return Ok(new { Message = "User registered successfully." });
@@ -93,7 +92,6 @@ namespace FitCheck_Server.Controllers
             user.RefreshTokenExpiry = DateTime.UtcNow.AddDays(7);
             await _userManager.UpdateAsync(user);
 
-            // Get user roles to return with the response
             var roles = await _userManager.GetRolesAsync(user);
 
             return Ok(new { accessToken, refreshToken, roles });
@@ -121,7 +119,6 @@ namespace FitCheck_Server.Controllers
             user.RefreshTokenExpiry = DateTime.UtcNow.AddDays(7);
             await _userManager.UpdateAsync(user);
 
-            // Get user roles to return with the response
             var roles = await _userManager.GetRolesAsync(user);
 
             return Ok(new { accessToken = newAccessToken, refreshToken = newRefreshToken, roles });

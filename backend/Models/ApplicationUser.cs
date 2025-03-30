@@ -16,12 +16,5 @@ namespace FitCheck_Server.Models
         public bool IsBanned { get; set; } = false;
         public string? BanReason { get; set; }
         public DateTime? BannedAt { get; set; }
-
-        //Follower properties
-        [InverseProperty(nameof(UserFollower.Followed))]
-        public virtual ICollection<UserFollower> Followers { get; set; } = new List<UserFollower>();
-
-        [InverseProperty(nameof(UserFollower.Follower))]
-        public virtual ICollection<UserFollower> Following { get; set; } = new List<UserFollower>();
     }
 }

@@ -39,6 +39,12 @@ namespace FitCheck_Server.Controllers
 
             if (user == null) return NotFound(new { Message = "User not found" });
 
+            var followersCount = await _context.UserFollowers
+                .CountAsync(uf => uf.FollowedId == user.Id);
+
+            var followingCount = await _context.UserFollowers
+                .CountAsync(uf => uf.FollowerId == user.Id);
+
             return Ok(new ProfileDto
             {
                 Username = user.UserName,
@@ -49,7 +55,8 @@ namespace FitCheck_Server.Controllers
                         .Where(p => p.UserId == user.Id)
                         .SelectMany(p => p.Likes)
                         .Count(),
-                FollowerCount = user.Followers.Count()
+                FollowerCount = followersCount,
+                FollowingCount = followingCount
             });
         }
 
@@ -59,11 +66,10 @@ namespace FitCheck_Server.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var user = await _userManager.FindByIdAsync(userId);
 
-            if (user == null) return NotFound("User not found");
+            if (user == null) return NotFound(new { Message = "User not found" });
 
             if (dto.Username != null && _userManager.Users.Any(u => u.UserName == dto.Username)) return BadRequest(new { Message = "The given username is already in use." });
 
-            // Update properties
             user.UserName = dto.Username ?? user.UserName;
             user.Email = dto.Email ?? user.Email;
             user.Bio = dto.Bio ?? user.Bio;
@@ -74,7 +80,7 @@ namespace FitCheck_Server.Controllers
                 return BadRequest(result.Errors);
             }
 
-            return Ok("Profile updated");
+            return Ok(new { Message = "Profile updated" });
         }
 
         [HttpGet("{username}")]
@@ -82,7 +88,7 @@ namespace FitCheck_Server.Controllers
         {
             var user = await _userManager.FindByNameAsync(username);
 
-            if (user == null) return NotFound("User not found");
+            if (user == null) return NotFound(new { Message = "User not found" });
 
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -99,15 +105,19 @@ namespace FitCheck_Server.Controllers
                     .AnyAsync(uf => uf.FollowerId == currentUserId && uf.FollowedId == user.Id);
             }
 
-            return Ok(new
+            return Ok(new 
             {
-                UserId = user.Id,
+                Id = user.Id,
                 Username = user.UserName,
                 Bio = user.Bio,
                 ProfilePictureUrl = user.ProfilePictureUrl,
-                FollowersCount = followersCount,
+                FollowerCount = followersCount,
                 FollowingCount = followingCount,
-                IsFollowing = isFollowing
+                IsFollowing = isFollowing,
+                LikesCount = user.Id == null ? 0 : _context.Posts
+                        .Where(p => p.UserId == user.Id)
+                        .SelectMany(p => p.Likes)
+                        .Count(),
             });
         }
         #endregion
@@ -119,7 +129,7 @@ namespace FitCheck_Server.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var user = await _userManager.FindByIdAsync(userId);
 
-            if (user == null) return NotFound("User not found");
+            if (user == null) return NotFound(new { Message = "User not found" });
 
             var result = await _userManager.ChangePasswordAsync(
                 user,
@@ -143,11 +153,11 @@ namespace FitCheck_Server.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var user = await _userManager.FindByIdAsync(userId);
 
-            if (user == null) return NotFound("User not found");
+            if (user == null) return NotFound(new { Message = "User not found" });
 
             if (file == null || file.Length == 0)
             {
-                return BadRequest("No file uploaded");
+                return BadRequest(new { Message = "No file uploaded" });
             }
 
             var avatarPath = await _fileService.SaveAvatarAsync(file);

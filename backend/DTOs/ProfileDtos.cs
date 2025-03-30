@@ -9,6 +9,7 @@ namespace FitCheck_Server.DTOs
         public string ProfilePictureUrl { get; set; }
         public int LikesCount { get; set; }
         public int FollowerCount { get; set; }
+        public int FollowingCount { get; set; }
         public string Id { get; set; }
     }
 
