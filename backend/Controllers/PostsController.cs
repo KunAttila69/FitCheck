@@ -123,13 +123,11 @@ namespace FitCheck_Server.Controllers
         [HttpGet("user/{username}")]
         public async Task<IActionResult> GetUserPosts(string username, [FromQuery] int page = 1, [FromQuery] int pageSize = 10)
         {
-            // Find the user by username
             var user = await _userManager.FindByNameAsync(username);
             if (user == null) return NotFound("User not found");
 
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            // Get user's posts with pagination
             var posts = await _context.Posts
                 .Include(p => p.User)
                 .Include(p => p.MediaFiles)
@@ -248,7 +246,6 @@ namespace FitCheck_Server.Controllers
             _context.Comments.Add(comment);
             await _context.SaveChangesAsync();
 
-            // Explicitly load the user with Include
             var savedComment = await _context.Comments
                 .Include(c => c.User)
                 .FirstOrDefaultAsync(c => c.Id == comment.Id);

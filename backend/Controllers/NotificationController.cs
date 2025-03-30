@@ -55,7 +55,6 @@ namespace FitCheck_Server.Controllers
                 })
                 .ToListAsync();
 
-            // Get unread count
             var unreadCount = await _context.Notifications
                 .CountAsync(n => n.UserId == userId && !n.IsRead);
 

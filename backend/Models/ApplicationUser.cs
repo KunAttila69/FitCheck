@@ -6,6 +6,7 @@ namespace FitCheck_Server.Models
     public class ApplicationUser : IdentityUser
     {
         //User properties
+        public string Email { get; set; }
         public string? RefreshToken { get; set; }
         public DateTime? RefreshTokenExpiry { get; set; }
         public string? Bio { get; set; } = string.Empty;
@@ -16,12 +17,5 @@ namespace FitCheck_Server.Models
         public bool IsBanned { get; set; } = false;
         public string? BanReason { get; set; }
         public DateTime? BannedAt { get; set; }
-
-        //Follower properties
-        [InverseProperty(nameof(UserFollower.Followed))]
-        public virtual ICollection<UserFollower> Followers { get; set; } = new List<UserFollower>();
-
-        [InverseProperty(nameof(UserFollower.Follower))]
-        public virtual ICollection<UserFollower> Following { get; set; } = new List<UserFollower>();
     }
 }
