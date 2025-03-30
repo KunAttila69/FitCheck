@@ -15,8 +15,7 @@ interface FriendProps {
 }
 
 const Friend = ({ friend, onUnfollow, handleMessage }: FriendProps) => {
-  const navigate = useNavigate();
-    console.log(friend)
+  const navigate = useNavigate(); 
   const unFollow = async () => {
     try {
       const result = await deleteFollow(friend.userId);
@@ -41,7 +40,7 @@ const Friend = ({ friend, onUnfollow, handleMessage }: FriendProps) => {
       />
       <div className={styles.textContainer}>
         <h4>{friend.username}</h4>
-        <p>This user has {friend.newPosts} new posts</p>
+        <p>This user has {friend.newPosts > 0 ? friend.newPosts : "no"} new posts</p>
       </div>
       <button className={styles.declineBtn} onClick={unFollow}></button>
     </div>

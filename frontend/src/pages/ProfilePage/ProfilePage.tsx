@@ -19,7 +19,7 @@ interface PostData {
 }
 
 interface Profile {
-    userId: string;
+    id: string;
     username: string;
     isFollowing: boolean;
     followersCount: number
@@ -45,7 +45,7 @@ const ProfilePage = () => {
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
 
-    const fetchProfile = async () => {
+    const fetchProfile = async () => { 
         try {
             const user = await getUserProfile();
             if (user?.username === username) {
@@ -56,7 +56,7 @@ const ProfilePage = () => {
             if (!data) {
                 navigate("/profile/not-found");
             } else {
-                setProfile(data); 
+                setProfile(data);  
                 setFollowing(data.isFollowing);
             }
         } catch (err) {
@@ -82,15 +82,15 @@ const ProfilePage = () => {
         fetchPosts();
     }, [username, navigate]); 
 
-    const handleFollow = async () => {
-        if (!profile?.userId) return;
+    const handleFollow = async () => { 
+        if (!profile?.id) return
         try {
             if (!isFollowing) {
-                await addFollow(profile.userId);
+                await addFollow(profile.id);
                 setFollowing(true);
                 setMessage({ text: `Successfully followed ${profile.username}.`, type: 2 });  
             } else {
-                await deleteFollow(profile.userId);
+                await deleteFollow(profile.id);
                 setFollowing(false);
                 setMessage({ text: `Successfully unfollowed ${profile.username}.`, type: 2 }); 
             }

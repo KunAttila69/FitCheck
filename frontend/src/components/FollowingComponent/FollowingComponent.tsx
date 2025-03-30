@@ -30,7 +30,8 @@ const FollowingComponent = () => {
     }
     useEffect(() => {
       const fetchFriends = async () => {
-        const data: FriendType[] = await getFollowing();
+        const data: any = await getFollowing();
+        console.log(data)
         setFollowing(data);
         setLoading(false);
       };

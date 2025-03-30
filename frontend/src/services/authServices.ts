@@ -215,7 +215,9 @@ export async function updateProfile(username: string,email: string , bio: string
     if (!token) {
       throw new Error("User not authenticated");
     }
- 
+    
+    const newUsername = username == "" ? null : username
+
     const response = await fetch(`${BASE_URL}/api/profile`, {
       method: "PUT",
       headers: {
@@ -223,7 +225,7 @@ export async function updateProfile(username: string,email: string , bio: string
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        username,
+        newUsername,
         email,
         bio
       })
@@ -323,10 +325,7 @@ export const addFollow = async (userid: string) => {
         "Authorization": `Bearer ${token}`,
         "Content-Type": "application/json",
       },
-    });
-
-    console.log(response)
-    console.log("Response Status:", response.status);
+    }); 
 
     if (!response.ok) {
       throw new Error(`Failed to follow: ${response.statusText}`);
