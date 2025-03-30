@@ -71,6 +71,7 @@ namespace FitCheck_Server.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("TEXT");
 
@@ -181,15 +182,6 @@ namespace FitCheck_Server.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Location")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("Privacy")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("UserId")
@@ -491,13 +483,13 @@ namespace FitCheck_Server.Migrations
             modelBuilder.Entity("FitCheck_Server.Models.UserFollower", b =>
                 {
                     b.HasOne("FitCheck_Server.Models.ApplicationUser", "Followed")
-                        .WithMany("Followers")
+                        .WithMany()
                         .HasForeignKey("FollowedId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("FitCheck_Server.Models.ApplicationUser", "Follower")
-                        .WithMany("Following")
+                        .WithMany()
                         .HasForeignKey("FollowerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -601,13 +593,6 @@ namespace FitCheck_Server.Migrations
                         .IsRequired();
 
                     b.Navigation("Post");
-                });
-
-            modelBuilder.Entity("FitCheck_Server.Models.ApplicationUser", b =>
-                {
-                    b.Navigation("Followers");
-
-                    b.Navigation("Following");
                 });
 
             modelBuilder.Entity("FitCheck_Server.Models.Post", b =>

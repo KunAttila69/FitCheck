@@ -45,6 +45,8 @@ namespace FitCheck_Server.Controllers
             var followingCount = await _context.UserFollowers
                 .CountAsync(uf => uf.FollowerId == user.Id);
 
+            var roles = await _userManager.GetRolesAsync(user);
+
             return Ok(new ProfileDto
             {
                 Username = user.UserName,
@@ -56,7 +58,9 @@ namespace FitCheck_Server.Controllers
                         .SelectMany(p => p.Likes)
                         .Count(),
                 FollowerCount = followersCount,
-                FollowingCount = followingCount
+                FollowingCount = followingCount,
+                Email = user.Email,
+                Roles = roles
             });
         }
 

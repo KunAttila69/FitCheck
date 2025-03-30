@@ -11,6 +11,8 @@ namespace FitCheck_Server.DTOs
         public int FollowerCount { get; set; }
         public int FollowingCount { get; set; }
         public string Id { get; set; }
+        public string Email { get; set; }
+        public IList<string> Roles { get; set; }
     }
 
     public class UpdateProfileDto
