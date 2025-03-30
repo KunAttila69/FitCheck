@@ -26,6 +26,7 @@ export const ProfileProvider = ({ children }: { children: ReactNode }) => {
       const res = await getUserProfile();
       if (res) {
         setProfile(res);
+        console.log(res)
       }
     } catch (err) {
       console.error("Error fetching profile:", err);

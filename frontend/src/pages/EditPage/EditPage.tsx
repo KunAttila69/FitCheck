@@ -54,10 +54,11 @@ const EditPage = () => {
   const handleSaveChanges = async () => { 
     if (name !== profile?.username || aboutMe !== profile?.bio) {
       try {
-        const updatedName = name === profile?.username ? profile?.username || "" : name || "";
-        const updatedEmail = profile?.email || "";
+        const updatedName = name === profile?.username ? profile?.username || "" : name || ""; 
         const updatedAboutMe = aboutMe || "";
-        const response = await updateProfile(updatedName, updatedEmail, updatedAboutMe);
+        console.log(profile)
+        console.log(profile?.email)
+        const response = await updateProfile(updatedName, profile?.email || "", updatedAboutMe);
         console.log(response);
         setMessage({ text: "Profile updated successfully!", type: 2 }); 
       } catch (error) {
@@ -111,7 +112,7 @@ const EditPage = () => {
             ) : profile?.profilePictureUrl ? (
               <img src={BASE_URL + profile.profilePictureUrl} alt="Profile" />
             ) : (
-              <img src="images/FitCheck-logo.png" alt="Profile" />
+              <img src="/images/FitCheck-logo.png" alt="Profile" />
             )}
           </div>
 

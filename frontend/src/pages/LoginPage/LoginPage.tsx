@@ -22,16 +22,17 @@ const LoginPage = () => {
 
     setLoading(true);
     try {
-      const res = await loginUser(username, password);
-      if (res && res.status === 200) {
-        console.log("Login successful!", res);
+      const response = await loginUser(username, password);
+      if (response && response.status === 200) {
+        console.log("Login successful!", response);
         profile?.fetchProfile();
         window.location.href = "/";
-      } else {
-        setError("Invalid username or password!");
+      } else if(response?.status !== 200){
+        setError(response?.error || "");
       }
     } catch (err) {
-      setError("Invalid username or password!");
+      console.error("Unexpected error:", err);
+      setError("Unexpected error occurred. Please try again.");
     } finally {
       setLoading(false);
     }

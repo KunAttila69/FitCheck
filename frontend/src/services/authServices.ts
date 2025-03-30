@@ -12,10 +12,12 @@ export async function loginUser(username: string, password: string) {
         username: username,
         password: password
       })
-    });
+    }); 
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
+    if (!response.ok) { 
+      const errorData = await response.json();
+      console.error("Login error:", errorData);
+      return { status: response.status, error: errorData.message || "Login failed." };
     }
 
     const tokens = await response.json();
@@ -26,13 +28,17 @@ export async function loginUser(username: string, password: string) {
       return undefined;
     }
 
+
+
     localStorage.setItem("refresh", tokens.refreshToken);
     localStorage.setItem("access", tokens.accessToken);
     
+
+
     return { status: response.status, tokens };
   } catch (err) {
-    console.error("Login error:", err);
-    return undefined;
+    console.error("Error during registration:", err);
+    return { status: 500, error: "Network error. Please try again later." };
   }
 }
 
