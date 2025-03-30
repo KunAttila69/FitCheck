@@ -7,6 +7,7 @@ import styles from "./FollowingComponent.module.css"
 interface FriendType {
     userId: string;
     username: string;
+    recentPostsCount: number
     profilePictureUrl: string;
     newPosts: number;
   }
@@ -30,8 +31,7 @@ const FollowingComponent = () => {
     }
     useEffect(() => {
       const fetchFriends = async () => {
-        const data: any = await getFollowing();
-        console.log(data)
+        const data: FriendType[] = await getFollowing(); 
         setFollowing(data);
         setLoading(false);
       };

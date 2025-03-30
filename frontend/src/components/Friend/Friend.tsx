@@ -8,6 +8,7 @@ interface FriendProps {
     profilePictureUrl: string;
     username: string;
     newPosts: number;
+    recentPostsCount: number;
     userId: string;
   };
   onUnfollow: (userId: string) => void;
@@ -40,7 +41,7 @@ const Friend = ({ friend, onUnfollow, handleMessage }: FriendProps) => {
       />
       <div className={styles.textContainer}>
         <h4>{friend.username}</h4>
-        <p>This user has {friend.newPosts > 0 ? friend.newPosts : "no"} new posts</p>
+        <p>This user has {friend.recentPostsCount > 0 ? friend.recentPostsCount : "no"} new posts</p>
       </div>
       <button className={styles.declineBtn} onClick={unFollow}></button>
     </div>

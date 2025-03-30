@@ -22,9 +22,8 @@ interface Profile {
     id: string;
     username: string;
     isFollowing: boolean;
-    followersCount: number
+    followerCount: number
     bio?: string;
-    friendsCount: number;
     likesCount: number;
     profilePictureUrl: string | null; 
 }
@@ -56,7 +55,7 @@ const ProfilePage = () => {
             if (!data) {
                 navigate("/profile/not-found");
             } else {
-                setProfile(data);  
+                setProfile(data);   
                 setFollowing(data.isFollowing);
             }
         } catch (err) {
@@ -123,7 +122,7 @@ const ProfilePage = () => {
                     <div className={styles.profileResponsiveStats}>
                         <div>
                             <h5>Followers</h5>
-                            <h2>{(profile?.followersCount ?? 0) +  (profile?.isFollowing === false && isFollowing ? 1 :   profile?.isFollowing === true && isFollowing === false ? -1 : 0)}</h2>
+                            <h2>{profile?.followerCount ?? 0}</h2>
                         </div>
                         <div>
                             <h5>Likes</h5>
@@ -143,7 +142,7 @@ const ProfilePage = () => {
                 <div className={styles.profileStats}>
                     <div>
                         <h5>Followers</h5>
-                        <h2>{profile?.followersCount ?? 0}</h2>
+                        <h2>{profile?.followerCount ?? 0}</h2>
                     </div>
                     <div>
                         <h5>Likes</h5>
