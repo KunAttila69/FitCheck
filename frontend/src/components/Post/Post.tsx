@@ -2,7 +2,7 @@ import { BASE_URL } from "../../services/interceptor";
 import styles from "./Post.module.css";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { likePost, unlikePost, addComment, getComments } from "../../services/authServices";
+import { likePost, unlikePost, addComment, getComments, flagComment, flagPost } from "../../services/authServices";
 import { useProfile } from "../../contexts/ProfileContext";
 
 interface PostProps {
@@ -35,6 +35,7 @@ const Post = ({ id, userName, userProfilePictureUrl, caption, likeCount, mediaUr
     const fetchComments = async () => {
       try {
         const comments = await getComments(id.toString());
+        console.log(comments)
         setPostComments(comments || []);
       } catch (error) {
         console.error("Error fetching comments:", error);
@@ -86,6 +87,32 @@ const Post = ({ id, userName, userProfilePictureUrl, caption, likeCount, mediaUr
     }
   };
 
+  const deletePost = async () => {
+    try {
+      const result = await flagPost(id.toString());
+      if (result) {
+        console.log("Post deleted successfully"); 
+      }
+    } catch (err) {
+      console.error("Error deleting post:", err);
+    }
+  };
+  
+  const deleteComment = async (commentId: string) => {
+    try {
+      const result = await flagComment(commentId);
+      if (result) {
+        setPostComments((prevComments) =>
+          prevComments.filter((comment) => comment.authorUsername !== commentId)
+        );
+        console.log("Comment deleted successfully");
+      }
+    } catch (err) {
+      console.error("Error deleting comment:", err);
+    }
+  };
+  
+
   return (
     <div className={styles.postContainer}>
       <div className={styles.postHeader}>
@@ -103,6 +130,7 @@ const Post = ({ id, userName, userProfilePictureUrl, caption, likeCount, mediaUr
             {caption}
           </p>
         </div>
+        {profile?.roles.includes("Moderator") && <img  src="../../src/images/delete.svg" onClick={() => deletePost()} className={styles.deletePostBtn}/>}
       </div>
 
       {mediaUrls.length > 0 && (
@@ -130,10 +158,11 @@ const Post = ({ id, userName, userProfilePictureUrl, caption, likeCount, mediaUr
         <div className={styles.commentContainer}>
           {postComments.map((comment, index) => (
             <div key={index} className={styles.comment}>
-              <img src={comment?.authorProfilePictureUrl !== null ? BASE_URL + comment.authorProfilePictureUrl : "images/FitCheck-logo.png"} alt="Commenter" onClick={() => navigate(`/profile/${comment.authorUsername}`)}/>
+              <img className={styles.commentImg} src={comment?.authorProfilePictureUrl !== null ? BASE_URL + comment.authorProfilePictureUrl : "/images/FitCheck-logo.png"} alt="Commenter" onClick={() => navigate(`/profile/${comment.authorUsername}`)}/>
               <h4>{comment.authorUsername !== profile?.username ? comment.authorUsername : "You"}: </h4>
               <p> {comment.text}</p>
-            </div>
+              {profile?.roles.includes("Moderator") && <img  src="../../src/images/delete.svg" onClick={() => deleteComment(index.toString())} className={styles.deleteCommentBtn}/>}
+          </div>
           ))}
         </div>
       )}

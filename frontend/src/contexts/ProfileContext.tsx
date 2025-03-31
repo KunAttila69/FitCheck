@@ -7,6 +7,7 @@ interface UserProfile {
     bio: string
     email: string | null;
     profilePictureUrl: string | null;
+    roles: string[]
     fetchProfile: () => Promise<void>
 }
 
@@ -25,7 +26,7 @@ export const ProfileProvider = ({ children }: { children: ReactNode }) => {
     try {
       const res = await getUserProfile();
       if (res) {
-        setProfile(res); 
+        setProfile(res);  
       }
     } catch (err) {
       console.error("Error fetching profile:", err);
