@@ -83,12 +83,12 @@ Ezután a `publish` könyvtárban található `.exe` fájl futtatható.
 ### **Backend problémák**
 - Ha a backend nem indul el, ellenőrizzük az adatbáziskapcsolatot az `appsettings.json` fájlban.
 - Ha a buildelés során hiba lépett fel az adatbázissal kapcsolatban:
-  1. Töröljük az adatbázis fájlt és a migrációs fájlokat.
-  2. Futtassuk újra:
+  I. Töröljük az adatbázis fájlt és a migrációs fájlokat.
+  II. Futtassuk újra:
      ```sh
      dotnet build
      ```
-  3. Figyelem: Ez töröl minden elmentett adatot!
+  III. Figyelem: Ez töröl minden elmentett adatot!
 
 ### **Frontend problémák**
 - Ha a frontend nem találja a backend API-t, ellenőrizzük a `BASE_URL` változót az `interceptor.ts` fájlban.
