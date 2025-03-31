@@ -126,6 +126,7 @@ using (var scope = app.Services.CreateScope())
         if (result.Succeeded)
         {
             await userManager.AddToRoleAsync(adminUser, "Administrator");
+            await userManager.AddToRoleAsync(adminUser, "User");
         }
     }
 }
