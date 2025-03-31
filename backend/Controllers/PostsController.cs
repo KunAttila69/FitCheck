@@ -75,6 +75,7 @@ namespace FitCheck_Server.Controllers
             {
                 Id = post.Id,
                 Caption = post.Caption,
+                UserName = user.UserName,
                 MediaUrls = post.MediaFiles.Select(m => m.FilePath).ToList(),
                 LikeCount = post.Likes.Count
             };
