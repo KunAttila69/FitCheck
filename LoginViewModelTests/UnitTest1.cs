@@ -1,9 +1,6 @@
 using Xunit;
-using FitCheck_WPFApp.ViewModels;
-using FitCheck_WPFApp.Services;
 using Moq;
 using System.Threading.Tasks;
-using System.Windows.Controls;
 
 public class LoginViewModelTests
 {
@@ -21,8 +18,8 @@ public class LoginViewModelTests
 
         // Act
         viewModel.Username = "testuser";
-        var passwordBox = new PasswordBox { Password = "password123" };
-        await viewModel.LoginCommand.Execute(passwordBox);
+        viewModel.Password = "password123";
+        await viewModel.LoginCommand.Execute(null);
 
         // Assert
         Assert.True(wasLoginSuccessful);
@@ -40,8 +37,8 @@ public class LoginViewModelTests
 
         // Act
         viewModel.Username = "testuser";
-        var passwordBox = new PasswordBox { Password = "wrongpassword" };
-        await viewModel.LoginCommand.Execute(passwordBox);
+        viewModel.Password = "wrongpassword";
+        await viewModel.LoginCommand.Execute(null);
 
         // Assert
         Assert.True(viewModel.HasError);

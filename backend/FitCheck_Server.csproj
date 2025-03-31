@@ -27,4 +27,8 @@
     <Folder Include="wwwroot\uploads\posts\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\LoginViewModelTests\LoginViewModelTests.csproj" />
+  </ItemGroup>
+
 </Project>
