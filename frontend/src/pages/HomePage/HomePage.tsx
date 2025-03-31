@@ -33,6 +33,7 @@ const HomePage = () => {
         setHasMore(false);
       } else {
         setFeed((prev) => [...prev, ...newPosts]);
+        console.log(newPosts)
         setPage((prev) => prev + 1);
       }
 

@@ -35,7 +35,6 @@ const Post = ({ id, userName, userProfilePictureUrl, caption, likeCount, mediaUr
     const fetchComments = async () => {
       try {
         const comments = await getComments(id.toString());
-        console.log(comments)
         setPostComments(comments || []);
       } catch (error) {
         console.error("Error fetching comments:", error);

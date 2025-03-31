@@ -49,6 +49,7 @@ namespace FitCheck_Server.Controllers
             foreach (var file in request.Files)
             {
                 var filePath = await _fileService.SaveMediaAsync(file);
+                Console.WriteLine(filePath);
                 mediaFiles.Add(new PostMedia
                 {
                     FilePath = filePath,
@@ -271,7 +272,6 @@ namespace FitCheck_Server.Controllers
                 .OrderByDescending(c => c.CreatedAt)
                 .Select(c => new CommentDto
                 {
-                    Id = c.Id,
                     Text = c.Text,
                     AuthorUsername = c.User.UserName,
                     AuthorProfilePictureUrl = c.User.ProfilePictureUrl,

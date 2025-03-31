@@ -376,27 +376,27 @@ export async function uploadPost(caption: string, files: File[]) {
     if (!token) {
       throw new Error("User not authenticated");
     }
-  
+
     const formData = new FormData();
     formData.append("caption", caption);
-    files.forEach(file => formData.append("files", file));
+     
+    files.forEach((file) => formData.append("Files", file));  
 
     const response = await fetch(`${BASE_URL}/api/posts/create-post`, {
       method: "POST",
       headers: {
-        "Authorization": `Bearer ${token}`,
+        "Authorization": `Bearer ${token}`, 
       },
       body: formData,
     });
 
     const responseData = await response.json();
-    console.log("Server response:", responseData);
 
     if (!response.ok) {
       throw new Error(responseData.message || "Failed to upload post");
     }
 
-    return responseData;
+    return responseData;  
   } catch (error) {
     console.error("Upload error:", error);
     throw error;
