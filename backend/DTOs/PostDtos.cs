@@ -15,6 +15,7 @@
 
     public class CommentDto
     {
+        public int? Id { get; set; }
         public string? Text { get; set; }
         public string? AuthorUsername { get; set; }
         public string? AuthorProfilePictureUrl { get; set; }

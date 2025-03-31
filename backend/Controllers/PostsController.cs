@@ -271,6 +271,7 @@ namespace FitCheck_Server.Controllers
                 .OrderByDescending(c => c.CreatedAt)
                 .Select(c => new CommentDto
                 {
+                    Id = c.Id,
                     Text = c.Text,
                     AuthorUsername = c.User.UserName,
                     AuthorProfilePictureUrl = c.User.ProfilePictureUrl,
