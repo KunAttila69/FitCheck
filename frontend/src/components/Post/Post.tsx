@@ -19,6 +19,7 @@ interface PostProps {
 interface Comment {
   authorUsername: string;
   text: string;
+  id: number;
   authorProfilePictureUrl: string;
 }
 
@@ -35,6 +36,7 @@ const Post = ({ id, userName, userProfilePictureUrl, caption, likeCount, mediaUr
     const fetchComments = async () => {
       try {
         const comments = await getComments(id.toString());
+        console.log(comments)
         setPostComments(comments || []);
       } catch (error) {
         console.error("Error fetching comments:", error);
@@ -72,11 +74,7 @@ const Post = ({ id, userName, userProfilePictureUrl, caption, likeCount, mediaUr
     try {
       const result = await addComment(id.toString(), commentText);
       if (result) {
-        setPostComments((prevComments) => [
-          ...prevComments,
-          { authorUsername: "You", text: commentText, authorProfilePictureUrl: profile?.profilePictureUrl || ""  },
-        ]);
-        console.log(postComments)
+        window.location.reload()
         setCommentText("");
       } else {
         console.error("Failed to add comment");
@@ -90,7 +88,8 @@ const Post = ({ id, userName, userProfilePictureUrl, caption, likeCount, mediaUr
     try {
       const result = await flagPost(id.toString());
       if (result) {
-        console.log("Post deleted successfully"); 
+        console.log("Post deleted successfully");
+        window.location.reload() 
       }
     } catch (err) {
       console.error("Error deleting post:", err);

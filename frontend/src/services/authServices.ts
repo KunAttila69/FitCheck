@@ -578,12 +578,19 @@ export const flagPost = async (postId: string) => {
       }
     });
 
-    return await response.json();
+    const text = await response.text(); // Read response as text
+    try {
+      return JSON.parse(text); // Attempt to parse as JSON
+    } catch {
+      console.error("Unexpected response format:", text);
+      throw new Error("Server returned non-JSON response.");
+    }
   } catch (err) {
-    console.error("Error flaging post:", err);
+    console.error("Error flagging post:", err);
     return null;
   }
 };
+
 
 export const flagComment = async (commentID: string) => {
   try {
