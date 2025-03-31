@@ -35,18 +35,10 @@ namespace FitCheck_Server.Controllers
                     Caption = p.Caption,
                     MediaUrls = p.MediaFiles.Select(m => m.FilePath).ToList(),
                     LikeCount = p.Likes.Count,
+                    CommentCount = p.Comments.Count,
                     UserName = p.User.UserName,
                     UserProfilePictureUrl = p.User.ProfilePictureUrl,
-                    CreatedAt = p.CreatedAt,
-                    Comments = p.Comments.Select(c => new ModeratorCommentDto
-                    {
-                        Id = c.Id,
-                        Text = c.Text,
-                        CreatedAt = c.CreatedAt,
-                        AuthorUsername = c.User.UserName,
-                        AuthorProfilePicture = c.User.ProfilePictureUrl,
-                        PostId = c.PostId
-                    }).ToList()
+                    CreatedAt = p.CreatedAt
                 })
                 .ToListAsync();
 

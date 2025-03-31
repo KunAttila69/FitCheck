@@ -15,11 +15,11 @@ namespace FitCheck_Server.DTOs
     {
         public int Id { get; set; }
         public string Caption { get; set; }
-        public List<string> MediaUrls { get; set; }
+        public List<string>? MediaUrls { get; set; }
         public int LikeCount { get; set; }
-        public string UserName { get; set; }
-        public string UserProfilePictureUrl { get; set; }
+        public int CommentCount { get; set; }
+        public string? UserName { get; set; }
+        public string? UserProfilePictureUrl { get; set; }
         public DateTime CreatedAt { get; set; }
-        public List<ModeratorCommentDto> Comments { get; set; }
     }
 }
