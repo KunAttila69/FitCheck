@@ -1,20 +1,12 @@
-﻿using Xunit;
-using FitCheck_Server.DTOs;
-
-public class LoginRequestTests
+﻿public class FileService
 {
-    [Fact]
-    public void LoginRequest_ValidInput_ShouldSetProperties()
+    public async Task<string> SaveMediaAsync(IFormFile file)
     {
-        // Arrange
-        var loginRequest = new LoginRequest
-        {
-            Username = "testuser",
-            Password = "password123"
-        };
+        return string.Empty;
+    }
 
-        // Act & Assert
-        Assert.Equal("testuser", loginRequest.Username);
-        Assert.Equal("password123", loginRequest.Password);
+    public async Task<string> SaveAvatarAsync(IFormFile file)
+    {
+        return string.Empty;
     }
 }

@@ -5,9 +5,9 @@ VisualStudioVersion = 17.12.35527.113
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FitCheck_Server", "FitCheck_Server.csproj", "{CE9BE0EA-8116-477B-97C1-7B2EBCE98F00}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoginRequestsTest", "..\LoginRequestsTest\LoginRequestsTest.csproj", "{2555F1C2-6AB6-409E-979E-7FC8B2DB3709}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoginRequestsTest", "..\LoginRequestsTest\LoginRequestsTest.csproj", "{2555F1C2-6AB6-409E-979E-7FC8B2DB3709}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoginViewModelTests", "..\LoginViewModelTests\LoginViewModelTests.csproj", "{427A0B1E-7C48-48C5-A096-EF0974204E30}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Shared", "..\Shared\Shared.shproj", "{905018B5-FFC5-494C-97AA-1BF7EA81B1C6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,15 +23,14 @@ Global
 		{2555F1C2-6AB6-409E-979E-7FC8B2DB3709}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2555F1C2-6AB6-409E-979E-7FC8B2DB3709}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2555F1C2-6AB6-409E-979E-7FC8B2DB3709}.Release|Any CPU.Build.0 = Release|Any CPU
-		{427A0B1E-7C48-48C5-A096-EF0974204E30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{427A0B1E-7C48-48C5-A096-EF0974204E30}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{427A0B1E-7C48-48C5-A096-EF0974204E30}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{427A0B1E-7C48-48C5-A096-EF0974204E30}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D282F9E1-5C0E-44C2-92CB-18452438D32E}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		..\Shared\Shared.projitems*{905018b5-ffc5-494c-97aa-1bf7ea81b1c6}*SharedItemsImports = 13
 	EndGlobalSection
 EndGlobal
