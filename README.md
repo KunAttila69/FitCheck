@@ -6,6 +6,8 @@ A FitCheck egy közösségi platform, amely lehetővé teszi a felhasználók sz
 - **Frontend (React)** - A felhasználói felület.
 - **Admin felület (WPF)** - Moderációs és adminisztrációs funkciók.
 
+A dokumentáció ezen a linken elérhető: [FitCheck Documentation Site](https://klun-attila0508s-organization.gitbook.io/fitcheck-documentation-site)
+
 ---
 ## 1. Repository szerkezete
 ```
