@@ -157,8 +157,7 @@
    
 .sliderContainer {
     position: relative;
-    width: 100%;
-    max-width: 800px;
+    width: 100%; 
     background-color: black;
     display: flex;
     align-items: center;
