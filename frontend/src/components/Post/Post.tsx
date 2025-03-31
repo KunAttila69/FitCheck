@@ -129,7 +129,7 @@ const Post = ({ id, userName, userProfilePictureUrl, caption, likeCount, mediaUr
             {caption}
           </p>
         </div>
-        {profile?.roles.includes("Moderator") && <img  src="../../src/images/delete.svg" onClick={() => deletePost()} className={styles.deletePostBtn}/>}
+        {(profile?.roles.includes("Moderator") || profile?.roles.includes("Admin")) && <img  src="../../src/images/delete.svg" onClick={() => deletePost()} className={styles.deletePostBtn}/>}
       </div>
 
       {mediaUrls.length > 0 && (
@@ -160,7 +160,7 @@ const Post = ({ id, userName, userProfilePictureUrl, caption, likeCount, mediaUr
               <img className={styles.commentImg} src={comment?.authorProfilePictureUrl !== null ? BASE_URL + comment.authorProfilePictureUrl : "/images/FitCheck-logo.png"} alt="Commenter" onClick={() => navigate(`/profile/${comment.authorUsername}`)}/>
               <h4>{comment.authorUsername !== profile?.username ? comment.authorUsername : "You"}: </h4>
               <p> {comment.text}</p>
-              {profile?.roles.includes("Moderator") && <img  src="../../src/images/delete.svg" onClick={() => deleteComment(index.toString())} className={styles.deleteCommentBtn}/>}
+              {(profile?.roles.includes("Moderator") || profile?.roles.includes("Admin")) && <img  src="../../src/images/delete.svg" onClick={() => deleteComment(index.toString())} className={styles.deleteCommentBtn}/>}
           </div>
           ))}
         </div>
