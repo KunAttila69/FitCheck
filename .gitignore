@@ -98,7 +98,6 @@ coverage/
 out/
 
 # SQLite Database files
-*.db
 *.db-shm
 *.db-wal
 *.sqlite
