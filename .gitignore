@@ -98,6 +98,7 @@ coverage/
 out/
 
 # SQLite Database files
+*.db
 *.db-shm
 *.db-wal
 *.sqlite
@@ -115,6 +116,15 @@ temp/
 tmp/
 
 # Media and upload files
+wwwroot/**/*.jpg
+wwwroot/**/*.jpeg
+wwwroot/**/*.png
+wwwroot/**/*.gif
+wwwroot/**/*.bmp
+wwwroot/**/*.svg
+wwwroot/**/*.mp4
+wwwroot/**/*.mp3
+wwwroot/**/*.wav
 
 # Secrets
 appsettings.*.json
